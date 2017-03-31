@@ -2,4 +2,6 @@
 
 # submodules
 from .classes import *
+from .functions import *
 del classes
+del functions
