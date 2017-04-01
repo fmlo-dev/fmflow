@@ -82,7 +82,13 @@ class FMAccessor(object):
         return {key: getattr(self, key).values.item() for key in PTCOORDS()}
 
     def _initcoords(self):
-        """Initialize coords with default values."""
+        """Initialize coords with default values.
+
+        Warning:
+            Do not use this method after an array is created.
+            This forcibly replaces all vaules of coords with default ones.
+
+        """
         self.coords.update(TCOORDS(self.shape[0]))
         self.coords.update(CHCOORDS(self.shape[1]))
         self.coords.update(PTCOORDS(self.shape[1]))
