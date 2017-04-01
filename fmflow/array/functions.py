@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['array', 'ones', 'zeros', 'full', 'empty']
+__all__ = ['array', 'ones', 'zeros', 'full', 'empty', 'demodulate', 'modulate']
 
 # dependent packages
 import fmflow as fm
@@ -107,3 +107,33 @@ def empty(shape, dtype=None, **kwargs):
     return fm.array(data, **kwargs)
 
 
+def demodulate(array, reverse=False):
+    """Create a demodulated array from the modulated one.
+
+    This function is only available when the array is modulated.
+
+    Args:
+        array (xarray.DataArray): A modulated array.
+        reverse (bool, optional): If True, the array is reverse-demodulated
+            (i.e. -1 * fmch is used for demodulation). Default is False.
+
+    Returns:
+        array (xarray.DataArray): A demodulated array.
+
+    """
+    return array.fm.demodulate(reverse)
+
+
+def modulate(array):
+    """Create a modulated array from the demodulated one.
+
+    This function is only available when the array is demodulated.
+
+    Args:
+        array (xarray.DataArray): A demodulated array.
+
+    Returns:
+        array (xarray.DataArray): A modulated array.
+
+    """
+    return array.fm.modulate()
