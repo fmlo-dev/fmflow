@@ -101,7 +101,7 @@ class FMAccessor(object):
     def modulate(self):
         """Create a modulated array from the demodulated one.
 
-        This method is only available when the original array is demodulated.
+        This method is only available when the array is demodulated.
         It is equivalent to the fm.modulate function (recommended to use).
         i.e. array.fm.modulate() <=> fm.modulate(array)
 
