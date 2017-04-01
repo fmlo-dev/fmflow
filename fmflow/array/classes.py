@@ -56,12 +56,12 @@ class FMAccessor(object):
     def demodulate(self, reverse=False):
         """Create a demodulated array from the modulated one.
 
-        This method is only available when the original array is modulated.
+        This method is only available when the array is modulated.
         It is equivalent to the fm.demodulate function (recommended to use).
         i.e. array.fm.demodulate(reverse) <=> fm.demodulate(array, reverse)
 
         Args:
-            reverse (bool): If True, the original array is reverse-demodulated
+            reverse (bool, optional): If True, the array is reverse-demodulated
                 (i.e. -1 * fmch is used for demodulation). Default is False.
 
         Returns:
