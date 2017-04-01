@@ -72,28 +72,29 @@ class FMAccessor(object):
             raise fm.utils.FMFlowError('already demodulated')
 
         fmch = [1, -1][reverse] * self.fmch.values
-        shape = (self.shape[0], self.shape[1]+np.ptp(fmch))
+        newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
 
         # demodulate data
         if np.ptp(fmch) != 0:
-            data = np.full(shape, np.nan)
+            data = np.full(newshape, np.nan)
             data[:,:-np.ptp(fmch)] = self.values
             data = fm.utils.rollrows(data, fmch-np.min(fmch))
         else:
             data = self.values.copy()
 
         # update coords
-        indx = np.arange(np.min(fmch), np.min(fmch)+shape[1])
-        fsig = interp1d(self.indx, self.fsig, fill_value='extrapolate')(indx)
-        fimg = interp1d(self.indx, self.fimg, fill_value='extrapolate')(indx)
+        chno = self.shape[1]
+        chid = np.arange(np.min(fmch), np.min(fmch)+newshape[1])
+        fsig = interp1d(np.arange(chno), self.fsig, fill_value='extrapolate')(chid)
+        fimg = interp1d(np.arange(chno), self.fimg, fill_value='extrapolate')(chid)
         status = 'DEMODULATED' + ['+', '-'][reverse]
 
         tcoords  = deepcopy(self.tcoords)
         chcoords = deepcopy(self.chcoords)
         ptcoords = deepcopy(self.ptcoords)
         tcoords.update({'fmch': fmch})
-        chcoords.update({'indx': indx, 'fsig': fsig, 'fimg': fimg})
-        ptcoords.update({'status': status})
+        chcoords.update({'fsig': fsig, 'fimg': fimg, 'chid': chid})
+        ptcoords.update({'status': status, 'chno': chno})
 
         return fm.array(data, tcoords, chcoords, ptcoords)
 
