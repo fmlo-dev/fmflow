@@ -30,10 +30,9 @@ CHCOORDS = lambda size=0: OrderedDict([
     ('fimg', ('ch', np.arange(size, dtype=float)[::-1])),
 ])
 
-PTCOORDS = lambda size=0: OrderedDict([
+PTCOORDS = OrderedDict([
     ('status', 'MODULATED'),
     ('coordsys', 'RADEC'),
-    ('nch', int(size)),
     ('xref', 0.0),
     ('yref', 0.0),
 ])
