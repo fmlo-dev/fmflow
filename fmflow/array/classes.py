@@ -121,7 +121,7 @@ class FMAccessor(object):
     @property
     def ptcoords(self):
         """A dictionary of values that don't label any axes (point like)."""
-        return {key: getattr(self, key).values.item() for key in PTCOORDS()}
+        return {key: getattr(self, key).item() for key in PTCOORDS}
 
     def _initcoords(self):
         """Initialize coords with default values.
