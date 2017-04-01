@@ -52,9 +52,6 @@ class FMAccessor(object):
         """
         self._array = array
 
-    def __getattr__(self, name):
-        """array.fm.name <=> array.name"""
-        return getattr(self._array, name)
 
     @property
     def isdemodulated(self):
@@ -92,3 +89,7 @@ class FMAccessor(object):
         self.coords.update(TCOORDS(self.shape[0]))
         self.coords.update(CHCOORDS(self.shape[1]))
         self.coords.update(PTCOORDS(self.shape[1]))
+
+    def __getattr__(self, name):
+        """array.fm.name <=> array.name"""
+        return getattr(self._array, name)
