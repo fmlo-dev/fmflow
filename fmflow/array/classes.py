@@ -25,7 +25,6 @@ TCOORDS = lambda size=0: OrderedDict([
 ])
 
 CHCOORDS = lambda size=0: OrderedDict([
-    ('indx', ('ch', np.arange(size, dtype=int))),
     ('fsig', ('ch', np.arange(size, dtype=float))),
     ('fimg', ('ch', np.arange(size, dtype=float)[::-1])),
 ])
