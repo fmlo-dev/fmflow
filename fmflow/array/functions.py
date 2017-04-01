@@ -15,11 +15,11 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
 
     Args:
         data (array): A 2D (time x channel) array.
-        tcoords (dict): A dictionary of arrays that label time axis.
-        chcoords (dict): A dictionary of arrays that label channel axis.
-        ptcoords (dict): A dictionary of values that don't label any axes (point like).
-        attrs (dict): A dictionary of attributes to add to the instance.
-        name (str): A string that names the instance.
+        tcoords (dict, optional): A dictionary of arrays that label time axis.
+        chcoords (dict, optional): A dictionary of arrays that label channel axis.
+        ptcoords (dict, optional): A dictionary of values that don't label any axes (point like).
+        attrs (dict, optional): A dictionary of attributes to add to the instance.
+        name (str, optional): A string that names the instance.
 
     Returns:
         array (xarray.DataArray): A modulated array.
