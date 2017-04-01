@@ -98,6 +98,50 @@ class FMAccessor(object):
 
         return fm.array(data, tcoords, chcoords, ptcoords)
 
+    def modulate(self):
+        """Create a modulated array from the demodulated one.
+
+        This method is only available when the original array is demodulated.
+        It is equivalent to the fm.modulate function (recommended to use).
+        i.e. array.fm.modulate() <=> fm.modulate(array)
+
+        Returns:
+            array (xrray.DataArray): A modulated array.
+
+        """
+        if self.ismodulated:
+            raise fm.utils.FMFlowError('already modulated')
+
+        fmch = self.fmch.values.copy()
+        lextch = np.max([0, np.min(self.chid.values)])
+        rextch = np.max([0, np.min((self.chno-self.chid).values)])
+        extshape = (self.shape[0], self.shape[1]+lextch+rextch)
+        extchid = np.arange(np.min(self.chid)-lextch, np.max(self.chid)+rextch+1)
+        newchid = np.arange(self.chno)
+
+        # modulate data
+        if np.ptp(fmch) != 0:
+            data = np.full(extshape, np.nan)
+            data[:,lextch:extshape[1]-rextch] = self.values
+            data = fm.utils.rollrows(data, -fmch)
+            data = data[:,np.in1d(extchid, newchid)]
+        else:
+            data = self.values.copy()
+
+        # update coords
+        fmch *= eval('{}1'.format(self.status.item()[-1]))
+        fsig = interp1d(self.chid, self.fsig, fill_value='extrapolate')(newchid)
+        fimg = interp1d(self.chid, self.fimg, fill_value='extrapolate')(newchid)
+        status = 'MODULATED'
+
+        tcoords  = deepcopy(self.tcoords)
+        chcoords = deepcopy(self.chcoords)
+        ptcoords = deepcopy(self.ptcoords)
+        tcoords.update({'fmch': fmch})
+        chcoords.update({'fsig': fsig, 'fimg': fimg})
+        ptcoords.update({'status': status})
+
+        return fm.array(data, tcoords, chcoords, ptcoords)
 
     @property
     def isdemodulated(self):
