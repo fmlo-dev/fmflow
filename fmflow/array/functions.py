@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['array']
+__all__ = ['array', 'ones', 'zeros', 'full', 'empty']
 
 # dependent packages
 import fmflow as fm
@@ -40,5 +40,70 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
         array.coords.update(ptcoords)
 
     return array
+
+
+def zeros(shape, dtype=None, **kwargs):
+    """Create a modulated array of given shape and type, filled with zeros.
+
+    Args:
+        shape (sequence of ints): 2D shape of the array.
+        dtype (data-type, optional): The desired data-type for the array.
+        kwargs (optional): Other arguments of the array (*coords, attrs, and name).
+
+    Returns:
+        array (FMArray): A modulated array filled with zeros.
+
+    """
+    data = np.zeros(shape, dtype)
+    return fm.array(data, **kwargs)
+
+
+def ones(shape, dtype=None, **kwargs):
+    """Create a modulated array of given shape and type, filled with ones.
+
+    Args:
+        shape (sequence of ints): 2D shape of the array.
+        dtype (data-type, optional): The desired data-type for the array.
+        kwargs (optional): Other arguments of the array (*coords, attrs, and name).
+
+    Returns:
+        array (FMArray): A modulated array filled with ones.
+
+    """
+    data = np.ones(shape, dtype)
+    return fm.array(data, **kwargs)
+
+
+def full(shape, fill_value, dtype=None, **kwargs):
+    """Create a modulated array of given shape and type, filled with `fill_value`.
+
+    Args:
+        shape (sequence of ints): 2D shape of the array.
+        fill_value (scalar): Fill value.
+        dtype (data-type, optional): The desired data-type for the array.
+        kwargs (optional): Other arguments of the array (*coords, attrs, and name).
+
+    Returns:
+        array (FMArray): A modulated array filled with `fill_value`.
+
+    """
+    data = np.full(shape, dtype)
+    return fm.array(data, **kwargs)
+
+
+def empty(shape, dtype=None, **kwargs):
+    """Create a modulated array of given shape and type, without initializing entries.
+
+    Args:
+        shape (sequence of ints): 2D shape of the array.
+        dtype (data-type, optional): The desired data-type for the array.
+        kwargs (optional): Other arguments of the array (*coords, attrs, and name).
+
+    Returns:
+        array (FMArray): A modulated array without initializing entries.
+
+    """
+    data = np.empty(shape, dtype)
+    return fm.array(data, **kwargs)
 
 
