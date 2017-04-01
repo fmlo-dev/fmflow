@@ -43,8 +43,9 @@ class FMAccessor(object):
     def __init__(self, array):
         """Initialize the FM accessor of an array.
 
-        Normally, this method is for the internal use.
-        Users should create an array with the fm.array function.
+        Note:
+            This method is only for the internal use.
+            Users can create an array with FM accessor using fm.array.
 
         Args:
             array (xarray.DataArray): An array to which FM accessor is added.
