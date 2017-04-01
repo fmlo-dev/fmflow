@@ -6,3 +6,4 @@ __author__  = 'Akio Taniguchi'
 
 # submodules
 from . import utils
+from .array import *
