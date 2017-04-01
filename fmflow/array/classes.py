@@ -6,12 +6,14 @@ __all__ = []
 # standard library
 import re
 from collections import OrderedDict
+from copy import deepcopy
 from datetime import datetime
 
 # dependent packages
 import fmflow as fm
 import numpy as np
 import xarray as xr
+from scipy.interpolate import interp1d
 
 # constants
 TCOORDS = lambda size=0: OrderedDict([
@@ -52,6 +54,50 @@ class FMAccessor(object):
 
         """
         self._array = array
+
+    def demodulate(self, reverse=False):
+        """Create a demodulated array from the modulated one.
+
+        This method is only available when the original array is modulated.
+        It is equivalent to the fm.demodulate function (recommended to use).
+        i.e. array.fm.demodulate(reverse) <=> fm.demodulate(array, reverse)
+
+        Args:
+            reverse (bool): If True, the original array is reverse-demodulated
+                (i.e. -1 * fmch is used for demodulation). Default is False.
+
+        Returns:
+            array (xarray.DataArray): A demodulated array.
+
+        """
+        if self.isdemodulated:
+            raise fm.utils.FMFlowError('already demodulated')
+
+        fmch = [1, -1][reverse] * self.fmch.values
+        shape = (self.shape[0], self.shape[1]+np.ptp(fmch))
+
+        # demodulate data
+        if np.ptp(fmch) != 0:
+            data = np.full(shape, np.nan)
+            data[:,:-np.ptp(fmch)] = self.values
+            data = fm.utils.rollrows(data, fmch-np.min(fmch))
+        else:
+            data = self.values.copy()
+
+        # update coords
+        indx = np.arange(np.min(fmch), np.min(fmch)+shape[1])
+        fsig = interp1d(self.indx, self.fsig, fill_value='extrapolate')(indx)
+        fimg = interp1d(self.indx, self.fimg, fill_value='extrapolate')(indx)
+        status = 'DEMODULATED' + ['+', '-'][reverse]
+
+        tcoords  = deepcopy(self.tcoords)
+        chcoords = deepcopy(self.chcoords)
+        ptcoords = deepcopy(self.ptcoords)
+        tcoords.update({'fmch': fmch})
+        chcoords.update({'indx': indx, 'fsig': fsig, 'fimg': fimg})
+        ptcoords.update({'status': status})
+
+        return fm.array(data, tcoords, chcoords, ptcoords)
 
 
     @property
