@@ -2,6 +2,11 @@
 
 # imported items
 __all__ = ['array', 'ones', 'zeros', 'full', 'empty', 'demodulate', 'modulate']
+__all__ = [
+    'array', 'demodulate', 'modulate',
+    'ones', 'zeros', 'full', 'empty',
+    'ones_like', 'zeros_like', 'full_like', 'empty_like',
+]
 
 # dependent packages
 import fmflow as fm
@@ -105,6 +110,94 @@ def empty(shape, dtype=None, **kwargs):
     """
     data = np.empty(shape, dtype)
     return fm.array(data, **kwargs)
+
+
+def zeros_like(array, dtype=None, keepmeta=True):
+    """Create an array of zeros with the same shape and type as the input array.
+
+    Args:
+        array (xarray.DataArray): The shape and data-type of it define
+            these same attributes of the output array.
+        dtype (data-type, optional): If spacified, this function overrides
+            the data-type of the output array.
+        keepmeta (bool, optional): Whether *coords, attrs, and name of the input
+            array are kept in the output one. Default is True.
+
+    Returns:
+        array (xarray.DataArray): An array filled with zeros.
+
+    """
+    if keepmeta:
+        return xr.zeros_like(array, dtype)
+    else:
+        return fm.zeros(array.shape, dtype)
+
+
+def ones_like(array, dtype=None, keepmeta=True):
+    """Create an array of ones with the same shape and type as the input array.
+
+    Args:
+        array (xarray.DataArray): The shape and data-type of it define
+            these same attributes of the output array.
+        dtype (data-type, optional): If spacified, this function overrides
+            the data-type of the output array.
+        keepmeta (bool, optional): Whether *coords, attrs, and name of the input
+            array are kept in the output one. Default is True.
+
+    Returns:
+        array (xarray.DataArray): An array filled with ones.
+
+    """
+    if keepmeta:
+        return xr.ones_like(array, dtype)
+    else:
+        return fm.ones(array.shape, dtype)
+
+
+def full_like(array, fill_value, dtype=None, keepmeta=True):
+    """Create an array of `fill_value` with the same shape and type as the input array.
+
+    Args:
+        array (xarray.DataArray): The shape and data-type of it define
+            these same attributes of the output array.
+        fill_value (scalar): Fill value.
+        dtype (data-type, optional): If spacified, this function overrides
+            the data-type of the output array.
+        keepmeta (bool, optional): Whether *coords, attrs, and name of the input
+            array are kept in the output one. Default is True.
+
+    Returns:
+        array (xarray.DataArray): An array filled with `fill_value`.
+
+    """
+    if keepmeta:
+        return xr.full_like(array, dtype)
+    else:
+        return fm.full(array.shape, dtype)
+
+
+def empty_like(array, dtype=None, keepmeta=True):
+    """Create an array of empty with the same shape and type as the input array.
+
+    Args:
+        array (xarray.DataArray): The shape and data-type of it define
+            these same attributes of the output array.
+        dtype (data-type, optional): If spacified, this function overrides
+            the data-type of the output array.
+        keepmeta (bool, optional): Whether *coords, attrs, and name of the input
+            array are kept in the output one. Default is True.
+
+    Returns:
+        array (xarray.DataArray): An array without initializing entries.
+
+    """
+    if keepmeta:
+        return fm.empty(array.shape,
+            array.fm.tcoords, array.fm.chcoords, array.fm.ptcoords,
+            array.attrs, array.name
+        )
+    else:
+        return fm.empty(array.shape, dtype)
 
 
 def demodulate(array, reverse=False):
