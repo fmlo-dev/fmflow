@@ -4,7 +4,7 @@
 __all__ = ['arrayfunc', 'numchunk', 'timechunk']
 
 # standard library
-from collections import partial, wraps
+from functools import partial, wraps
 from inspect import getargspec
 
 # dependent packages
