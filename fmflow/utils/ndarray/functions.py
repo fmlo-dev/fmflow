@@ -9,6 +9,17 @@ import numpy as np
 
 # functions
 def rollrows(array, shifts):
+    """Roll 2D array elements of each row by a given shifts.
+
+    Args:
+        array (numpy.ndarray): A 2D array.
+        shifts (int of list of int): The number(s) of places
+            by which elements of each row are shifted.
+
+    Returns:
+        array (numpy.ndarray): An output rolled array.
+
+    """
     array = np.asarray(array)
     shifts = np.asarray(shifts)
 
