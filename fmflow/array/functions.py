@@ -1,17 +1,18 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['array', 'ones', 'zeros', 'full', 'empty', 'demodulate', 'modulate']
 __all__ = [
     'array', 'demodulate', 'modulate',
     'ones', 'zeros', 'full', 'empty',
     'ones_like', 'zeros_like', 'full_like', 'empty_like',
+    'align', 'concat', 'merge',
 ]
 
 # dependent packages
 import fmflow as fm
 import numpy as np
 import xarray as xr
+from xarray import align, concat, merge
 
 
 # functions
