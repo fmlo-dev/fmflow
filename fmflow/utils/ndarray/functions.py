@@ -1,10 +1,11 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['rollrows']
+__all__ = ['rollrows', 'slicewhere']
 
 # dependent packages
 import numpy as np
+from scipy import ndimage
 
 
 # functions
@@ -33,3 +34,22 @@ def rollrows(array, shifts):
     cols = cols - (shifts%array.shape[1])[:,np.newaxis]
     cols[cols<0] += array.shape[1]
     return array[rows, cols]
+
+
+def slicewhere(condition):
+    """Return slices of regions that fulfill condition.
+
+    Example:
+        >>> cond = [False, True, True, False, False, True, False]
+        >>> fm.utils.slicewhere(cond)
+        [slice(1L, 3L, None), slice(5L, 6L, None)]
+
+    Args:
+        condition (numpy.ndarray): An array of booleans.
+
+    Returns:
+        slices (list of slice): List of slice objects.
+
+    """
+    regions = ndimage.find_objects(ndimage.label(condition)[0])
+    return [region[0] for region in regions]
