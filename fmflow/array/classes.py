@@ -25,8 +25,8 @@ TCOORDS = lambda size=0: OrderedDict([
 ])
 
 CHCOORDS = lambda size=0: OrderedDict([
-    ('fsig', ('ch', np.arange(size, dtype=float))),
-    ('fimg', ('ch', np.arange(size, dtype=float)[::-1])),
+    ('fsig', ('ch', np.zeros(size, dtype=float))),
+    ('fimg', ('ch', np.zeros(size, dtype=float))),
 ])
 
 PTCOORDS = OrderedDict([
