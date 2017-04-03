@@ -145,7 +145,7 @@ class FMAccessor(object):
 
     @property
     def isdemodulated(self):
-        """A boolean that indicates whether the array is demodulated."""
+        """Whether the array is demodulated (regardless of reverse)."""
         return bool(re.search('^DEMODULATED', self.status.values.item()))
 
     @property
