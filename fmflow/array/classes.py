@@ -150,7 +150,7 @@ class FMAccessor(object):
 
     @property
     def ismodulated(self):
-        """A boolean that indicates whether the array is modulated."""
+        """Whether the array is modulated."""
         return bool(re.search('^MODULATED', self.status.values.item()))
 
     @property
