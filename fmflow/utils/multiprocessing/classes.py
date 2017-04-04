@@ -63,7 +63,7 @@ class MPPool(object):
         results = []
 
         def pfunc(child, args):
-            child.send(map(func, args))
+            child.send(list(map(func, args)))
             child.close()
 
         for args in np.array_split(sequence, self.processes):
