@@ -58,12 +58,14 @@ class MPPool(object):
 
     def _mpmap(self, func, sequence):
         """Multiprosessing map function that can works with non-local function."""
+        procs = []
+        parents = []
+        results = []
+
         def pfunc(child, args):
             child.send(map(func, args))
             child.close()
 
-        procs = []
-        parents = []
         for args in np.array_split(sequence, self.processes):
             parent, child = mp.Pipe()
             proc = mp.Process(target=pfunc, args=(child, args))
@@ -73,7 +75,6 @@ class MPPool(object):
         for proc in procs:
             proc.start()
 
-        results = []
         for parent in parents:
             results += parent.recv()
 
