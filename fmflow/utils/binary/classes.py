@@ -15,6 +15,51 @@ import numpy as np
 
 # classes
 class CStructReader(object):
+    """Read a binary file to unpack values in a C structure.
+
+    C structures can be expressed as a Python list that stores name, type, and shape
+    of each member in a C structure. For example, the following C structure::
+
+        struct schedule {
+        int a[2];
+        float b[2][3];
+        char c[10];
+        };
+
+    will be expressed as the following Python list::
+
+        structure = [
+            ('a', 'i', 2),
+            ('b', 'd', (2,3)),
+            ('c', '10s')
+        ]
+
+    where the first element of each member is name, the second one is the format
+    character (https://docs.python.jp/3/library/struct.html#format-characters)
+    that represents C type in Python, and the third one (optional) is shape.
+
+    Example:
+        >>> structure = [('a', 'i', 2), ('b', 'd', (2,3)), ('c', '10s')]
+        >>> reader = fm.utils.CStructReader(structure)
+        >>> with open('binaryfile', 'rb') as f:
+        ...     reader.read(f)
+        >>> reader.data
+        OrderedDict([
+            ('a', array([0, 1])),
+            ('b', array([[0, 1, 2],[3, 4, 5]])),
+            ('c', 'some text')
+        ])
+
+    Attributes:
+        data (OrderedDict): An ordered dictionary that stores unpacked values.
+        jsondata (OrderedDict): An JSON string that stores unpacked values.
+        fitsformats (OrderedDict): An ordered dictionary of FITS formats corresponding dtypes.
+        info (dict): Stored information about the structure, ignored, and byteorder.
+
+    References:
+        https://docs.python.jp/3/library/struct.html#module-struct
+
+    """
     def __init__(self, structure, ignored='$.', byteorder='<'):
         """Initialize a C structure reader.
 
