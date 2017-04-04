@@ -68,8 +68,7 @@ class MPPool(object):
 
         for args in np.array_split(sequence, self.processes):
             parent, child = mp.Pipe()
-            proc = mp.Process(target=pfunc, args=(child, args))
-            procs.append(proc)
+            procs.append(mp.Process(target=pfunc, args=(child, args)))
             parents.append(parent)
 
         for proc in procs:
