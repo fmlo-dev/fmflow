@@ -56,9 +56,10 @@ class CStructReader(object):
 
     @property
     def fitsformats(self):
+        """An ordered dictionary of FITS formats corresponding dtypes."""
         fitsformats = OrderedDict()
-        for name, dtype in self.dtypes.items():
-            count = np.prod(self.shapes[name])
+        for name, dtype in self.info['dtypes'].items():
+            count = np.prod(self.info['shapes'][name])
 
             if re.search('s', dtype):
                 code = 'A'
