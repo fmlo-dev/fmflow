@@ -31,9 +31,10 @@ class CStructReader(object):
 
     @property
     def data(self):
+        """An ordered dictionary that stores unpacked values."""
         data = OrderedDict()
-        for name, shape in self.shapes.items():
-            if re.search(self.ignored, name):
+        for name, shape in self.info['shapes'].items():
+            if re.search(self.info['ignored'], name):
                 continue
 
             _data = self._data[name]
