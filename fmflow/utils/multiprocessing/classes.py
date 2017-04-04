@@ -77,7 +77,7 @@ class MPPool(object):
         for parent in parents:
             results += parent.recv()
 
-        for procs in procs:
-            procs.join()
+        for proc in procs:
+            proc.join()
 
         return results
