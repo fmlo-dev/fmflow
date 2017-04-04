@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['fmgf', 'rollrows', 'slicewhere']
+__all__ = ['fmgf', 'mad', 'rollrows', 'slicewhere']
 
 # dependent packages
 import numpy as np
@@ -48,6 +48,25 @@ def fmgf(array, sigma):
 
     filtered = yg + ((1-t)**2)*ym1 + (2*t*(1-t))*y0 + (t**2)*yp1
     return filtered
+
+
+def mad(array, axis=None, keepdims=False):
+    """Compute the median absolute deviation (MAD) along the given axis.
+
+    Args:
+        array (numpy.ndarray): An input array.
+        axis (int, optional): Axis along which the MADs are computed.
+            The default is to compute the MAD along a flattened version of the array.
+        keepdims (bool, optional): If True, the axes which are reduced are left
+            in the result as dimensions with size one.
+
+    Returns:
+        mad (numpy.ndarray): A new array holding the result.
+
+    """
+    ad = np.abs(array - np.median(array, axis, keepdims=True))
+    mad = np.median(ad, axis, keepdims=keepdims)
+    return mad
 
 
 def rollrows(array, shifts):
