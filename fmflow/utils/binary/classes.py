@@ -81,11 +81,10 @@ class CStructReader(object):
 
         return fitsformats
 
-    @property
-    def joineddtypes(self):
-        joineddtypes = self.byteorder
-        for name, dtype in self.dtypes.items():
-            count = np.prod(self.shapes[name])
+    def _joineddtypes(self):
+        joineddtypes = self.info['byteorder']
+        for name, dtype in self.info['dtypes'].items():
+            count = np.prod(self.info['shapes'][name])
             joineddtypes += dtype * count
 
         return joineddtypes
