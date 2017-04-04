@@ -25,8 +25,8 @@ TCOORDS = lambda size=0: OrderedDict([
 ])
 
 CHCOORDS = lambda size=0: OrderedDict([
-    ('fsig', ('ch', np.arange(size, dtype=float))),
-    ('fimg', ('ch', np.arange(size, dtype=float)[::-1])),
+    ('fsig', ('ch', np.zeros(size, dtype=float))),
+    ('fimg', ('ch', np.zeros(size, dtype=float))),
 ])
 
 PTCOORDS = OrderedDict([
@@ -145,12 +145,17 @@ class FMAccessor(object):
 
     @property
     def isdemodulated(self):
-        """A boolean that indicates whether the array is demodulated."""
+        """Whether the array is demodulated (regardless of reverse)."""
         return bool(re.search('^DEMODULATED', self.status.values.item()))
 
     @property
+    def isdemodulated_r(self):
+        """Whether the array is reverse-demodulated."""
+        return bool(re.search('^DEMODULATED-', self.status.values.item()))
+
+    @property
     def ismodulated(self):
-        """A boolean that indicates whether the array is modulated."""
+        """Whether the array is modulated."""
         return bool(re.search('^MODULATED', self.status.values.item()))
 
     @property
@@ -165,7 +170,7 @@ class FMAccessor(object):
 
     @property
     def ptcoords(self):
-        """A dictionary of values that don't label any axes (point like)."""
+        """A dictionary of values that don't label any axes (point-like)."""
         return {key: getattr(self, key).item() for key in PTCOORDS}
 
     def _initcoords(self):
