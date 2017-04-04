@@ -47,6 +47,7 @@ class CStructReader(object):
 
     @property
     def jsondata(self):
+        """An JSON string that stores unpacked values."""
         data = self.data
         for name, datum in data.items():
             if isinstance(datum, np.ndarray):
