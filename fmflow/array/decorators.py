@@ -72,7 +72,7 @@ def numchunk(func):
 
     """
     @wraps(func)
-    @arrayfunc(func)
+    @arrayfunc
     def wrapper(*args, **kwargs):
         array = args[0]
         argnames = getargspec(func).args
@@ -110,7 +110,7 @@ def timechunk(func):
 
     """
     @wraps(func)
-    @arrayfunc(func)
+    @arrayfunc
     def wrapper(*args, **kwargs):
         array = args[0]
         argnames = getargspec(func).args
