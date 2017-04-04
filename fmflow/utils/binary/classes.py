@@ -23,9 +23,19 @@ class CStructReader(object):
         self.unpacker = Struct(self.joineddtypes)
 
     def read(self, f):
-        bindata = f.read(self.unpacker.size)
-        unpdata = deque(self.unpacker.unpack(bindata))
-        for name, shape in self.shapes.items():
+        """Sequentially read a file object to unpack values in a C structure.
+
+        Values are stored in the C structure reader instance as an ordered dictionary.
+        Use `data` or `jsondata` attributes to access them.
+
+        Args:
+            f (file): A binary file object to be read.
+                It must be `open`ed with `b` option.
+
+        """
+        bindata = f.read(self._unpacker.size)
+        unpdata = deque(self._unpacker.unpack(bindata))
+        for name, shape in self.info['shapes'].items():
             datum = [unpdata.popleft() for i in range(np.prod(shape))]
             self._data[name].append(np.asarray(datum))
 
