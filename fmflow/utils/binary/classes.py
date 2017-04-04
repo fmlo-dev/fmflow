@@ -98,7 +98,7 @@ class CStructReader(object):
                 (name, dtype), shape = item, tuple([1])
             elif len(item) == 3:
                 if type(item[2]) == int:
-                    name, dtype, shape = item[:2], (item[2],)
+                    (name, dtype), shape = item[:2], (item[2],)
                 elif type(item[2]) in (list, tuple):
                     name, dtype, shape = item[:2], tuple(item[2])
                 else:
