@@ -16,11 +16,22 @@ import numpy as np
 # classes
 class CStructReader(object):
     def __init__(self, structure, ignored='$.', byteorder='<'):
-        self.ignored = ignored
-        self.byteorder = byteorder
-        self.dtypes, self.shapes = self._parse(structure)
-        self._data = OrderedDict((name,[]) for name in self.dtypes)
-        self.unpacker = Struct(self.joineddtypes)
+        """Initialize a C structure reader.
+
+        Args:
+            structure (list of item): A Python list that stores name, type, and shape
+                of each member in a C structure. See example for more information.
+            ignored (str, optional): A string of regular expression for ignoring
+                specific name(s) of data when reading a binary file. Default is '$.'
+                (all names of data are not ignored).
+            byteorder (str, optional): A format character that indicates the byte ordered
+                of a binary file. Default is '<' (little endian). Use '>' for big endian.
+
+        """
+        self.info = {'ignored': ignored, 'byteorder': byteorder}
+        self.info['dtypes'], self.info['shapes'] = self._parse(structure)
+        self._data = OrderedDict((name,[]) for name in self.info['dtypes'])
+        self._unpacker = Struct(self._joineddtypes())
 
     def read(self, f):
         """Sequentially read a file object to unpack values in a C structure.
