@@ -82,10 +82,10 @@ def numchunk(func):
 
         p = fm.utils.MPPool()
         N = kwargs.pop('numchunk', p.processes)
-        func = partial(func, **kwargs)
+        pfunc = partial(func, **kwargs)
         subarrays = np.array_split(array, N)
 
-        return np.concatenate(p.map(func, subarrays))
+        return np.concatenate(p.map(pfunc, subarrays))
 
     return wrapper
 
@@ -121,9 +121,9 @@ def timechunk(func):
         p = fm.utils.MPPool()
         T = kwargs.pop('timechunk', len(array))
         N = int(round(len(array) / T))
-        func = partial(func, **kwargs)
+        pfunc = partial(func, **kwargs)
         subarrays = np.array_split(array, N)
 
-        return np.concatenate(p.map(func, subarrays))
+        return np.concatenate(p.map(pfunc, subarrays))
 
     return wrapper
