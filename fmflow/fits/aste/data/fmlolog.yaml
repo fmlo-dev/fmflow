@@ -1,0 +1,5 @@
+- [STARTTIME, U22, null]
+- [SCANTYPE, U4, null]
+- [FMFREQ, f8, Hz]
+- [LOFREQ, f8, Hz]
+- [VRAD, f8, m/s]
