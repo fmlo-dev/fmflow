@@ -60,11 +60,8 @@ def dtype_to_tform(dtype):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
-    # character
-    if re.search('S', dtype):
-        return 'A{}'.format(re.findall('\d+', dtype)[0])
     # 32-bit integer
-    elif re.search('i4', dtype):
+    if re.search('i4', dtype):
         return 'J'
     # 64-bit integer
     elif re.search('i8', dtype):
@@ -75,6 +72,10 @@ def dtype_to_tform(dtype):
     # double precision floating point
     elif re.search('f8', dtype):
         return 'D'
+    # character or Unicode
+    elif re.search('S|U', dtype):
+        num = re.findall('\d+', dtype)[0]
+        return 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(dtype)
