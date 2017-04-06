@@ -22,14 +22,8 @@ def ctype_to_tform(ctype):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
-    # character
-    if re.search('s', ctype):
-        return 'A{}'.format(re.findall('\d+', ctype)[0])
-    # unsigned byte
-    elif re.search('B', ctype):
-        return 'B'
     # 32-bit integer
-    elif re.search('i', ctype):
+    if re.search('i', ctype):
         return 'J'
     # 64-bit integer
     elif re.search('q', ctype):
@@ -40,6 +34,13 @@ def ctype_to_tform(ctype):
     # double precision floating point
     elif re.search('d', ctype):
         return 'D'
+    # unsigned byte
+    elif re.search('B', ctype):
+        return 'B'
+    # character
+    elif re.search('s', ctype):
+        num = re.findall('\d+', ctype)[0]
+        return 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(ctype)
@@ -59,11 +60,8 @@ def dtype_to_tform(dtype):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
-    # character
-    if re.search('S', dtype):
-        return 'A{}'.format(re.findall('\d+', dtype)[0])
     # 32-bit integer
-    elif re.search('i4', dtype):
+    if re.search('i4', dtype):
         return 'J'
     # 64-bit integer
     elif re.search('i8', dtype):
@@ -74,6 +72,10 @@ def dtype_to_tform(dtype):
     # double precision floating point
     elif re.search('f8', dtype):
         return 'D'
+    # character or Unicode
+    elif re.search('S|U', dtype):
+        num = re.findall('\d+', dtype)[0]
+        return 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(dtype)
