@@ -61,7 +61,7 @@ def dtype_to_tform(dtype):
     """
     # character
     if re.search('S', dtype):
-        return 'A{}'.format(re.findall('\d+', ctype)[0])
+        return 'A{}'.format(re.findall('\d+', dtype)[0])
     # 32-bit integer
     elif re.search('i4', dtype):
         return 'J'
