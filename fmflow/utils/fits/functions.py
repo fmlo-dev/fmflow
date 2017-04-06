@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['ctype_to_tform']
+__all__ = ['ctype_to_tform', 'dtype_to_tform']
 
 # standard library
 import re
@@ -45,3 +45,35 @@ def ctype_to_tform(ctype):
         raise ValueError(ctype)
 
 
+def dtype_to_tform(dtype):
+    """Convert NumPy dtype to FITS format.
+
+    Args:
+        dtype (str): A dtype string of NumPy.
+
+    Returns:
+        tform (str): A format string of FITS (TFORM).
+
+    References
+        https://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html
+        http://docs.astropy.org/en/stable/io/fits/usage/table.html
+
+    """
+    # character
+    if re.search('S', dtype):
+        return 'A{}'.format(re.findall('\d+', ctype)[0])
+    # 32-bit integer
+    elif re.search('i4', dtype):
+        return 'J'
+    # 64-bit integer
+    elif re.search('i8', dtype):
+        return 'K'
+    # single precision floating point
+    elif re.search('f4', dtype):
+        return 'E'
+    # double precision floating point
+    elif re.search('f8', dtype):
+        return 'D'
+    # otherwise
+    else:
+        raise ValueError(dtype)
