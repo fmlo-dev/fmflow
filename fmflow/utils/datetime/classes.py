@@ -31,16 +31,20 @@ class DatetimeParser(object):
         self.cutoffsec = cutoffsec
         self.pattern = None
 
-    def __call__(self, string):
+    def __call__(self, string, encoding='utf-8'):
         """Convert a datetime string to that in ISO format.
 
         Args:
             string (str): A datetime string.
+            encoding (str, optional): An encoding with which to decode `string` if it is bytes.
 
         Returns:
             isostring (str): A datetime string in ISO format.
 
         """
+        if type(string) == bytes:
+            string = string.decode(encoding)
+
         try:
             dt = datetime.strptime(string, self.pattern)
         except:
