@@ -119,13 +119,15 @@ class CStructReader(object):
         data = self.data
         encoding = self.info['encoding']
         for name, datum in data.items():
-            if type(datum) == np.ndarray:
+            if type(datum) == bytes:
+                data[name] = datum.decode(encoding)
+            elif type(datum) == np.ndarray:
                 if datum.dtype.kind == 'S':
                     date[name] = np.char.decode(datum, encoding).tolist()
                 else:
                     data[name] = datum.tolist()
-            if type(datum) == bytes:
-                data[name] = datum.decode(encoding)
+            else:
+                continue
 
         return json.dumps(data)
 
