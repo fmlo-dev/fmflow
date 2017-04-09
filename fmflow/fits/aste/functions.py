@@ -140,3 +140,29 @@ def read_antennalog(antennalog):
     return fits.BinTableHDU.from_columns(cols, header)
 
 
+def check_backend(backendlog, byteorder):
+    """Check backend type from a backend logging of ASTE.
+
+    Args:
+        backendlog (str): File name of backend logging.
+        byteorder (str): format string that represents byte order
+            of the backendlog. Default is '<' (little-endian).
+            If the data in the returned FITS seems to be wrong,
+            try to spacify '>' (big-endian).
+
+    Returns:
+        backend (str): Backend type.
+
+    """
+    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
+    head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
+    ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
+
+    # read backendlog
+    with open(backendlog, 'rb') as f:
+        head.read(f)
+        ctl.read(f)
+
+    return ctl.data['cbe_type']
+
+
