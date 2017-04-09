@@ -53,11 +53,12 @@ def ctype_to_tform(ctype, shape=None):
         raise ValueError(ctype)
 
 
-def dtype_to_tform(dtype):
+def dtype_to_tform(dtype, shape=None):
     """Convert NumPy dtype to FITS format.
 
     Args:
         dtype (str): A dtype string of NumPy.
+        shape (int or tuple of int, optional): shape of the C-type.
 
     Returns:
         tform (str): A format string of FITS (TFORM).
@@ -67,22 +68,28 @@ def dtype_to_tform(dtype):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
+    num = ''
+    if shape is not None:
+        prod = np.prod(shape)
+        if prod != 1:
+            num = str(prod)
+
     # 32-bit integer
     if re.search('i4', dtype):
-        return 'J'
+        return num + 'J'
     # 64-bit integer
     elif re.search('i8', dtype):
-        return 'K'
+        return num + 'K'
     # single precision floating point
     elif re.search('f4', dtype):
-        return 'E'
+        return num + 'E'
     # double precision floating point
     elif re.search('f8', dtype):
-        return 'D'
+        return num + 'D'
     # character or Unicode
     elif re.search('S|U', dtype):
         num = re.findall('\d+', dtype)[0]
-        return 'A{}'.format(num)
+        return num + 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(dtype)
