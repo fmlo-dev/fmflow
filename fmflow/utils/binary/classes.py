@@ -53,7 +53,6 @@ class CStructReader(object):
     Attributes:
         data (OrderedDict): An ordered dictionary that stores unpacked values.
         jsondata (OrderedDict): An JSON string that stores unpacked values.
-        fitsformats (OrderedDict): An ordered dictionary of FITS formats corresponding dtypes.
         info (dict): Stored information about the structure, ignored, and byteorder.
 
     References:
@@ -121,34 +120,6 @@ class CStructReader(object):
                 data[name] = datum.tolist()
 
         return json.dumps(data)
-
-    @property
-    def fitsformats(self):
-        """An ordered dictionary of FITS formats corresponding dtypes."""
-        fitsformats = OrderedDict()
-        for name, dtype in self.info['dtypes'].items():
-            count = np.prod(self.info['shapes'][name])
-
-            if re.search('s', dtype):
-                code = 'A'
-                code += re.findall('\d+', dtype)[0]
-            elif re.search('B', dtype):
-                code = 'B'
-            elif re.search('i', dtype):
-                code = 'J'
-            elif re.search('d', dtype):
-                code = 'D'
-            elif re.search('f', dtype):
-                code = 'E'
-            else:
-                raise ValueError(dtype)
-
-            if count == 1:
-                fitsformats[name] = code
-            else:
-                fitsformats[name] = str(count) + code
-
-        return fitsformats
 
     def _joineddtypes(self):
         joineddtypes = self.info['byteorder']
