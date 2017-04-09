@@ -141,7 +141,7 @@ class CStructReader(object):
                 if type(item[2]) == int:
                     (name, ctype), shape = item[:2], [item[2]]
                 elif type(item[2]) in (list, tuple):
-                    name, ctype, shape = item[:2], list(item[2])
+                    (name, ctype), shape = item[:2], list(item[2])
                 else:
                     raise ValueError(item)
             else:
