@@ -166,3 +166,119 @@ def check_backend(backendlog, byteorder):
     return ctl.data['cbe_type']
 
 
+def read_backendlog_mac(backendlog, byteorder):
+    """Read a backend logging of ASTE/MAC.
+
+    Args:
+        backendlog (str): File name of backend logging.
+        byteorder (str): format string that represents byte order
+            of the backendlog. Default is '<' (little-endian).
+            If the data in the returned FITS seems to be wrong,
+            try to spacify '>' (big-endian).
+
+    Returns:
+        hdu (BinTableHDU): HDU containing the read backend logging.
+
+    """
+    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
+    mac = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_mac.yaml'))
+
+    head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
+    ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
+    obs  = fm.utils.CStructReader(mac['obs'], IGNORED_KEY, byteorder)
+    dat  = fm.utils.CStructReader(mac['dat'], IGNORED_KEY, byteorder)
+
+    def eof(f):
+        head.read(f)
+        return (head._data['crec_type'][-1][0] == b'ED')
+
+    # read backendlog
+    fsize = os.path.getsize(backendlog)
+    with open(backendlog, 'rb') as f:
+        eof(f)
+        ctl.read(f)
+        eof(f)
+        obs.read(f)
+
+        i = 0
+        while not eof(f):
+            i += 1
+            dat.read(f)
+            if i%100 == 0:
+                frac = f.tell() / fsize
+                fm.utils.progressbar(frac)
+
+    # edit data
+    data = dat.data
+    data['starttime'] = data.pop('cint_sttm')
+    data['arrayid']   = data.pop('cary_name')
+    data['scantype']  = data.pop('cscan_type')
+    data['arraydata'] = data.pop('iary_data').astype(float)
+
+    ## starttime
+    p = fm.utils.DatetimeParser()
+    data['starttime'] = np.array([p(t) for t in data['starttime']])
+
+    ## scantype (bug?)
+    data['scantype'][data['scantype']==b'R\x00RO'] = b'R'
+
+    ## arraydata
+    usefg    = np.array(obs.data['iary_usefg'], dtype=bool)
+    isusb    = np.array(obs.data['csid_type'] == b'USB')[usefg]
+    arrayids = np.unique(data['arrayid'])
+
+    ## apply scaling factor and offset
+    data['arraydata'] *= data['dary_scf'][:,np.newaxis]
+    data['arraydata'] += data['dary_offset'][:,np.newaxis]
+
+    for i, arrayid in enumerate(arrayids):
+        flag = (data['arrayid'] == arrayid)
+
+        ## slices of each scantype
+        ons  = fm.utils.slicewhere(flag & (data['scantype'] == b'ON'))
+        rs   = fm.utils.slicewhere(flag & (data['scantype'] == b'R'))
+        skys = fm.utils.slicewhere(flag & (data['scantype'] == b'SKY'))
+        zero = fm.utils.slicewhere(flag & (data['scantype'] == b'ZERO'))[0]
+
+        ## apply ZERO and coeff. to ON data
+        for on in ons:
+            data['arraydata'][on] -= data['arraydata'][zero]
+            data['arraydata'][on] *= np.mean(data['dalpha'][on])
+
+        ## apply ZERO and coeff. to R data
+        for (r, sky) in zip(rs, skys):
+            data['arraydata'][r] -= data['arraydata'][zero]
+            data['arraydata'][r] *= data['dbeta'][sky]
+
+        ## apply ZERO to SKY data
+        for sky in skys:
+            data['arraydata'][sky] -= data['arraydata'][zero]
+
+        ## reverse array (if USB)
+        if arrayid in arrayids[isusb]:
+            data['arraydata'][flag] = data['arraydata'][flag,::-1]
+
+    # read and edit formats
+    names  = list(dat.info['ctypes'].keys())
+    ctypes = list(dat.info['ctypes'].values())
+    shapes = list(dat.info['shapes'].values())
+    tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
+    fmts = OrderedDict(item for item in zip(names, tforms))
+
+    num = re.findall('\d+', fmts.pop('iary_data'))[0]
+    fmts['arraydata'] = '{}E'.format(num)
+    fmts['starttime'] = 'A26'
+    fmts['arrayid']   = fmts.pop('cary_name')
+    fmts['scantype']  = fmts.pop('cscan_type')
+
+    # bintable HDU
+    header = fits.Header()
+    header['extname']  = 'BACKEND'
+    header['filename'] = backendlog
+    header['ctlinfo']  = ctl.jsondata
+    header['obsinfo']  = obs.jsondata
+
+    cols = [fits.Column(key, fmts[key], array=data[key]) for key in data]
+    return fits.BinTableHDU.from_columns(cols, header)
+
+
