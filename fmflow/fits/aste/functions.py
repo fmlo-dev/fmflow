@@ -282,3 +282,56 @@ def read_backendlog_mac(backendlog, byteorder):
     return fits.BinTableHDU.from_columns(cols, header)
 
 
+def make_obsinfo_mac(hdus):
+    """Make a OBSINFO HDU of ASTE/MAC.
+
+    Args:
+        hdus (HDUList): FITS object containing FMLOINFO, BACKEND HDUs.
+
+    Returns:
+        hdu (BinTableHDU): OBSINFO HDU containing the formatted observational info.
+
+    """
+    # read info
+    ctlinfo = json.loads(hdus['backend'].header['ctlinfo'])
+    obsinfo = json.loads(hdus['backend'].header['obsinfo'])
+    datinfo = hdus['backend'].data
+
+    # bintable HDU
+    N = obsinfo['iary_num']
+    p = fm.utils.DatetimeParser()
+    flag = np.array(obsinfo['iary_usefg'], dtype=bool)
+
+    fmts = yaml.load(get_data('fmflow', 'fits/data/obsinfo.yaml'))
+    names, dtypes, units = list(map(list, zip(*fmts)))
+    tforms = list(map(fm.utils.dtype_to_tform, dtypes))
+
+    header = fits.Header()
+    header['extname']  = 'OBSINFO'
+    header['fitstype'] = 'FMFITS'
+    header['telescop'] = 'ASTE'
+    header['date-obs'] = p(obsinfo['clog_id'])[:-3]
+    header['observer'] = obsinfo['cobs_user']
+    header['object']   = obsinfo['cobj_name']
+    header['ra']       = obsinfo['dsrc_pos'][0][0]
+    header['dec']      = obsinfo['dsrc_pos'][1][0]
+    header['equinox']  = float(re.findall('\d+', obsinfo['cepoch'])[0])
+    header['fmflow']   = fm.__version__
+
+    data = OrderedDict()
+    data['arrayid']   = np.unique(datinfo['arrayid'])
+    data['sideband']  = np.array(obsinfo['csid_type'])[flag]
+    data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
+    data['backend']   = np.tile(ctlinfo['cbe_type'], N)
+    data['numchan']   = np.tile(obsinfo['ichanel'], N)
+    data['restchan']  = np.tile(obsinfo['ichanel'], N)/2 - 0.5
+    data['restfreq']  = np.array(obsinfo['dcent_freq'])[flag]
+    data['intmfreq']  = np.array(obsinfo['dflif'])[flag]
+    data['bandwidth'] = np.array(obsinfo['dbebw'])[flag]
+    data['chanwidth'] = np.array(obsinfo['dbechwid'])[flag]
+    data['interval']  = np.tile(obsinfo['diptim'], N)
+    data['integtime'] = np.tile(obsinfo['diptim']*EFF_8257D, N)
+    data['beamsize']  = np.rad2deg(1.2*C/D_ASTE) / data['restfreq']
+
+    cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
+    return fits.BinTableHDU.from_columns(cols, header)
