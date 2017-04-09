@@ -8,11 +8,12 @@ import re
 
 
 # functions
-def ctype_to_tform(ctype):
+def ctype_to_tform(ctype, shape=None):
     """Convert Python C-type to FITS format.
 
     Args:
         ctype (str): A C-type format string in Python.
+        shape (int or tuple of int, optional): shape of the C-type.
 
     Returns:
         tform (str): A format string of FITS (TFORM).
@@ -22,25 +23,31 @@ def ctype_to_tform(ctype):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
+    num = ''
+    if shape is not None:
+        prod = np.prod(shape)
+        if prod != 1:
+            num = str(prod)
+
     # 32-bit integer
     if re.search('i', ctype):
-        return 'J'
+        return num + 'J'
     # 64-bit integer
     elif re.search('q', ctype):
-        return 'K'
+        return num + 'K'
     # single precision floating point
     elif re.search('f', ctype):
-        return 'E'
+        return num + 'E'
     # double precision floating point
     elif re.search('d', ctype):
-        return 'D'
+        return num + 'D'
     # unsigned byte
     elif re.search('B', ctype):
-        return 'B'
+        return num + 'B'
     # character
     elif re.search('s', ctype):
         num = re.findall('\d+', ctype)[0]
-        return 'A{}'.format(num)
+        return num + 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(ctype)
