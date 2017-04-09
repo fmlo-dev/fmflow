@@ -136,12 +136,12 @@ class CStructReader(object):
         shapes = OrderedDict()
         for item in structure:
             if len(item) == 2:
-                (name, ctype), shape = item, tuple([1])
+                (name, ctype), shape = item, [1]
             elif len(item) == 3:
                 if type(item[2]) == int:
-                    (name, ctype), shape = item[:2], (item[2],)
+                    (name, ctype), shape = item[:2], [item[2]]
                 elif type(item[2]) in (list, tuple):
-                    name, ctype, shape = item[:2], tuple(item[2])
+                    name, ctype, shape = item[:2], list(item[2])
                 else:
                     raise ValueError(item)
             else:
