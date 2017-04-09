@@ -6,6 +6,9 @@ __all__ = ['ctype_to_tform', 'dtype_to_tform']
 # standard library
 import re
 
+# dependent packages
+import numpy as np
+
 
 # functions
 def ctype_to_tform(ctype, shape=None):
@@ -23,31 +26,31 @@ def ctype_to_tform(ctype, shape=None):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
-    num = ''
+    count = ''
     if shape is not None:
         prod = np.prod(shape)
         if prod != 1:
-            num = str(prod)
+            count = str(prod)
 
     # 32-bit integer
     if re.search('i', ctype):
-        return num + 'J'
+        return count + 'J'
     # 64-bit integer
     elif re.search('q', ctype):
-        return num + 'K'
+        return count + 'K'
     # single precision floating point
     elif re.search('f', ctype):
-        return num + 'E'
+        return count + 'E'
     # double precision floating point
     elif re.search('d', ctype):
-        return num + 'D'
+        return count + 'D'
     # unsigned byte
     elif re.search('B', ctype):
-        return num + 'B'
+        return count + 'B'
     # character
     elif re.search('s', ctype):
         num = re.findall('\d+', ctype)[0]
-        return num + 'A{}'.format(num)
+        return count + 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(ctype)
@@ -68,28 +71,28 @@ def dtype_to_tform(dtype, shape=None):
         http://docs.astropy.org/en/stable/io/fits/usage/table.html
 
     """
-    num = ''
+    count = ''
     if shape is not None:
         prod = np.prod(shape)
         if prod != 1:
-            num = str(prod)
+            count = str(prod)
 
     # 32-bit integer
     if re.search('i4', dtype):
-        return num + 'J'
+        return count + 'J'
     # 64-bit integer
     elif re.search('i8', dtype):
-        return num + 'K'
+        return count + 'K'
     # single precision floating point
     elif re.search('f4', dtype):
-        return num + 'E'
+        return count + 'E'
     # double precision floating point
     elif re.search('f8', dtype):
-        return num + 'D'
+        return count + 'D'
     # character or Unicode
     elif re.search('S|U', dtype):
         num = re.findall('\d+', dtype)[0]
-        return num + 'A{}'.format(num)
+        return count + 'A{}'.format(num)
     # otherwise
     else:
         raise ValueError(dtype)
