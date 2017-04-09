@@ -53,7 +53,6 @@ class CStructReader(object):
     Attributes:
         data (OrderedDict): An ordered dictionary that stores unpacked values.
         jsondata (OrderedDict): An JSON string that stores unpacked values.
-        fitsformats (OrderedDict): An ordered dictionary of FITS formats corresponding dtypes.
         info (dict): Stored information about the structure, ignored, and byteorder.
 
     References:
@@ -74,9 +73,9 @@ class CStructReader(object):
 
         """
         self.info = {'ignored': ignored, 'byteorder': byteorder}
-        self.info['dtypes'], self.info['shapes'] = self._parse(structure)
-        self._data = OrderedDict((name,[]) for name in self.info['dtypes'])
-        self._unpacker = Struct(self._joineddtypes())
+        self.info['ctypes'], self.info['shapes'] = self._parse(structure)
+        self._data = OrderedDict((name,[]) for name in self.info['ctypes'])
+        self._unpacker = Struct(self._joinedctypes())
 
     def read(self, f):
         """Sequentially read a file object to unpack values in a C structure.
@@ -122,59 +121,33 @@ class CStructReader(object):
 
         return json.dumps(data)
 
-    @property
-    def fitsformats(self):
-        """An ordered dictionary of FITS formats corresponding dtypes."""
-        fitsformats = OrderedDict()
-        for name, dtype in self.info['dtypes'].items():
+    def _joinedctypes(self):
+        """A Joined C-type string for the Struct class."""
+        joinedctypes = self.info['byteorder']
+        for name, ctype in self.info['ctypes'].items():
             count = np.prod(self.info['shapes'][name])
+            joinedctypes += ctype * count
 
-            if re.search('s', dtype):
-                code = 'A'
-                code += re.findall('\d+', dtype)[0]
-            elif re.search('B', dtype):
-                code = 'B'
-            elif re.search('i', dtype):
-                code = 'J'
-            elif re.search('d', dtype):
-                code = 'D'
-            elif re.search('f', dtype):
-                code = 'E'
-            else:
-                raise ValueError(dtype)
-
-            if count == 1:
-                fitsformats[name] = code
-            else:
-                fitsformats[name] = str(count) + code
-
-        return fitsformats
-
-    def _joineddtypes(self):
-        joineddtypes = self.info['byteorder']
-        for name, dtype in self.info['dtypes'].items():
-            count = np.prod(self.info['shapes'][name])
-            joineddtypes += dtype * count
-
-        return joineddtypes
+        return joinedctypes
 
     def _parse(self, structure):
-        dtypes = OrderedDict()
+        """Convert the structure to ctypes and shapes ordered dicts."""
+        ctypes = OrderedDict()
         shapes = OrderedDict()
         for item in structure:
             if len(item) == 2:
-                (name, dtype), shape = item, tuple([1])
+                (name, ctype), shape = item, tuple([1])
             elif len(item) == 3:
                 if type(item[2]) == int:
-                    (name, dtype), shape = item[:2], (item[2],)
+                    (name, ctype), shape = item[:2], (item[2],)
                 elif type(item[2]) in (list, tuple):
-                    name, dtype, shape = item[:2], tuple(item[2])
+                    name, ctype, shape = item[:2], tuple(item[2])
                 else:
                     raise ValueError(item)
             else:
                 raise ValueError(item)
 
-            dtypes[name] = dtype
+            ctypes[name] = ctype
             shapes[name] = shape
 
-        return dtypes, shapes
+        return ctypes, shapes
