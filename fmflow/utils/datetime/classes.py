@@ -6,6 +6,9 @@ __all__ = ['DatetimeParser']
 # standard library
 from datetime import datetime, timedelta
 
+# dependent packages
+import numpy as np
+
 # constants
 ISO_8601 = '%Y-%m-%dT%H:%M:%S.%f'
 PATTERNS = [
@@ -44,6 +47,8 @@ class DatetimeParser(object):
         """
         if type(string) == bytes:
             string = string.decode(encoding)
+        elif type(string) == np.bytes_:
+            string = string.tobytes().decode(encoding)
 
         try:
             dt = datetime.strptime(string, self.pattern)
