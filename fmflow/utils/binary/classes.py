@@ -123,7 +123,7 @@ class CStructReader(object):
                 data[name] = datum.decode(encoding)
             elif type(datum) == np.ndarray:
                 if datum.dtype.kind == 'S':
-                    date[name] = np.char.decode(datum, encoding).tolist()
+                    data[name] = np.char.decode(datum, encoding).tolist()
                 else:
                     data[name] = datum.tolist()
             else:
