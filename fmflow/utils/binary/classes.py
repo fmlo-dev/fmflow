@@ -103,7 +103,7 @@ class CStructReader(object):
                 continue
 
             _data = self._data[name]
-            datum = _data.reshape([len(_data)]+shape)
+            datum = np.reshape(_data, [len(_data)]+shape)
             if np.prod(datum.shape) == 1:
                 data[name] = np.squeeze(datum).item()
             else:
