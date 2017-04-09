@@ -59,7 +59,7 @@ class CStructReader(object):
         https://docs.python.jp/3/library/struct.html#module-struct
 
     """
-    def __init__(self, structure, ignored='$.', byteorder='<'):
+    def __init__(self, structure, ignored='$.', byteorder='<', encoding='utf-8'):
         """Initialize a C structure reader.
 
         Args:
@@ -70,9 +70,11 @@ class CStructReader(object):
                 (all names of data are not ignored).
             byteorder (str, optional): A format character that indicates the byte ordered
                 of a binary file. Default is '<' (little endian). Use '>' for big endian.
+            encoding (str, optional): An encoding with which to decode string objects
+                if their type is bytes (for the jsondata attribute). Default is utf-8.
 
         """
-        self.info = {'ignored': ignored, 'byteorder': byteorder}
+        self.info = {'ignored': ignored, 'byteorder': byteorder, 'encoding': encoding}
         self.info['ctypes'], self.info['shapes'] = self._parse(structure)
         self._data = OrderedDict((name,[]) for name in self.info['ctypes'])
         self._unpacker = Struct(self._joinedctypes())
@@ -116,8 +118,10 @@ class CStructReader(object):
         """An JSON string that stores unpacked values."""
         data = self.data
         for name, datum in data.items():
-            if isinstance(datum, np.ndarray):
+            if type(datum) == np.ndarray:
                 data[name] = datum.tolist()
+            if type(datum) == bytes:
+                data[name] = datum.decode(self.info['encoding'])
 
         return json.dumps(data)
 
