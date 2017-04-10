@@ -43,9 +43,6 @@ def fromaste(fmlolog, backendlog, antennalog=None, byteorder='<'):
     Returns:
         hdus (HDUlist): HDU list containing the merged data.
 
-    See Also:
-        https://docs.python.jp/3/library/struct.html
-
     """
     # PRIMARY HDU
     hdus = fits.HDUList()
