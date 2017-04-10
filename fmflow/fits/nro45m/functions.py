@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['fromaste']
+__all__ = ['fromnro45m']
 
 # standard library
 import json
@@ -21,15 +21,15 @@ from astropy.io import fits
 
 # constants
 C           = constants.c.value # spped of light in vacuum
-D_ASTE      = (10.0 * u.m).value # diameter of the ASTE
+D_ASTE      = (45.0 * u.m).value # diameter of the ASTE
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
-IGNORED_KEY = '^[a-z]dmy([^_]|$)' # cdmy, cdmy2, ..., except for idmy_flag
-LAT_ASTE    = coordinates.Angle('-22d58m17.69447s').deg # latitude of the ASTE
+IGNORED_KEY = '^reserve' # reserved[1|4|8]
+LAT_NRO45m  = coordinates.Angle('+35d56m40.9s').deg # latitude of the NRO45m
 
 
 # functions
-def fromaste(fmlolog, backendlog, antennalog=None, byteorder='<'):
-    """Read logging data of ASTE and merge them into a FITS object.
+def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder='<'):
+    """Read logging data of NRO45m and merge them into a FITS object.
 
     Args:
         fmlolog (str): File name of FMLO logging.
@@ -54,11 +54,9 @@ def fromaste(fmlolog, backendlog, antennalog=None, byteorder='<'):
     # BACKEND and OBSINFO HDUs
     backend = check_backend(backendlog, byteorder)
 
-    if backend == b'AC45':
-        hdus.append(read_backendlog_mac(backendlog, byteorder))
-        hdus.insert(1, make_obsinfo_mac(hdus))
-    elif backend == b'FFX':
-        raise fm.utils.FMFlowError('WHSF logging is not supported yet')
+    if backend == b'SAM45':
+        hdus.append(read_backendlog_sam45(backendlog, byteorder))
+        hdus.insert(1, make_obsinfo_sam45(hdus))
     else:
         raise fm.utils.FMFlowError('invalid logging type')
 
@@ -70,7 +68,7 @@ def fromaste(fmlolog, backendlog, antennalog=None, byteorder='<'):
 
 
 def read_fmlolog(fmlolog):
-    """Read a FMLO logging of ASTE.
+    """Read a FMLO logging of NRO45m.
 
     Args:
         fmlolog (str): File name of FMLO logging.
@@ -80,7 +78,7 @@ def read_fmlolog(fmlolog):
 
     """
     # read fmlolog
-    fmts = yaml.load(get_data('fmflow', 'fits/aste/data/fmlolog.yaml'))
+    fmts = yaml.load(get_data('fmflow', 'fits/nro45m/data/fmlolog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -107,7 +105,7 @@ def read_antennalog(antennalog):
 
     """
     # read fmlolog
-    fmts = yaml.load(get_data('fmflow', 'fits/aste/data/antennalog.yaml'))
+    fmts = yaml.load(get_data('fmflow', 'fits/nro45m/data/antennalog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -138,7 +136,7 @@ def read_antennalog(antennalog):
 
 
 def check_backend(backendlog, byteorder):
-    """Check backend type from a backend logging of ASTE.
+    """Check backend type from a backend logging of NRO45m.
 
     Args:
         backendlog (str): File name of backend logging.
@@ -151,7 +149,7 @@ def check_backend(backendlog, byteorder):
         backend (str): Backend type.
 
     """
-    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
+    com = yaml.load(get_data('fmflow', 'fits/nro45m/data/backendlog_common.yaml'))
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
 
@@ -163,8 +161,8 @@ def check_backend(backendlog, byteorder):
     return ctl.data['cbe_type']
 
 
-def read_backendlog_mac(backendlog, byteorder):
-    """Read a backend logging of ASTE/MAC.
+def read_backendlog_sam45(backendlog, byteorder):
+    """Read a backend logging of NRO45m/SAM45.
 
     Args:
         backendlog (str): File name of backend logging.
@@ -177,8 +175,8 @@ def read_backendlog_mac(backendlog, byteorder):
         hdu (BinTableHDU): HDU containing the read backend logging.
 
     """
-    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
-    mac = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_mac.yaml'))
+    com = yaml.load(get_data('fmflow', 'fits/nro45m/data/backendlog_common.yaml'))
+    mac = yaml.load(get_data('fmflow', 'fits/nro45m/data/backendlog_sam45.yaml'))
 
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
@@ -210,7 +208,7 @@ def read_backendlog_mac(backendlog, byteorder):
     data['starttime'] = data.pop('cint_sttm')
     data['arrayid']   = data.pop('cary_name')
     data['scantype']  = data.pop('cscan_type')
-    data['arraydata'] = data.pop('iary_data').astype(float)
+    data['arraydata'] = data.pop('fary_data')
 
     ## starttime
     p = fm.utils.DatetimeParser()
@@ -221,12 +219,9 @@ def read_backendlog_mac(backendlog, byteorder):
 
     ## arraydata
     usefg    = np.array(obs.data['iary_usefg'], dtype=bool)
-    isusb    = np.array(obs.data['csid_type'] == b'USB')[usefg]
+    ifatt    = np.array(obs.data['iary_ifatt'], dtype=float)[usefg]
+    islsb    = np.array(obs.data['csid_type'] == b'LSB')[usefg]
     arrayids = np.unique(data['arrayid'])
-
-    ## apply scaling factor and offset
-    data['arraydata'] *= data['dary_scf'][:,np.newaxis]
-    data['arraydata'] += data['dary_offset'][:,np.newaxis]
 
     for i, arrayid in enumerate(arrayids):
         flag = (data['arrayid'] == arrayid)
@@ -237,22 +232,21 @@ def read_backendlog_mac(backendlog, byteorder):
         skys = fm.utils.slicewhere(flag & (data['scantype'] == b'SKY'))
         zero = fm.utils.slicewhere(flag & (data['scantype'] == b'ZERO'))[0]
 
-        ## apply ZERO and coeff. to ON data
+        ## apply ZERO to ON data
         for on in ons:
             data['arraydata'][on] -= data['arraydata'][zero]
-            data['arraydata'][on] *= np.mean(data['dalpha'][on])
 
-        ## apply ZERO and coeff. to R data
-        for (r, sky) in zip(rs, skys):
+        ## apply ZERO and ifatt to R data
+        for r in rs:
             data['arraydata'][r] -= data['arraydata'][zero]
-            data['arraydata'][r] *= data['dbeta'][sky]
+            data['arraydata'][r] *= 10.0**(ifatt[i]/10.0)
 
         ## apply ZERO to SKY data
         for sky in skys:
             data['arraydata'][sky] -= data['arraydata'][zero]
 
-        ## reverse array (if USB)
-        if arrayid in arrayids[isusb]:
+        ## reverse array (if LSB)
+        if arrayid in arrayids[islsb]:
             data['arraydata'][flag] = data['arraydata'][flag,::-1]
 
     # read and edit formats
@@ -262,9 +256,8 @@ def read_backendlog_mac(backendlog, byteorder):
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
-    num = re.findall('\d+', fmts.pop('iary_data'))[0]
-    fmts['arraydata'] = '{}E'.format(num)
     fmts['starttime'] = 'A26'
+    fmts['arraydata'] = fmts.pop('fary_data')
     fmts['arrayid']   = fmts.pop('cary_name')
     fmts['scantype']  = fmts.pop('cscan_type')
 
@@ -279,8 +272,8 @@ def read_backendlog_mac(backendlog, byteorder):
     return fits.BinTableHDU.from_columns(cols, header)
 
 
-def make_obsinfo_mac(hdus):
-    """Make a OBSINFO HDU of ASTE/MAC.
+def make_obsinfo_sam45(hdus):
+    """Make a OBSINFO HDU of NRO45m/SAM45.
 
     Args:
         hdus (HDUList): FITS object containing FMLOINFO, BACKEND HDUs.
@@ -306,7 +299,7 @@ def make_obsinfo_mac(hdus):
     header = fits.Header()
     header['extname']  = 'OBSINFO'
     header['fitstype'] = 'FMFITS'
-    header['telescop'] = 'ASTE'
+    header['telescop'] = 'NRO45m'
     header['date-obs'] = p(obsinfo['clog_id'])[:-3]
     header['observer'] = obsinfo['cobs_user']
     header['object']   = obsinfo['cobj_name']
@@ -320,7 +313,7 @@ def make_obsinfo_mac(hdus):
     data['sideband']  = np.array(obsinfo['csid_type'])[flag]
     data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
     data['backend']   = np.tile(ctlinfo['cbe_type'], N)
-    data['numchan']   = np.tile(obsinfo['ichanel'], N)
+    data['numchan']   = np.array(obsinfo['ichannel'])[flag]
     data['restchan']  = np.tile(obsinfo['ichanel'], N)/2 - 0.5
     data['restfreq']  = np.array(obsinfo['dcent_freq'])[flag]
     data['intmfreq']  = np.array(obsinfo['dflif'])[flag]
@@ -328,7 +321,7 @@ def make_obsinfo_mac(hdus):
     data['chanwidth'] = np.array(obsinfo['dbechwid'])[flag]
     data['interval']  = np.tile(obsinfo['diptim'], N)
     data['integtime'] = np.tile(obsinfo['diptim']*EFF_8257D, N)
-    data['beamsize']  = np.rad2deg(1.2*C/D_ASTE) / data['restfreq']
+    data['beamsize']  = np.rad2deg(1.2*C/D_NRO45m) / data['restfreq']
 
     cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
     return fits.BinTableHDU.from_columns(cols, header)
