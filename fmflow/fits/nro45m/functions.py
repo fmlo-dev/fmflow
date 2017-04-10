@@ -67,3 +67,30 @@ def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder='<'):
     return hdus
 
 
+def read_fmlolog(fmlolog):
+    """Read a FMLO logging of NRO45m.
+
+    Args:
+        fmlolog (str): File name of FMLO logging.
+
+    Returns:
+        hdu (BinTableHDU): HDU containing the read FMLO logging.
+
+    """
+    # read fmlolog
+    fmts = yaml.load(get_data('fmflow', 'fits/nro45m/data/fmlolog.yaml'))
+    names, dtypes, units = list(map(list, zip(*fmts)))
+    tforms = list(map(fm.utils.dtype_to_tform, dtypes))
+
+    c = {0: fm.utils.DatetimeParser()}
+    data = np.genfromtxt(fmlolog, list(zip(names, dtypes)), skip_header=1, converters=c)
+
+    # bintable HDU
+    header = fits.Header()
+    header['extname'] = 'FMLOLOG'
+    header['filename'] = fmlolog
+
+    cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
+    return fits.BinTableHDU.from_columns(cols, header)
+
+
