@@ -94,3 +94,44 @@ def read_fmlolog(fmlolog):
     return fits.BinTableHDU.from_columns(cols, header)
 
 
+def read_antennalog(antennalog):
+    """Read an antenna logging of ASTE.
+
+    Args:
+        antennalog (str): File name of antenna logging.
+
+    Returns:
+        hdu (BinTableHDU): HDU containing the read antenna logging.
+
+    """
+    # read fmlolog
+    fmts = yaml.load(get_data('fmflow', 'fits/nro45m/data/antennalog.yaml'))
+    names, dtypes, units = list(map(list, zip(*fmts)))
+    tforms = list(map(fm.utils.dtype_to_tform, dtypes))
+
+    c = {0: fm.utils.DatetimeParser()}
+    d = np.genfromtxt(antennalog, list(zip(names, dtypes)), skip_header=1, converters=c)
+
+    # RA, Dec real
+    sind = lambda deg: np.sin(np.deg2rad(deg))
+    cosd = lambda deg: np.cos(np.deg2rad(deg))
+    q = -np.arcsin(sind(d['az_prog']) * cosd(LAT_ASTE) / cosd(d['dec_prog']))
+
+    ra_error  = -np.cos(q)*d['az_error'] + np.sin(q)*d['el_error']
+    dec_error = +np.sin(q)*d['az_error'] + np.cos(q)*d['el_error']
+    ra_real   = d['ra_prog'] - ra_error
+    dec_real  = d['dec_prog'] - ra_error
+
+    # bintable HDU
+    header = fits.Header()
+    header['extname'] = 'ANTENNA'
+    header['filename'] = antennalog
+
+    cols = [fits.Column(n, tforms[i], units[i], array=d[n]) for i, n in enumerate(names)]
+    cols.append(fits.Column('ra', 'D', 'deg', array=ra_real))
+    cols.append(fits.Column('dec', 'D', 'deg', array=dec_real))
+    cols.append(fits.Column('ra_error', 'D', 'deg', array=ra_error))
+    cols.append(fits.Column('dec_error', 'D', 'deg', array=dec_error))
+    return fits.BinTableHDU.from_columns(cols, header)
+
+
