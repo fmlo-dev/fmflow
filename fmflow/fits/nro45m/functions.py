@@ -161,3 +161,114 @@ def check_backend(backendlog, byteorder):
     return ctl.data['cbe_type']
 
 
+def read_backendlog_sam45(backendlog, byteorder):
+    """Read a backend logging of NRO45m/SAM45.
+
+    Args:
+        backendlog (str): File name of backend logging.
+        byteorder (str): format string that represents byte order
+            of the backendlog. Default is '<' (little-endian).
+            If the data in the returned FITS seems to be wrong,
+            try to spacify '>' (big-endian).
+
+    Returns:
+        hdu (BinTableHDU): HDU containing the read backend logging.
+
+    """
+    com = yaml.load(get_data('fmflow', 'fits/nro45m/data/backendlog_common.yaml'))
+    mac = yaml.load(get_data('fmflow', 'fits/nro45m/data/backendlog_sam45.yaml'))
+
+    head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
+    ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
+    obs  = fm.utils.CStructReader(mac['obs'], IGNORED_KEY, byteorder)
+    dat  = fm.utils.CStructReader(mac['dat'], IGNORED_KEY, byteorder)
+
+    def eof(f):
+        head.read(f)
+        return (head._data['crec_type'][-1][0] == b'ED')
+
+    # read backendlog
+    fsize = os.path.getsize(backendlog)
+    with open(backendlog, 'rb') as f:
+        eof(f)
+        ctl.read(f)
+        eof(f)
+        obs.read(f)
+
+        i = 0
+        while not eof(f):
+            i += 1
+            dat.read(f)
+            if i%100 == 0:
+                frac = f.tell() / fsize
+                fm.utils.progressbar(frac)
+
+    # edit data
+    data = dat.data
+    data['starttime'] = data.pop('cint_sttm')
+    data['arrayid']   = data.pop('cary_name')
+    data['scantype']  = data.pop('cscan_type')
+    data['arraydata'] = data.pop('fary_data')
+
+    ## starttime
+    p = fm.utils.DatetimeParser()
+    data['starttime'] = np.array([p(t) for t in data['starttime']])
+
+    ## scantype (bug?)
+    data['scantype'][data['scantype']==b'R\x00RO'] = b'R'
+
+    ## arraydata
+    usefg    = np.array(obs.data['iary_usefg'], dtype=bool)
+    ifatt    = np.array(obs.data['iary_ifatt'], dtype=float)[usefg]
+    islsb    = np.array(obs.data['csid_type'] == b'LSB')[usefg]
+    arrayids = np.unique(data['arrayid'])
+
+    for i, arrayid in enumerate(arrayids):
+        flag = (data['arrayid'] == arrayid)
+
+        ## slices of each scantype
+        ons  = fm.utils.slicewhere(flag & (data['scantype'] == b'ON'))
+        rs   = fm.utils.slicewhere(flag & (data['scantype'] == b'R'))
+        skys = fm.utils.slicewhere(flag & (data['scantype'] == b'SKY'))
+        zero = fm.utils.slicewhere(flag & (data['scantype'] == b'ZERO'))[0]
+
+        ## apply ZERO to ON data
+        for on in ons:
+            data['arraydata'][on] -= data['arraydata'][zero]
+
+        ## apply ZERO and ifatt to R data
+        for r in rs:
+            data['arraydata'][r] -= data['arraydata'][zero]
+            data['arraydata'][r] *= 10.0**(ifatt[i]/10.0)
+
+        ## apply ZERO to SKY data
+        for sky in skys:
+            data['arraydata'][sky] -= data['arraydata'][zero]
+
+        ## reverse array (if LSB)
+        if arrayid in arrayids[islsb]:
+            data['arraydata'][flag] = data['arraydata'][flag,::-1]
+
+    # read and edit formats
+    names  = list(dat.info['ctypes'].keys())
+    ctypes = list(dat.info['ctypes'].values())
+    shapes = list(dat.info['shapes'].values())
+    tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
+    fmts = OrderedDict(item for item in zip(names, tforms))
+
+    fmts['starttime'] = 'A26'
+    fmts['arraydata'] = fmts.pop('fary_data')
+    fmts['arrayid']   = fmts.pop('cary_name')
+    fmts['scantype']  = fmts.pop('cscan_type')
+
+    # bintable HDU
+    header = fits.Header()
+    header['extname']  = 'BACKEND'
+    header['filename'] = backendlog
+    header['ctlinfo']  = ctl.jsondata
+    header['obsinfo']  = obs.jsondata
+
+    cols = [fits.Column(key, fmts[key], array=data[key]) for key in data]
+    return fits.BinTableHDU.from_columns(cols, header)
+
+
