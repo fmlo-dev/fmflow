@@ -1,0 +1,9 @@
+head:
+  - [crec_type, 4s]
+  - [irec_len, i]
+
+ctl:
+  - [cversion, 8s]
+  - [clog_name, 60s]
+  - [cbe_type, 8s]
+
