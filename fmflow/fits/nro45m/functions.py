@@ -21,7 +21,7 @@ from astropy.io import fits
 
 # constants
 C           = constants.c.value # spped of light in vacuum
-D_ASTE      = (45.0 * u.m).value # diameter of the ASTE
+D_NRO45m      = (45.0 * u.m).value # diameter of the NRO45m
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
 IGNORED_KEY = '^reserve' # reserved[1|4|8]
 LAT_NRO45m  = coordinates.Angle('+35d56m40.9s').deg # latitude of the NRO45m
@@ -95,7 +95,7 @@ def read_fmlolog(fmlolog):
 
 
 def read_antennalog(antennalog):
-    """Read an antenna logging of ASTE.
+    """Read an antenna logging of NRO45m.
 
     Args:
         antennalog (str): File name of antenna logging.
@@ -115,7 +115,7 @@ def read_antennalog(antennalog):
     # RA, Dec real
     sind = lambda deg: np.sin(np.deg2rad(deg))
     cosd = lambda deg: np.cos(np.deg2rad(deg))
-    q = -np.arcsin(sind(d['az_prog']) * cosd(LAT_ASTE) / cosd(d['dec_prog']))
+    q = -np.arcsin(sind(d['az_prog']) * cosd(LAT_NRO45m) / cosd(d['dec_prog']))
 
     ra_error  = -np.cos(q)*d['az_error'] + np.sin(q)*d['el_error']
     dec_error = +np.sin(q)*d['az_error'] + np.cos(q)*d['el_error']
@@ -314,7 +314,7 @@ def make_obsinfo_sam45(hdus):
     data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
     data['backend']   = np.tile(ctlinfo['cbe_type'], N)
     data['numchan']   = np.array(obsinfo['ichannel'])[flag]
-    data['restchan']  = np.tile(obsinfo['ichanel'], N)/2 - 0.5
+    data['restchan']  = np.tile(obsinfo['ichannel'], N)/2 - 0.5
     data['restfreq']  = np.array(obsinfo['dcent_freq'])[flag]
     data['intmfreq']  = np.array(obsinfo['dflif'])[flag]
     data['bandwidth'] = np.array(obsinfo['dbebw'])[flag]
