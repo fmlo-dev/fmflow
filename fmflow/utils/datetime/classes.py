@@ -18,22 +18,30 @@ PATTERNS = [
     '%Y%m%d%H%M%S',
     '%Y%m%d%H%M%S.',
     '%Y%m%d%H%M%S.%f',
+    ISO_8601
 ]
 
 
 # classes
 class DatetimeParser(object):
-    def __init__(self, cutoffsec=True, encoding='utf-8'):
+    def __init__(self, outputiso=True, cutoffsec=True, encoding='utf-8'):
         """Initialize a datetime parser object.
 
         Args:
+            outputiso (bool, optional): If True, the output object is an ISO 8601 string
+                (e.g. YYYY-mm-ddTHH:MM:SS.ssssss). Otherwise output is a datetime object.
+                Default is True.
             cutoffsec (bool, optional): If True, digits smaller than 0.1 second is
                 truncated. For example, 0.123 sec becomes 0.100 sec. Default is True.
             encoding (str, optional): An encoding with which to decode datetime strings
                 if their type is bytes. Default is utf-8.
 
         """
-        self.info = {'cutoffsec': cutoffsec, 'encoding': encoding}
+        self.info = {
+            'outputstr': outputstr,
+            'cutoffsec': cutoffsec,
+            'encoding': encoding
+        }
         self._pattern = None
 
     def __call__(self, dt_string):
@@ -58,9 +66,14 @@ class DatetimeParser(object):
             dt = datetime.strptime(dt_string, self._pattern)
 
         if self.info['cutoffsec']:
-            return dt.strftime(ISO_8601)[:-5] + '00000'
+            dt_isostring = dt.strftime(ISO_8601)[:-5] + '00000'
         else:
-            return dt.strftime(ISO_8601)
+            dt_isostring = dt.strftime(ISO_8601)
+
+        if self.info['outputiso']:
+            return dt_isostring
+        else:
+            return datetime.strptime(dt_isostring, ISO_8601)
 
     def _setpattern(self, dt_string):
         for pattern in PATTERNS:
