@@ -314,7 +314,7 @@ def make_obsinfo_sam45(hdus):
     data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
     data['backend']   = np.tile(ctlinfo['cbe_type'], N)
     data['numchan']   = np.array(obsinfo['ichannel'])[flag]
-    data['restchan']  = np.tile(obsinfo['ichanel'], N)/2 - 0.5
+    data['restchan']  = np.tile(obsinfo['ichannel'], N)/2 - 0.5
     data['restfreq']  = np.array(obsinfo['dcent_freq'])[flag]
     data['intmfreq']  = np.array(obsinfo['dflif'])[flag]
     data['bandwidth'] = np.array(obsinfo['dbebw'])[flag]
