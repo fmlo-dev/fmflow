@@ -38,7 +38,7 @@ class DatetimeParser(object):
 
         """
         self.info = {
-            'outputstr': outputstr,
+            'outputiso': outputiso,
             'cutoffsec': cutoffsec,
             'encoding': encoding
         }
