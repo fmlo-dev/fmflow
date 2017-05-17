@@ -44,20 +44,23 @@ class DatetimeParser(object):
         }
         self._pattern = None
 
-    def __call__(self, dt_string):
-        """Convert a datetime string to that in ISO format.
+    def __call__(self, datetime_like):
+        """Convert a datetime string or datetime object to a string in ISO format.
 
         Args:
-            dt_string (str): A datetime string.
+            datetime_like (str or datetime): A datetime string or datetime object.
 
         Returns:
-            isostring (str): A datetime string in ISO format.
+            datetime_like (str or datetime): A datetime string in ISO format.
+                if outputiso is True. Otherwise output is a datetime object.
 
         """
-        if type(dt_string) == bytes:
-            dt_string = dt_string.decode(self.info['encoding'])
-        elif type(dt_string) == np.bytes_:
-            dt_string = dt_string.tobytes().decode(self.info['encoding'])
+        if type(datetime_like) == bytes:
+            dt_string = datetime_like.decode(self.info['encoding'])
+        elif type(datetime_like) == np.bytes_:
+            dt_string = datetime_like.tobytes().decode(self.info['encoding'])
+        elif type(datetime_like) == datetime:
+            dt_string = datetime_like.strftime(ISO_8601)
 
         try:
             dt = datetime.strptime(dt_string, self._pattern)
