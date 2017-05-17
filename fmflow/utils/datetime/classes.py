@@ -57,7 +57,7 @@ class DatetimeParser(object):
         """
         if type(datetime_like) == str:
             dt_string = datetime_like
-        if type(datetime_like) == bytes:
+        elif type(datetime_like) == bytes:
             dt_string = datetime_like.decode(self.info['encoding'])
         elif type(datetime_like) == np.bytes_:
             dt_string = datetime_like.tobytes().decode(self.info['encoding'])
