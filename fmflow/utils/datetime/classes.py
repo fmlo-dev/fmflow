@@ -55,12 +55,16 @@ class DatetimeParser(object):
                 if outputiso is True. Otherwise output is a datetime object.
 
         """
+        if type(datetime_like) == str:
+            dt_string = datetime_like
         if type(datetime_like) == bytes:
             dt_string = datetime_like.decode(self.info['encoding'])
         elif type(datetime_like) == np.bytes_:
             dt_string = datetime_like.tobytes().decode(self.info['encoding'])
         elif type(datetime_like) == datetime:
             dt_string = datetime_like.strftime(ISO_8601)
+        else:
+            raise ValueError(datetime_like)
 
         try:
             dt = datetime.strptime(dt_string, self._pattern)
