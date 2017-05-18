@@ -76,9 +76,14 @@ def numchunk(func):
         array = args[0]
         params = signature(func).parameters
         for i, key in enumerate(params):
+            if i == 0:
+                continue
+
             if params[key].kind == POSITIONAL_OR_KEYWORD:
-                if i > 0:
+                try:
                     kwargs.update({key: args[i]})
+                except IndexError:
+                    kwargs.update({key: params[key].default})
 
         p = fm.utils.MPPool()
         N = kwargs.pop('numchunk', p.processes)
@@ -115,9 +120,14 @@ def timechunk(func):
         array = args[0]
         params = signature(func).parameters
         for i, key in enumerate(params):
+            if i == 0:
+                continue
+
             if params[key].kind == POSITIONAL_OR_KEYWORD:
-                if i > 0:
+                try:
                     kwargs.update({key: args[i]})
+                except IndexError:
+                    kwargs.update({key: params[key].default})
 
         p = fm.utils.MPPool()
         T = kwargs.pop('timechunk', len(array))
