@@ -1,0 +1,5 @@
+- [starttime, U26, null]
+- [scantype, U4, null]
+- [fmfreq, f8, Hz]
+- [lofreq, f8, Hz]
+- [vrad, f8, m/s]
