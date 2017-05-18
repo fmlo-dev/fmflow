@@ -74,10 +74,11 @@ def numchunk(func):
     @arrayfunc
     def wrapper(*args, **kwargs):
         array = args[0]
-        argnames = getargspec(func).args
-        if len(args) > 1:
-            for i in range(1, len(args)):
-                kwargs[argnames[i]] = args[i]
+        params = signature(func).parameters
+        for i, key in enumerate(params):
+            if params[key].kind == POSITIONAL_OR_KEYWORD:
+                if i > 0:
+                    kwargs.update({key: args[i]})
 
         p = fm.utils.MPPool()
         N = kwargs.pop('numchunk', p.processes)
