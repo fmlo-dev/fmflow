@@ -5,12 +5,15 @@ __all__ = ['arrayfunc', 'numchunk', 'timechunk']
 
 # standard library
 from functools import partial, wraps
-from inspect import getargspec
+from inspect import Parameter, signature
 
 # dependent packages
 import fmflow as fm
 import numpy as np
 import xarray as xr
+
+# constants
+POSITIONAL_OR_KEYWORD = Parameter.POSITIONAL_OR_KEYWORD
 
 
 # decorators
@@ -37,16 +40,12 @@ def arrayfunc(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         array = args[0]
-        argnames = getargspec(func).args
-        if len(args) > 1:
-            for i in range(1, len(args)):
-                kwargs[argnames[i]] = args[i]
 
         if isinstance(array, xr.DataArray):
-            result = func(array.values, **kwargs)
+            result = func(array.values, *args[1:], **kwargs)
             return fm.ones_like(array) * result
         else:
-            return func(array)
+            return func(array, *args[1:], **kwargs)
 
     return wrapper
 
