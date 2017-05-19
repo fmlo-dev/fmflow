@@ -8,3 +8,4 @@ __author__  = 'Akio Taniguchi'
 from . import utils
 from .array import *
 from . import fits
+from . import models
