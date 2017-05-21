@@ -40,7 +40,7 @@ class MPPool(object):
         if self.mpcompatible:
             return self._mpmap(func, sequence)
         else:
-            return map(func, sequence)
+            return list(map(func, sequence))
 
     @property
     def mpcompatible(self):
