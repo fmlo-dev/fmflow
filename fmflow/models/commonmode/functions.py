@@ -2,6 +2,7 @@
 
 # imported items
 __all__ = [
+    'decompose',
     'reconstruct',
 ]
 
@@ -20,6 +21,31 @@ PARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
+def decompose(array, decomposer='TruncatedSVD', **kwargs):
+    """Decompose an array with given algorithm.
+
+    Args:
+        array (xarray.DataArray): An input array to be decomposed.
+        decomposer (str): A name of decomposition class
+            which sklearn.decomposition provides.
+        kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
+
+    Returns:
+        bases (numpy.ndarray): Basis vectors.
+        coords (numpy.ndarray): Coordinate vectors.
+
+    """
+    AlgorithmClass = getattr(decomposition, decomposer)
+
+    model = AlgorithmClass(**kwargs)
+    fit = model.fit_transform(array)
+
+    if hasattr(model, 'components_'):
+        return fit, model.components_
+    else:
+        raise fm.utils.FMFlowError('cannot decompose with the spacified algorithm')
+
+
 @fm.timechunk
 def reconstruct(array, decomposer='TruncatedSVD', **kwargs):
     """Reconstruct an array from decomposed one with given algorithm.
