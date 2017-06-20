@@ -20,7 +20,7 @@ PARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 # functions
 @fm.timechunk
 def reducedim(array, decomposer='TruncatedSVD', **kwargs):
-    """Compute a dimension-reduced fmarray via a decomposition algorithm.
+    """Compute a dimension-reduced array via a decomposition algorithm.
 
     Args:
         array (xarray.DataArray): An input array.
@@ -34,7 +34,7 @@ def reducedim(array, decomposer='TruncatedSVD', **kwargs):
     Example:
         To compute a fmarray reconstructed from top two principal components:
 
-        >>> result = fm.model.reduceim(fmarray, 'PCA', n_components=2)
+        >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
     AlgorithmClass = getattr(decomposition, decomposer)
@@ -44,9 +44,9 @@ def reducedim(array, decomposer='TruncatedSVD', **kwargs):
     model = AlgorithmClass(**params)
     fit = model.fit_transform(array)
 
-    if hasattr(model, 'inverse_transform'):
-        return model.inverse_transform(fit)
-    elif hasattr(model, 'components_'):
+    if hasattr(model, 'components_'):
         return np.dot(fit, model.components_)
+    elif hasattr(model, 'inverse_transform'):
+        return model.inverse_transform(fit)
     else:
         raise fm.utils.FMFlowError('cannot decompose with the spacified algorithm')
