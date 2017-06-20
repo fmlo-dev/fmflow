@@ -1,7 +1,9 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['reducedim']
+__all__ = [
+    'reconstruct',
+]
 
 # standard library
 from collections import defaultdict
@@ -19,20 +21,20 @@ PARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 # functions
 @fm.timechunk
-def reducedim(array, decomposer='TruncatedSVD', **kwargs):
-    """Compute a dimension-reduced array via a decomposition algorithm.
+def reconstruct(array, decomposer='TruncatedSVD', **kwargs):
+    """Reconstruct an array from decomposed one with given algorithm.
 
     Args:
-        array (xarray.DataArray): An input array.
+        array (xarray.DataArray): An input array to be decomposed.
         decomposer (str): A name of decomposition class
             which sklearn.decomposition provides.
         kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
 
     Returns:
-        array (xarray.DataArray): An output dimension-reduced array.
+        array (xarray.DataArray): An output reconstructed array.
 
     Example:
-        To compute a fmarray reconstructed from top two principal components:
+        To reconstruct an array from top two principal components:
 
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
@@ -45,8 +47,8 @@ def reducedim(array, decomposer='TruncatedSVD', **kwargs):
     fit = model.fit_transform(array)
 
     if hasattr(model, 'components_'):
-        return np.dot(fit, model.components_)
+        return fit @ model.components_
     elif hasattr(model, 'inverse_transform'):
         return model.inverse_transform(fit)
     else:
-        raise fm.utils.FMFlowError('cannot decompose with the spacified algorithm')
+        raise fm.utils.FMFlowError('cannot reconstruct with the spacified algorithm')
