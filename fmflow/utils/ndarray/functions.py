@@ -26,7 +26,7 @@ def fmgf(array, sigma):
 
     """
     x, y = np.arange(len(array)), array.copy()
-    yg = filters.gaussian_filter(y, sigma)
+    yg = ndimage.filters.gaussian_filter(y, sigma)
     y -= yg
 
     # digitizing
