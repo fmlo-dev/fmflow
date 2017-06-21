@@ -215,6 +215,7 @@ def read_backendlog_sam45(backendlog, byteorder):
     data['starttime'] = np.array([p(t) for t in data['starttime']])
 
     ## scantype (bug?)
+    data['scantype'][data['scantype']==b'ON\x00O'] = b'ON'
     data['scantype'][data['scantype']==b'R\x00RO'] = b'R'
 
     ## arraydata
