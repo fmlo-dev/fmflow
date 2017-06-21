@@ -3,6 +3,9 @@
 # imported items
 __all__ = ['fmgf', 'mad', 'rollrows', 'slicewhere']
 
+# standard library
+from functools import partial
+
 # dependent packages
 import numpy as np
 from scipy import ndimage
@@ -31,7 +34,7 @@ def fmgf(array, sigma):
 
     # digitizing
     m = 101
-    dy = 6.0*fm.utils.mad(y) / m
+    dy = 6.0*mad(y) / m
     ybin = np.arange(np.min(y)-5*dy, np.max(y)+5*dy+dy, dy)
     z = np.zeros([len(ybin), len(x)])
     z[np.digitize(y, ybin), x] = 1.0
