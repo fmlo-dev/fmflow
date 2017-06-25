@@ -3,7 +3,7 @@
 # imported items
 __all__ = [
     'decompose',
-    'reconstruct',
+    'skdecomposition',
 ]
 
 # standard library
@@ -16,8 +16,8 @@ import fmflow as fm
 from sklearn import decomposition
 
 # constants
-PARAMS = defaultdict(dict)
-PARAMS['KernelPCA'] = {'fit_inverse_transform': True}
+SKPARAMS = defaultdict(dict)
+SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
@@ -53,13 +53,12 @@ def decompose(array, decomposer='EMPCA', **kwargs):
 
 
 @fm.timechunk
-def reconstruct(array, decomposer='EMPCA', **kwargs):
-    """Reconstruct an array from decomposed one with given algorithm.
+def skdecomposition(array, decomposer='TruncatedSVD', **kwargs):
+    """Reconstruct an array from decomposed one with a scikit-learn decomposer.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        decomposer (str): A name of decomposition class provided by
-            fmflow.models or sklearn.decomposition. Default is 'EMPCA'.
+        decomposer (str): A name of algorithm provided by sklearn.decomposition.
         kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
 
     Returns:
@@ -71,19 +70,15 @@ def reconstruct(array, decomposer='EMPCA', **kwargs):
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    try:
-        AlgorithmClass = getattr(fm.models, decomposer)
-    except AttributeError:
-        AlgorithmClass = getattr(decomposition, decomposer)
-
-    params = deepcopy(PARAMS[decomposer])
+    AlgorithmClass = getattr(decomposition, decomposer)
+    params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
 
     model = AlgorithmClass(**params)
-    fit = model.fit_transform(array)
+    transformed = model.fit_transform(array)
 
     if hasattr(model, 'components_'):
-        return fit @ model.components_
+        return transformed @ model.components_
     elif hasattr(model, 'inverse_transform'):
         return model.inverse_transform(fit)
     else:
