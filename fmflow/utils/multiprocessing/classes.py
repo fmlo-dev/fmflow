@@ -12,17 +12,17 @@ import numpy as np
 
 # classes
 class MPPool(object):
-    def __init__(self, processes=None):
+    def __init__(self, n_processes=None):
         """Initialize a process pool object.
 
         Args:
-            processes (int): The number of processes to be created. Default is
+            n_processes (int): The number of processes to be created. Default is
                 <CPU count of your machine> -1 (one thread is saved for backup).
 
         """
-        self.processes = processes or mp.cpu_count() - 1
+        self.n_processes = n_processes or mp.cpu_count() - 1
 
-    def map(self, func, sequence):
+    def map(self, func, *sequences):
         """Return a list of the results of applying the function to the sequence.
 
         If self.mpcompatible is True, mapping is multiprocessed with the spacified
@@ -31,16 +31,16 @@ class MPPool(object):
 
         Args:
             func (function): Applying function.
-            sequence (list): List of items to which function is applied.
+            sequences (lists): Lists of items to which function is applied.
 
         Returns:
             results (list): The results of applying the function to the sequence.
 
         """
         if self.mpcompatible:
-            return self._mpmap(func, sequence)
+            return self._mpmap(func, *sequences)
         else:
-            return list(map(func, sequence))
+            return list(map(func, *sequences))
 
     @property
     def mpcompatible(self):
@@ -56,19 +56,24 @@ class MPPool(object):
             atlas = any([('atlas' in lib) for lib in libs])
             return any([mkl, blas, atlas])
 
-    def _mpmap(self, func, sequence):
+    def _mpmap(self, func, *sequences):
         """Multiprosessing map function that can works with non-local function."""
-        procs = []
-        parents = []
-        results = []
+        mpsequences = [[] for i in range(self.n_processes)]
+        procs, parents, results = [], [], []
 
-        def pfunc(child, args):
-            child.send(list(map(func, args)))
+        def pfunc(child, psequences):
+            child.send(list(map(func, *psequences)))
             child.close()
 
-        for args in np.array_split(sequence, self.processes):
+        for sequence in sequences:
+            sseqs = np.array_split(sequence, self.n_processes)
+            for n in range(len(sseqs)):
+                mpsequences[n].append(sseqs[n])
+
+        for psequences in mpsequences:
             parent, child = mp.Pipe()
-            procs.append(mp.Process(target=pfunc, args=(child, args)))
+            proc = mp.Process(target=pfunc, args=(child, psequences))
+            procs.append(proc)
             parents.append(parent)
 
         for proc in procs:
