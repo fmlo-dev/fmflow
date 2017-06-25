@@ -1,7 +1,13 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['fmgf', 'mad', 'rollrows', 'slicewhere']
+__all__ = [
+    'fmgf',
+    'mad',
+    'orthonormalize',
+    'rollrows',
+    'slicewhere',
+]
 
 # standard library
 from functools import partial
@@ -70,6 +76,30 @@ def mad(array, axis=None, keepdims=False):
     ad = np.abs(array - np.median(array, axis, keepdims=True))
     mad = np.median(ad, axis, keepdims=keepdims)
     return mad
+
+
+def orthonormalize(Ain):
+    """Orthonormalize an imput vectors.
+
+    Of cource this can be achieved by QR decomposition (numpy.linalg.qr),
+    but this function is faster when number of vectors is less than that of features.
+
+    Args:
+        Ain (numpy.ndarray): An input vectors as a 2D array.
+            i.e. len(Ain) equals the number of vectors.
+
+    Returns:
+        Aout (numpy.ndarray): An output orthonormalized vectors as a 2D array.
+
+    """
+    Aout = Ain.copy()
+    for i in range(len(Aout)):
+        for j in range(i):
+            Aout[i] -= (Aout[i] @ Aout[j]) * Aout[j]
+
+        Aout[i] /= np.linalg.norm(Aout[i])
+
+    return Aout
 
 
 def rollrows(array, shifts):
