@@ -2,7 +2,7 @@
 
 # imported items
 __all__ = [
-    'decompose',
+    'empca',
     'skdecomposition',
 ]
 
@@ -21,35 +21,23 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
-def decompose(array, decomposer='EMPCA', **kwargs):
-    """Decompose an array with given algorithm.
+@fm.timechunk
+def empca(array, weights, **kwargs):
+    """Reconstruct an array from decomposed one with EMPCA.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        decomposer (str): A name of decomposition class provided by
-            fmflow.models or sklearn.decomposition. Default is 'EMPCA'.
+        weights (xarray.DataArray): A weight array. It must have the same shape
+            as `array`. Just spacify `None` if executing this function without weights.
         kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
 
     Returns:
-        bases (numpy.ndarray): Basis vectors.
-        coords (numpy.ndarray): Coordinate vectors.
+        array (xarray.DataArray): An output reconstructed array.
 
     """
-    try:
-        AlgorithmClass = getattr(fm.models, decomposer)
-    except AttributeError:
-        AlgorithmClass = getattr(decomposition, decomposer)
-
-    params = deepcopy(PARAMS[decomposer])
-    params.update(kwargs)
-
-    model = AlgorithmClass(**params)
-    fit = model.fit_transform(array)
-
-    if hasattr(model, 'components_'):
-        return fit, model.components_
-    else:
-        raise fm.utils.FMFlowError('cannot decompose with the spacified algorithm')
+    model = fm.models.EMPCA(**kwargs)
+    transformed = model.fit_transform(array, weights)
+    return transformed @ model.components_
 
 
 @fm.timechunk
