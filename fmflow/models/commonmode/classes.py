@@ -69,17 +69,6 @@ class EMPCA(object):
 
         return self._orthonormalize(P)
 
-    @staticmethod
-    def _orthonormalize(Ain):
-        Aout = Ain.copy()
-        for i in range(len(Aout)):
-            for j in range(i):
-                Aout[i] -= (Aout[i] @ Aout[j]) * Aout[j]
-
-            Aout[i] /= np.linalg.norm(Aout[i])
-
-        return Aout
-
     def __getattr__(self, name):
         return self.info[name]
 
