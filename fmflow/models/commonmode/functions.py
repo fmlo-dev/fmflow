@@ -21,13 +21,13 @@ PARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
-def decompose(array, decomposer='TruncatedSVD', **kwargs):
+def decompose(array, decomposer='EMPCA', **kwargs):
     """Decompose an array with given algorithm.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        decomposer (str): A name of decomposition class
-            which sklearn.decomposition provides.
+        decomposer (str): A name of decomposition class provided by
+            fmflow.models or sklearn.decomposition. Default is 'EMPCA'.
         kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
 
     Returns:
@@ -35,9 +35,15 @@ def decompose(array, decomposer='TruncatedSVD', **kwargs):
         coords (numpy.ndarray): Coordinate vectors.
 
     """
-    AlgorithmClass = getattr(decomposition, decomposer)
+    try:
+        AlgorithmClass = getattr(fm.models, decomposer)
+    except AttributeError:
+        AlgorithmClass = getattr(decomposition, decomposer)
 
-    model = AlgorithmClass(**kwargs)
+    params = deepcopy(PARAMS[decomposer])
+    params.update(kwargs)
+
+    model = AlgorithmClass(**params)
     fit = model.fit_transform(array)
 
     if hasattr(model, 'components_'):
@@ -47,13 +53,13 @@ def decompose(array, decomposer='TruncatedSVD', **kwargs):
 
 
 @fm.timechunk
-def reconstruct(array, decomposer='TruncatedSVD', **kwargs):
+def reconstruct(array, decomposer='EMPCA', **kwargs):
     """Reconstruct an array from decomposed one with given algorithm.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        decomposer (str): A name of decomposition class
-            which sklearn.decomposition provides.
+        decomposer (str): A name of decomposition class provided by
+            fmflow.models or sklearn.decomposition. Default is 'EMPCA'.
         kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
 
     Returns:
@@ -65,7 +71,11 @@ def reconstruct(array, decomposer='TruncatedSVD', **kwargs):
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    AlgorithmClass = getattr(decomposition, decomposer)
+    try:
+        AlgorithmClass = getattr(fm.models, decomposer)
+    except AttributeError:
+        AlgorithmClass = getattr(decomposition, decomposer)
+
     params = deepcopy(PARAMS[decomposer])
     params.update(kwargs)
 
