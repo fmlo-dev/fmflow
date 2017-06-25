@@ -29,7 +29,7 @@ class EMPCA(object):
             W = np.ones_like(X)
 
         if not X.shape == W.shape:
-            raise fm.utils.FMFlowError('error!')
+            raise fm.utils.FMFlowError('X and W must have same shapes')
 
         # shapes of matrices
         (N, D), K = X.shape, self.n_components
@@ -38,7 +38,7 @@ class EMPCA(object):
         # initial random eigen vectors
         np.random.seed(self.random_seed)
         A = np.random.randn(self.K, self.D)
-        P = self._orthonormalize(A)
+        P = fm.utils.orthonormalize(A)
 
         # EM algorithm
         for i in range(self.n_maxiters):
@@ -67,18 +67,7 @@ class EMPCA(object):
             P[k] = (ck @ (X*W)) / (ck**2 @ W)
             X -= np.outer(ck, P[k])
 
-        return self._orthonormalize(P)
-
-    @staticmethod
-    def _orthonormalize(Ain):
-        Aout = Ain.copy()
-        for i in range(len(Aout)):
-            for j in range(i):
-                Aout[i] -= (Aout[i] @ Aout[j]) * Aout[j]
-
-            Aout[i] /= np.linalg.norm(Aout[i])
-
-        return Aout
+        return fm.utils.orthonormalize(P)
 
     def __getattr__(self, name):
         return self.info[name]
