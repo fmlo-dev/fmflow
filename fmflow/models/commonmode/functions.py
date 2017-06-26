@@ -22,20 +22,24 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 # functions
 @fm.timechunk
-def empca(array, weights, **kwargs):
+def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, **kwargs):
     """Reconstruct an array from decomposed one with EMPCA.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        weights (xarray.DataArray): A weight array. It must have the same shape
-            as `array`. Just spacify `None` if executing this function without weights.
-        kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
+        weights (xarray.DataArray): A weight array. It must have
+            the same shape as `array`.
+        n_components (int): A number of components to keep.
+        n_maxiters (int): A number of maximum iterations of the EM step.
+        random_seed (int): random seed values used for the initial state.
+        kwargs (dict): Parameters for the timechunk calculation such as
+            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
 
     Returns:
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    model = fm.models.EMPCA(**kwargs)
+    model = fm.models.EMPCA(n_components, n_maxiters, random_seed)
     transformed = model.fit_transform(array, weights)
     return transformed @ model.components_
 
