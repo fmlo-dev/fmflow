@@ -51,7 +51,9 @@ def skdecomposition(array, decomposer='TruncatedSVD', **kwargs):
     Args:
         array (xarray.DataArray): An input array to be decomposed.
         decomposer (str): A name of algorithm provided by sklearn.decomposition.
-        kwargs (dict): Parameters for the spacified algorithm such as `n_components`.
+        kwargs (dict): Parameters for the spacified algorithm such as
+            `n_components` and for the timechunk calculation such as
+            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
 
     Returns:
         array (xarray.DataArray): An output reconstructed array.
