@@ -12,7 +12,7 @@ import numpy as np
 
 # classes
 class EMPCA(object):
-    def __init__(self, n_components=10, n_maxiters=25, random_seed=None):
+    def __init__(self, n_components=20, n_maxiters=10, random_seed=None):
         self.info = {
             'n_components': n_components,
             'n_maxiters': n_maxiters,
@@ -42,7 +42,6 @@ class EMPCA(object):
 
         # EM algorithm
         for i in range(self.n_maxiters):
-            print(i+1, end=' ')
             C = self._update_coefficients(X, W, P)
             P = self._update_eigenvectors(X, W, C)
 
