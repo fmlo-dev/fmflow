@@ -1,0 +1,40 @@
+# Generic midaltitude atmosphere
+# Ported from generic_mid.amc
+
+amc: |
+  f {fmin} GHz {fmax} GHz {fstep} MHz
+  output f GHz tau Tb K
+
+  za 0 deg
+  tol 0
+  Nscale h2o 0
+  T0 2.7 K
+
+  layer
+  Pbase {Pbase} mbar
+  Tbase {Tbase} K
+  column o3 hydrostatic {O3col}
+
+layers:
+  - {Pbase: 3,    Tbase: 252,   O3col: 4.0e-6}
+  - {Pbase: 6,    Tbase: 240.5, O3col: 6.156e-6}
+  - {Pbase: 9,    Tbase: 235,   O3col: 8.844e-6}
+  - {Pbase: 12,   Tbase: 232,   O3col: 9.225e-6}
+  - {Pbase: 15,   Tbase: 228,   O3col: 8.890e-6}
+  - {Pbase: 20,   Tbase: 225,   O3col: 7.808e-6}
+  - {Pbase: 25,   Tbase: 221.5, O3col: 6.187e-6}
+  - {Pbase: 30,   Tbase: 219,   O3col: 4.930e-6}
+  - {Pbase: 40,   Tbase: 215,   O3col: 3.480e-6}
+  - {Pbase: 50,   Tbase: 210.5, O3col: 2.077e-6}
+  - {Pbase: 60,   Tbase: 207,   O3col: 1.269e-6}
+  - {Pbase: 80,   Tbase: 201,   O3col: 0.649e-6}
+  - {Pbase: 100,  Tbase: 200,   O3col: 0.248e-6}
+  - {Pbase: 150,  Tbase: 208,   O3col: 0.101e-6}
+  - {Pbase: 200,  Tbase: 219,   O3col: 0.053e-6}
+  - {Pbase: 314,  Tbase: 230.5, O3col: 0.042e-6}
+  - {Pbase: 407,  Tbase: 243,   O3col: 0.045e-6}
+  - {Pbase: 516,  Tbase: 258,   O3col: 0.047e-6}
+  - {Pbase: 618,  Tbase: 265,   O3col: 0.048e-6}
+  - {Pbase: 707,  Tbase: 272,   O3col: 0.048e-6}
+  - {Pbase: 853,  Tbase: 279,   O3col: 0.048e-6}
+  - {Pbase: 1100, Tbase: 286,   O3col: 0.048e-6}
