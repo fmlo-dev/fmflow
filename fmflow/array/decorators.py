@@ -96,7 +96,7 @@ def numchunk(func):
             try:
                 sequences.append(np.array_split(arrays[i], N))
             except:
-                sequences.append(np.tile(arrays[i]), N)
+                sequences.append(np.tile(arrays[i], N))
 
         return np.concatenate(p.map(pfunc, *sequences))
 
@@ -148,7 +148,7 @@ def timechunk(func):
             try:
                 sequences.append(np.array_split(arrays[i], N))
             except:
-                sequences.append(np.tile(arrays[i]), N)
+                sequences.append(np.tile(arrays[i], N))
 
         return np.concatenate(p.map(pfunc, *sequences))
 
