@@ -16,16 +16,18 @@ import numpy as np
 from astropy import constants
 from astropy import units as u
 from scipy.interpolate import interp1d
-from scipy.ndimage import filters
+from scipy.ndimage.filters import gaussian_filter
 from scipy.optimize import curve_fit
 
 # constants
 C = constants.c.value
 DATA_DIR = os.path.join(fm.__path__[0], 'models', 'data')
+
+AMCMD = ['am', '-']
 with open(os.path.join(DATA_DIR, 'am.yaml')) as f:
-    d = yaml.load(f)
-    AMCONFIG = d['amc']
-    AMLAYERS = d['layers']
+    am = yaml.load(f)
+    AMCONFIG = am['config']
+    AMLAYERS = am['layers']
 
 
 # classes
@@ -37,45 +39,55 @@ class OzoneLines(object):
     }
     freq = None
     taus = None
-    Tbs  = None
+    tbs  = None
 
     def __init__(self, fitmode='normal', smooth=50):
+        """
+
+        Args:
+            fitmode (str):
+            smooth (int):
+
+        """
         self.info = {
             'fitmode': fitmode,
             'smooth': smooth,
         }
         self._setclassattrs()
 
-    def fit(self, array, weights=None):
+    def fit(self, freq, spec, vrad=0.0):
+        """
+
+        Args:
+            freq (numpy.ndarray):
+            spec (numpy.ndarray):
+            vrad (float):
+
+        Returns:
+            tb (numpy.ndarray):
+
+        """
         if not self.computed:
-            self.compute(array)
+            self.compute(freq)
 
-        freq = fm.getfreq(array, unit='GHz')
-        spec = fm.getspec(array, weights=weights)
-        vrad = array.vrad.values.mean() # m/s
-        frad = freq * vrad/C # GHz
-
+        frad = np.median(freq) * vrad/C
         if self.fitmode == 'normal':
-            model = self._fit(freq-frad, spec)
+            return self._fit(freq-frad, spec)
         elif self.fitmode == 'diff':
-            model = self._dfit(freq-frad, spec, smooth)
+            return self._dfit(freq-frad, spec, smooth)
         else:
             raise fm.utils.FMFlowError('invalid mode')
 
-        array_ = fm.demodulate(array)
-        return fm.modulate(fm.zeros_like(array_)+model)
-
-    def compute(self, array):
-        freq = fm.getfreq(array, unit='GHz') # GHz
-        step = 1e3 * np.diff(freq).mean() # MHz
-
-        fmin = np.floor(np.min(freq))
-        fmax = np.ceil(np.max(freq))
-        fstep  = float('{:.0e}'.format(0.5*step))
-        params = {'fmin': fmin, 'fmax': fmax, 'fstep': fstep}
+    def compute(self, freq):
+        params = {
+            'fmin': np.floor(np.min(freq)),
+            'fmax': np.ceil(np.max(freq)),
+            'fstep': float('{:.0e}'.format(0.5*np.diff(freq).mean())),
+        }
 
         amfreq = None
-        amtaus, amTbs = [], []
+        amtaus, amtbs = [], []
+
         N = len(self.amlayers)
         for n in range(N):
             fm.utils.progressbar((n+1)/N)
@@ -83,7 +95,7 @@ class OzoneLines(object):
             params.update(**self.amlayers[n])
             amc = self.amconfig.format(**params)
 
-            cp = run(['am', '-'], input=amc.encode('utf-8'), stdout=PIPE)
+            cp = run(AMCMD, input=amc.encode('utf-8'), stdout=PIPE)
             stdout = cp.stdout.decode('utf-8')
             output = np.loadtxt(stdout.split('\n'))
 
@@ -91,44 +103,44 @@ class OzoneLines(object):
                 amfreq = output[:, 0]
 
             amtaus.append(output[:, 1])
-            amTbs.append(output[:, 2])
+            amtbs.append(output[:, 2])
 
         OzoneLines.freq = amfreq
         OzoneLines.taus = np.array(amtaus)
-        OzoneLines.Tbs  = np.array(amTbs) - 2.7
+        OzoneLines.tbs  = np.array(amtbs) - 2.7
         OzoneLines.info['computed'] = True
-        self._getclassattrs()
+        self._setclassattrs()
 
     def _setclassattrs(self):
         self.info.update(OzoneLines.info)
         self.freq = OzoneLines.freq
         self.taus = OzoneLines.taus
-        self.Tbs  = OzoneLines.Tbs
+        self.tbs  = OzoneLines.tbs
 
     def _fit(self, freq, spec):
-        Tbs = interp1d(self.freq, self.Tbs, axis=1)(freq)
+        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
 
         def func(freq, *coeffs):
             coeffs = np.asarray(coeffs)[:,np.newaxis]
-            return np.sum(coeffs * Tbs, 0)
+            return np.sum(coeffs * tbs, 0)
 
-        p0 = np.full(len(Tbs), 0.5)
+        p0 = np.full(len(tbs), 0.5)
         bs = (0.0, 1.0)
         popt, pcov = curve_fit(func, freq, spec, p0, bounds=bs)
         return func(freq, *popt)
 
     def _dfit(self, freq, spec, smooth):
-        Tbs = interp1d(self.freq, self.Tbs, axis=1)(freq)
-        dTbs = np.gradient(Tbs, axis=1)
+        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+        dtbs = np.gradient(tbs, axis=1)
 
         dspec = np.gradient(spec)
-        dspec -= filters.gaussian_filter(dspec, self.smooth)
+        dspec -= gaussian_filter(dspec, self.smooth)
 
         def func(freq, *coeffs):
             coeffs = np.asarray(coeffs)[:,np.newaxis]
-            return np.sum(coeffs * dTbs, 0)
+            return np.sum(coeffs * dtbs, 0)
 
-        p0 = np.zeros(len(dTbs))
+        p0 = np.zeros(len(dtbs))
         bs = (0.0, 1.0)
         popt, pcov = curve_fit(func, freq, dspec, p0, bounds=bs)
         return np.cumsum(func(freq, *popt))
@@ -139,8 +151,7 @@ class OzoneLines(object):
     def __repr__(self):
         string = str.format(
             'OzoneLines(fitmode={0}, computed={1})',
-            self.fitmode,
-            self.computed,
+            self.fitmode, self.computed,
         )
 
         return string
