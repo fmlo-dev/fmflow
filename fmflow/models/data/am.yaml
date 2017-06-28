@@ -1,8 +1,8 @@
 # Generic midaltitude atmosphere
 # Ported from generic_mid.amc
 
-amc: |
-  f {fmin} GHz {fmax} GHz {fstep} MHz
+config: |
+  f {fmin} GHz {fmax} GHz {fstep} GHz
   output f GHz tau Tb K
 
   za 0 deg
