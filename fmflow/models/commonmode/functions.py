@@ -27,8 +27,8 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, **kw
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        weights (xarray.DataArray): A weight array. It must have
-            the same shape as `array`.
+        weights (xarray.DataArray): A weight array. It must have the same shape
+            as `array`. Just spacify `None` in the case of no weights.
         n_components (int): A number of components to keep.
         n_maxiters (int): A number of maximum iterations of the EM step.
         random_seed (int): random seed values used for the initial state.
@@ -39,7 +39,11 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, **kw
         array (xarray.DataArray): An output reconstructed array.
 
     """
+    if weights is None:
+        weights = np.ones_like(array)
+
     model = fm.models.EMPCA(n_components, n_maxiters, random_seed)
+    print(model)
     transformed = model.fit_transform(array, weights)
     return transformed @ model.components_
 
