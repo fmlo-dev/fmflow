@@ -49,12 +49,13 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, **kw
 
 
 @fm.timechunk
-def skdecomposition(array, decomposer='TruncatedSVD', **kwargs):
+def skdecomposition(array, decomposer='TruncatedSVD', n_components=None, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
         decomposer (str): A name of algorithm provided by sklearn.decomposition.
+        n_components (int): A number of components to keep.
         kwargs (dict): Parameters for the spacified algorithm such as
             `n_components` and for the timechunk calculation such as
             `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
@@ -72,12 +73,12 @@ def skdecomposition(array, decomposer='TruncatedSVD', **kwargs):
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
 
-    model = AlgorithmClass(**params)
+    model = AlgorithmClass(n_components, **params)
     transformed = model.fit_transform(array)
 
     if hasattr(model, 'components_'):
         return transformed @ model.components_
     elif hasattr(model, 'inverse_transform'):
-        return model.inverse_transform(fit)
+        return model.inverse_transform(transformed)
     else:
         raise fm.utils.FMFlowError('cannot reconstruct with the spacified algorithm')
