@@ -16,7 +16,6 @@ import numpy as np
 from astropy import constants
 from astropy import units as u
 from scipy.interpolate import interp1d
-from scipy.ndimage.filters import gaussian_filter
 from scipy.optimize import curve_fit
 
 # constants
@@ -41,44 +40,40 @@ class OzoneLines(object):
     taus = None
     tbs  = None
 
-    def __init__(self, fitmode='normal', smooth=50):
-        """
-
-        Args:
-            fitmode (str):
-            smooth (int):
-
-        """
-        self.info = {
-            'fitmode': fitmode,
-            'smooth': smooth,
-        }
+    def __init__(self):
         self._setclassattrs()
 
     def fit(self, freq, spec, vrad=0.0):
-        """
-
-        Args:
-            freq (numpy.ndarray):
-            spec (numpy.ndarray):
-            vrad (float):
-
-        Returns:
-            tb (numpy.ndarray):
-
-        """
-        if not self.computed:
-            self.compute(freq)
-
+        self.compute(freq)
         frad = np.median(freq) * vrad/C
-        if self.fitmode == 'normal':
-            return self._fit(freq-frad, spec)
-        elif self.fitmode == 'diff':
-            return self._dfit(freq-frad, spec, smooth)
-        else:
-            raise fm.utils.FMFlowError('invalid mode')
+        return self._fit(freq-frad, spec)
 
-    def compute(self, freq):
+    def generate(self, freq, vrad=0.0):
+        self.compute(freq)
+        frad = np.median(freq) * vrad/C
+        return self._generate(freq-frad)
+
+    def compute(self, freq, forcibly=False):
+        if (not self.computed) or (self.computed and forcibly):
+            self._compute(freq)
+
+    def _fit(self, freq, spec):
+        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+
+        def func(freq, *coeffs):
+            coeffs = np.asarray(coeffs)[:,np.newaxis]
+            return (coeffs*tbs).sum(0)
+
+        p0 = np.full(len(tbs), 0.5)
+        bs = (0.0, 1.0)
+        popt, pcov = curve_fit(func, freq, spec, p0, bounds=bs)
+        return func(freq, *popt)
+
+    def _generate(self, freq):
+        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+        return tbs.sum(0)
+
+    def _compute(self, freq):
         params = {
             'fmin': np.floor(np.min(freq)),
             'fmax': np.ceil(np.max(freq)),
@@ -112,38 +107,10 @@ class OzoneLines(object):
         self._setclassattrs()
 
     def _setclassattrs(self):
-        self.info.update(OzoneLines.info)
+        self.info = OzoneLines.info
         self.freq = OzoneLines.freq
         self.taus = OzoneLines.taus
         self.tbs  = OzoneLines.tbs
-
-    def _fit(self, freq, spec):
-        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
-
-        def func(freq, *coeffs):
-            coeffs = np.asarray(coeffs)[:,np.newaxis]
-            return np.sum(coeffs * tbs, 0)
-
-        p0 = np.full(len(tbs), 0.5)
-        bs = (0.0, 1.0)
-        popt, pcov = curve_fit(func, freq, spec, p0, bounds=bs)
-        return func(freq, *popt)
-
-    def _dfit(self, freq, spec, smooth):
-        tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
-        dtbs = np.gradient(tbs, axis=1)
-
-        dspec = np.gradient(spec)
-        dspec -= gaussian_filter(dspec, self.smooth)
-
-        def func(freq, *coeffs):
-            coeffs = np.asarray(coeffs)[:,np.newaxis]
-            return np.sum(coeffs * dtbs, 0)
-
-        p0 = np.zeros(len(dtbs))
-        bs = (0.0, 1.0)
-        popt, pcov = curve_fit(func, freq, dspec, p0, bounds=bs)
-        return np.cumsum(func(freq, *popt))
 
     def __getattr__(self, name):
         return self.info[name]
