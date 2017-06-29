@@ -43,9 +43,8 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, **kw
         weights = np.ones_like(array)
 
     model = fm.models.EMPCA(n_components, n_maxiters, random_seed)
-    print(model)
-    transformed = model.fit_transform(array, weights)
-    return transformed @ model.components_
+    transformed = model.fit_transform(array-array.mean(0), weights)
+    return transformed @ model.components_ + array.mean(0)
 
 
 @fm.timechunk
