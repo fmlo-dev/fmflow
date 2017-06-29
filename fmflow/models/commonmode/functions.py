@@ -73,11 +73,11 @@ def skdecomposition(array, decomposer='TruncatedSVD', n_components=None, **kwarg
     params.update(kwargs)
 
     model = AlgorithmClass(n_components, **params)
-    transformed = model.fit_transform(array)
+    transformed = model.fit_transform(array-array.mean(0))
 
     if hasattr(model, 'components_'):
-        return transformed @ model.components_
+        return transformed @ model.components_ + array.mean(0)
     elif hasattr(model, 'inverse_transform'):
-        return model.inverse_transform(transformed)
+        return model.inverse_transform(transformed) + array.mean(0)
     else:
         raise fm.utils.FMFlowError('cannot reconstruct with the spacified algorithm')
