@@ -3,7 +3,7 @@
 # imported items
 __all__ = [
     'empca',
-    'skdecomposition',
+    'decomposition',
 ]
 
 # standard library
@@ -55,7 +55,7 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, cent
 
 
 @fm.timechunk
-def skdecomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
+def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
 
     Args:
