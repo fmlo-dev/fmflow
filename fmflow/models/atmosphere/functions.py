@@ -11,24 +11,16 @@ import numpy as np
 
 
 # functions
-def ozonelines(array, weights=None, fitmode='normal', smooth=50):
-    """
-
-    Args:
-        array (xarray.DataArray):
-        weights (xarray.DataArray):
-        fitmode (str):
-        smooth (int):
-
-    Returns:
-        tb (xarray.DataArray):
-
-    """
-    model = fm.models.OzoneLines(fitmode, smooth)
+def ozonelines(array, weights=None, mode='fit'):
+    model = fm.models.OzoneLines()
     freq = fm.getfreq(array, unit='GHz')
     spec = fm.getspec(array, weights=weights)
     vrad = array.vrad.values.mean()
 
-    tb_ = model.fit(freq, spec, vrad)
+    if mode == 'fit':
+        tb_ = model.fit(freq, spec, vrad)
+    elif mode == 'generate':
+        tb_ = model.generate(freq, vrad)
+
     array_ = fm.demodulate(array)
-    return fm.modulate(fm.zeros_like(array_ + tb_))
+    return fm.modulate(fm.zeros_like(array_)+tb_)
