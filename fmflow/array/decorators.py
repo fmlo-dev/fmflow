@@ -19,7 +19,7 @@ POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 
 # decorators
 def arrayfunc(func):
-    """Make a function compatible with array.
+    """Make a function compatible with xarray.DataArray.
 
     This function should be used as a decorator like::
 
