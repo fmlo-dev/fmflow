@@ -78,9 +78,13 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
         else:
             flag_be = (be['arrayid']==arrayid) & (be['scantype']==scantype)
 
-        # data
-        data = be['arraydata'][flag_be]
-        return fm.array(data, tcoords, chcoords, ptcoords).squeeze()
+        # finally
+        array = fm.array(be['arraydata'][flag_be], tcoords, chcoords, ptcoords)
+
+        if scantype == 'ON':
+            return array.squeeze()
+        else:
+            return array.squeeze().drop(array.fm.tcoords.keys())
 
 
 def makeflags(f, arrayid, scantype, offsetsec=0.0):
