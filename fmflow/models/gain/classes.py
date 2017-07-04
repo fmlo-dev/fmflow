@@ -8,18 +8,19 @@ __all__ = [
 # dependent packages
 import fmflow as fm
 import numpy as np
-from scipy.interpolate import UnivariateSpline
+from scipy.interpolate import interp1d
+from scipy.ndimage import gaussian_filter
 
 
 # classes
 class RFGain(object):
-    def __init__(self, R, include_isb=False):
-        self.R = R
+    def __init__(self, include_logain=False, include_ifgain=False):
         self.info = {
-            'include_isb': include_isb,
+            'include_logain': include_logain,
+            'include_ifgain': include_ifgain,
         }
 
-    def fit(self, ON):
+    def fit(self, X):
         pass
 
     def _fit(self):
@@ -30,8 +31,8 @@ class RFGain(object):
 
     def __repr__(self):
         string = str.format(
-            'RFGain(include_isb={0})',
-            self.include_isb,
+            'RFGain(include_logain={0}, include_ifgain={1})',
+            self.include_logain, self.include_ifgain,
         )
 
         return string
