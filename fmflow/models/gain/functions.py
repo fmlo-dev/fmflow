@@ -10,5 +10,6 @@ import fmflow as fm
 import numpy as np
 
 # functions
-def rfgain(ON, R):
+@fm.timechunk
+def rfgain(ON):
     pass
