@@ -58,7 +58,7 @@ def zeros(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with zeros.
+        array (xarray.DataArray): A modulated array filled with zeros.
 
     """
     data = np.zeros(shape, dtype)
@@ -74,7 +74,7 @@ def ones(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with ones.
+        array (xarray.DataArray): A modulated array filled with ones.
 
     """
     data = np.ones(shape, dtype)
@@ -91,7 +91,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with `fill_value`.
+        array (xarray.DataArray): A modulated array filled with `fill_value`.
 
     """
     data = np.full(shape, dtype)
@@ -107,7 +107,7 @@ def empty(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array without initializing entries.
+        array (xarray.DataArray): A modulated array without initializing entries.
 
     """
     data = np.empty(shape, dtype)
