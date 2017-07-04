@@ -72,7 +72,6 @@ def numchunk(func):
 
     """
     @wraps(func)
-    @arrayfunc
     def wrapper(*args, **kwargs):
         arrays = []
         sequences = []
@@ -123,7 +122,6 @@ def timechunk(func):
 
     """
     @wraps(func)
-    @arrayfunc
     def wrapper(*args, **kwargs):
         arrays = []
         sequences = []
