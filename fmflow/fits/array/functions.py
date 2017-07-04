@@ -83,7 +83,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
         return fm.array(data, tcoords, chcoords, ptcoords).squeeze()
 
 
-def flag(f, arrayid, scantype, offsetsec=0.0):
+def makeflags(f, arrayid, scantype, offsetsec=0.0):
     p = fm.utils.DatetimeParser(False)
     c = lambda dt: np.vectorize(p)(np.asarray(dt))
     t_list = []
@@ -106,7 +106,7 @@ def flag(f, arrayid, scantype, offsetsec=0.0):
         t_ant = c(ant['starttime'])
         t_list.append(t_ant)
 
-    # flags
+    # time and flags
     t_com = reduce(lambda t, s: np.intersect1d(t, s), t_list)
     flag_fmlo = np.in1d(t_fmlo, t_com) & f_fmlo
     flag_be   = np.in1d(t_be, t_com) & f_be
