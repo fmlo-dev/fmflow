@@ -58,7 +58,7 @@ def zeros(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with zeros.
+        array (xarray.DataArray): A modulated array filled with zeros.
 
     """
     data = np.zeros(shape, dtype)
@@ -74,7 +74,7 @@ def ones(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with ones.
+        array (xarray.DataArray): A modulated array filled with ones.
 
     """
     data = np.ones(shape, dtype)
@@ -91,7 +91,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array filled with `fill_value`.
+        array (xarray.DataArray): A modulated array filled with `fill_value`.
 
     """
     data = np.full(shape, dtype)
@@ -107,7 +107,7 @@ def empty(shape, dtype=None, **kwargs):
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
     Returns:
-        array (FMArray): A modulated array without initializing entries.
+        array (xarray.DataArray): A modulated array without initializing entries.
 
     """
     data = np.empty(shape, dtype)
@@ -250,7 +250,7 @@ def getfreq(array, reverse=False, unit='Hz'):
         unit (str, optional): An unit of the observed frequency. Default is Hz.
 
     Returns:
-        freq (numpy.ndarray): An array of the observed frequency in given unit.
+        freq (xarray.DataArray): An array of the observed frequency in given unit.
 
     """
     if array.fm.ismodulated:
@@ -261,7 +261,8 @@ def getfreq(array, reverse=False, unit='Hz'):
     else:
         freq_Hz = array.fsig.values
 
-    return (freq_Hz*u.Hz).to(getattr(u, unit)).value
+    freq = (freq_Hz*u.Hz).to(getattr(u, unit)).value
+    return fm.zeros_like(array[0].drop(array.fm.tcoords.keys())) + freq
 
 
 def getspec(array, reverse=False, weights=None):
@@ -281,7 +282,7 @@ def getspec(array, reverse=False, weights=None):
             The shape of it must be same as the input array.
 
     Returns:
-        spec (numpy.ndarray): An array of the time-averaged spectrum.
+        spec (xarray.DataArray): An array of the time-averaged spectrum.
 
     """
     if weights is not None:
@@ -292,4 +293,5 @@ def getspec(array, reverse=False, weights=None):
         array = fm.demodulate(array, reverse)
 
     masked_array = np.ma.array(array, mask=np.isnan(array))
-    return np.ma.average(masked_array, axis=0, weights=weights).data
+    spec = np.ma.average(masked_array, axis=0, weights=weights).data
+    return fm.zeros_like(array[0].drop(array.fm.tcoords.keys())) + spec
