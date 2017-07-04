@@ -65,7 +65,7 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         decomposer (str): A name of algorithm provided by sklearn.decomposition.
         n_components (int): A number of components to keep.
         centering (bool): If True, mean vector along time axis is subtracted from
-            `array` before computing EMPCA and then added to the reconstructed one.
+            `array` before decomposition and then added to the reconstructed one.
         kwargs (dict): Parameters for the spacified algorithm such as
             `n_components` and for the timechunk calculation such as
             `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
