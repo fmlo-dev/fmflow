@@ -13,7 +13,7 @@ from copy import deepcopy
 # dependent packages
 import numpy as np
 import fmflow as fm
-from sklearn import decomposition
+from sklearn import decomposition as _decomposition
 
 # constants
 SKPARAMS = defaultdict(dict)
@@ -54,6 +54,7 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, cent
     return transformed @ model.components_ + mean
 
 
+@fm.arrayfunc
 @fm.timechunk
 def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
@@ -77,7 +78,7 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    AlgorithmClass = getattr(decomposition, decomposer)
+    AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
 
