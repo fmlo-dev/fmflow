@@ -11,7 +11,7 @@ import numpy as np
 
 
 # functions
-def ozonelines(array, weights=None, mode='fit', smooth=50):
+def ozonelines(array, weights=None, mode='fit'):
     model = fm.models.OzoneLines()
     freq = fm.getfreq(array, unit='GHz')
     spec = fm.getspec(array, weights=weights)
