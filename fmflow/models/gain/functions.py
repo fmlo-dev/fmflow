@@ -10,6 +10,6 @@ import fmflow as fm
 import numpy as np
 
 # functions
-@fm.timechunk
-def rfgain(ON):
-    pass
+def rfgain(ON, ch_step=2, ch_smooth=50, n_maxiters=5):
+    model = fm.models.RFGain(ch_step, ch_smooth, n_maxiters)
+    return model.fit(ON)

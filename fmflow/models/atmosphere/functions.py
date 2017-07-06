@@ -13,8 +13,8 @@ import numpy as np
 # functions
 def ozonelines(array, weights=None, mode='fit'):
     model = fm.models.OzoneLines()
-    freq = fm.getfreq(array, unit='GHz')
-    spec = fm.getspec(array, weights=weights)
+    freq = fm.getfreq(array, unit='GHz').values
+    spec = fm.getspec(array, weights=weights).values
     vrad = array.vrad.values.mean()
 
     if mode == 'fit':
