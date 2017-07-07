@@ -50,7 +50,7 @@ class EMPCA(object):
         return C
 
     def _update_coefficients(self, X, W, P):
-        C = np.zeros([self.N, self.K])
+        C = np.empty([self.N, self.K])
         for n in range(self.N):
             Pn = P @ (P * W[n]).T
             xn = P @ (X[n] * W[n])
@@ -60,11 +60,10 @@ class EMPCA(object):
 
     def _update_eigenvectors(self, X, W, C):
         X = X.copy()
-        P = np.zeros([self.K, self.D])
+        P = np.empty([self.K, self.D])
         for k in range(self.K):
-            ck = C[:,k]
-            P[k] = (ck @ (X*W)) / (ck**2 @ W)
-            X -= np.outer(ck, P[k])
+            P[k] = (C[:,k] @ (X*W)) / (C[:,k]**2 @ W)
+            X -= np.outer(C[:,k], P[k])
 
         return fm.utils.orthonormalize(P)
 
@@ -74,7 +73,7 @@ class EMPCA(object):
     def __repr__(self):
         string = str.format(
             'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed
+            self.n_components, self.n_maxiters, self.random_seed,
         )
 
         return string
