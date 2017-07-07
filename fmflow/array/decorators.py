@@ -13,12 +13,13 @@ import numpy as np
 import xarray as xr
 
 # constants
-POSITIONAL_OR_KEYWORD = Parameter.POSITIONAL_OR_KEYWORD
+EMPTY = Parameter.empty
+POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 
 
 # decorators
 def arrayfunc(func):
-    """Make a function compatible with array.
+    """Make a function compatible with xarray.DataArray.
 
     This function should be used as a decorator like::
 
@@ -71,26 +72,32 @@ def numchunk(func):
 
     """
     @wraps(func)
-    @arrayfunc
     def wrapper(*args, **kwargs):
-        array = args[0]
+        arrays = []
+        sequences = []
+
         params = signature(func).parameters
         for i, key in enumerate(params):
-            if i == 0:
-                continue
+            if params[key].kind == POS_OR_KWD:
+                if params[key].default == EMPTY:
+                    arrays.append(np.asarray(args[i]))
+                else:
+                    try:
+                        kwargs.update({key: args[i]})
+                    except IndexError:
+                        if not key in kwargs:
+                            kwargs.update({key: params[key].default})
 
-            if params[key].kind == POSITIONAL_OR_KEYWORD:
-                try:
-                    kwargs.update({key: args[i]})
-                except IndexError:
-                    kwargs.update({key: params[key].default})
-
-        p = fm.utils.MPPool()
-        N = kwargs.pop('numchunk', p.processes)
+        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
+        N = kwargs.pop('numchunk', p.n_processes)
         pfunc = partial(func, **kwargs)
-        subarrays = np.array_split(array, N)
+        for i in range(len(arrays)):
+            try:
+                sequences.append(np.array_split(arrays[i], N))
+            except:
+                sequences.append(np.tile(arrays[i], N))
 
-        return np.concatenate(p.map(pfunc, subarrays))
+        return np.concatenate(p.map(pfunc, *sequences))
 
     return wrapper
 
@@ -115,26 +122,32 @@ def timechunk(func):
 
     """
     @wraps(func)
-    @arrayfunc
     def wrapper(*args, **kwargs):
-        array = args[0]
+        arrays = []
+        sequences = []
+
         params = signature(func).parameters
         for i, key in enumerate(params):
-            if i == 0:
-                continue
+            if params[key].kind == POS_OR_KWD:
+                if params[key].default == EMPTY:
+                    arrays.append(np.asarray(args[i]))
+                else:
+                    try:
+                        kwargs.update({key: args[i]})
+                    except IndexError:
+                        if not key in kwargs:
+                            kwargs.update({key: params[key].default})
 
-            if params[key].kind == POSITIONAL_OR_KEYWORD:
-                try:
-                    kwargs.update({key: args[i]})
-                except IndexError:
-                    kwargs.update({key: params[key].default})
-
-        p = fm.utils.MPPool()
-        T = kwargs.pop('timechunk', len(array))
-        N = int(round(len(array) / T))
+        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
+        T = kwargs.pop('timechunk', len(arrays[0]))
+        N = int(round(len(arrays[0]) / T))
         pfunc = partial(func, **kwargs)
-        subarrays = np.array_split(array, N)
+        for i in range(len(arrays)):
+            try:
+                sequences.append(np.array_split(arrays[i], N))
+            except:
+                sequences.append(np.tile(arrays[i], N))
 
-        return np.concatenate(p.map(pfunc, subarrays))
+        return np.concatenate(p.map(pfunc, *sequences))
 
     return wrapper

@@ -20,7 +20,7 @@ class CStructReader(object):
     C structures can be expressed as a Python list that stores name, type, and shape
     of each member in a C structure. For example, the following C structure::
 
-        struct schedule {
+        struct structure {
         int a[2];
         float b[2][3];
         char c[10];

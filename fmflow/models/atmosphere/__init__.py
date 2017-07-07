@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # submodules
-from .classes import *
 from .functions import *
-del classes
+from .classes import *
 del functions
+del classes

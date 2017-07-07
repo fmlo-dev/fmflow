@@ -1,7 +1,16 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['fmgf', 'mad', 'rollrows', 'slicewhere']
+__all__ = [
+    'fmgf',
+    'mad',
+    'orthonormalize',
+    'rollrows',
+    'slicewhere',
+]
+
+# standard library
+from functools import partial
 
 # dependent packages
 import numpy as np
@@ -26,12 +35,12 @@ def fmgf(array, sigma):
 
     """
     x, y = np.arange(len(array)), array.copy()
-    yg = filters.gaussian_filter(y, sigma)
+    yg = ndimage.filters.gaussian_filter(y, sigma)
     y -= yg
 
     # digitizing
     m = 101
-    dy = 6.0*fm.utils.mad(y) / m
+    dy = 6.0*mad(y) / m
     ybin = np.arange(np.min(y)-5*dy, np.max(y)+5*dy+dy, dy)
     z = np.zeros([len(ybin), len(x)])
     z[np.digitize(y, ybin), x] = 1.0
@@ -67,6 +76,30 @@ def mad(array, axis=None, keepdims=False):
     ad = np.abs(array - np.median(array, axis, keepdims=True))
     mad = np.median(ad, axis, keepdims=keepdims)
     return mad
+
+
+def orthonormalize(Ain):
+    """Orthonormalize an imput vectors.
+
+    Of cource this can be achieved by QR decomposition (numpy.linalg.qr),
+    but this function is faster when number of vectors is less than that of features.
+
+    Args:
+        Ain (numpy.ndarray): An input vectors as a 2D array.
+            i.e. len(Ain) equals the number of vectors.
+
+    Returns:
+        Aout (numpy.ndarray): An output orthonormalized vectors as a 2D array.
+
+    """
+    Aout = Ain.copy()
+    for i in range(len(Aout)):
+        for j in range(i):
+            Aout[i] -= (Aout[i] @ Aout[j]) * Aout[j]
+
+        Aout[i] /= np.linalg.norm(Aout[i])
+
+    return Aout
 
 
 def rollrows(array, shifts):
