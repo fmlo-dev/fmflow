@@ -198,9 +198,9 @@ def empty_like(array, dtype=None, keepmeta=True):
 
     """
     if keepmeta:
-        return fm.empty(array.shape,
-            array.fm.tcoords, array.fm.chcoords, array.fm.ptcoords,
-            array.attrs, array.name
+        return fm.empty(array.shape, dtype,
+            tcoords=array.fm.tcoords, chcoords=array.fm.chcoords,
+            ptcoords=array.fm.ptcoords, attrs=array.attrs, name=array.name
         )
     else:
         return fm.empty(array.shape, dtype)
