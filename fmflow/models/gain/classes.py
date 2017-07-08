@@ -15,7 +15,7 @@ from scipy.ndimage import gaussian_filter
 # classes
 class RFGain(object):
     def __init__(self, ch_step=2, ch_smooth=50, n_maxiters=5):
-        self.info = {
+        self.params = {
             'ch_step': ch_step,
             'ch_smooth': ch_smooth,
             'n_maxiters': n_maxiters,
@@ -44,12 +44,10 @@ class RFGain(object):
         return fm.modulate(slogGrf_)
 
     def __getattr__(self, name):
-        return self.info[name]
+        return self.params[name]
 
     def __repr__(self):
-        string = str.format(
+        return str.format(
             'RFGain(ch_step={0}, n_maxiters={1})',
             self.ch_step, self.n_maxiters,
         )
-
-        return string
