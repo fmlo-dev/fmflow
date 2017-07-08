@@ -322,12 +322,12 @@ def save(array, filename=None):
     array.to_netcdf(filename)
 
 
-def load(filename, copy=False):
+def load(filename, copy=True):
     """Load an array from a NetCDF file.
 
     Args:
         filename (str): A file name (*.nc).
-        copy (bool): If True, array is copied in memory. Default is False.
+        copy (bool): If True, array is copied in memory. Default is True.
 
     Returns:
         array (xarray.DataArray): A loaded array.
