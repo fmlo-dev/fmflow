@@ -66,7 +66,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
 
             tcoords.update({
                 'fmch': (fmlo['FMFREQ'][flag_fmlo]/step).astype(int),
-                'vrad': fmlo['VRAD'][flag_fmlo],
+                'vrad': fmlo['VRAD'][flag_fmlo].astype('float64'),
                 'time': t,
             })
 
@@ -79,7 +79,8 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
             flag_be = (be['arrayid']==arrayid) & (be['scantype']==scantype)
 
         # finally
-        array = fm.array(be['arraydata'][flag_be], tcoords, chcoords, ptcoords)
+        data = be['arraydata'][flag_be].astype('float64')
+        array = fm.array(data, tcoords, chcoords, ptcoords)
 
         if scantype == 'ON':
             return array.squeeze()
