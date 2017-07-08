@@ -13,7 +13,7 @@ from copy import deepcopy
 # dependent packages
 import numpy as np
 import fmflow as fm
-from sklearn import decomposition
+from sklearn import decomposition as _decomposition
 
 # constants
 SKPARAMS = defaultdict(dict)
@@ -21,6 +21,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
+@fm.arrayfunc
 @fm.timechunk
 def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with EMPCA.
@@ -54,6 +55,7 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, cent
     return transformed @ model.components_ + mean
 
 
+@fm.arrayfunc
 @fm.timechunk
 def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
@@ -63,7 +65,7 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         decomposer (str): A name of algorithm provided by sklearn.decomposition.
         n_components (int): A number of components to keep.
         centering (bool): If True, mean vector along time axis is subtracted from
-            `array` before computing EMPCA and then added to the reconstructed one.
+            `array` before decomposition and then added to the reconstructed one.
         kwargs (dict): Parameters for the spacified algorithm such as
             `n_components` and for the timechunk calculation such as
             `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
@@ -77,7 +79,7 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    AlgorithmClass = getattr(decomposition, decomposer)
+    AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
 
