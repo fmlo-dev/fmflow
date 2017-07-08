@@ -1,7 +1,11 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['arrayfunc', 'numchunk', 'timechunk']
+__all__ = [
+    'arrayfunc',
+    'numchunk',
+    'timechunk',
+]
 
 # standard library
 from functools import partial, wraps
@@ -40,13 +44,17 @@ def arrayfunc(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        array = args[0]
+        if any(isinstance(arg, xr.DataArray) for arg in args):
+            newargs = []
+            for arg in args:
+                if isinstance(arg, xr.DataArray):
+                    newargs.append(arg.values)
+                else:
+                    newargs.append(arg)
 
-        if isinstance(array, xr.DataArray):
-            result = func(array.values, *args[1:], **kwargs)
-            return fm.ones_like(array) * result
+            return fm.empty_like(args[0]) + func(*newargs, **kwargs)
         else:
-            return func(array, *args[1:], **kwargs)
+            return func(*args, **kwargs)
 
     return wrapper
 
