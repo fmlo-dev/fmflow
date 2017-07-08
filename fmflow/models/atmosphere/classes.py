@@ -31,7 +31,7 @@ with open(os.path.join(DATA_DIR, 'am.yaml')) as f:
 
 # classes
 class OzoneLines(object):
-    info = {
+    params = {
         'amconfig': AMCONFIG,
         'amlayers': AMLAYERS,
         'computed': False,
@@ -103,22 +103,20 @@ class OzoneLines(object):
         OzoneLines.freq = amfreq
         OzoneLines.taus = np.array(amtaus)
         OzoneLines.tbs  = np.array(amtbs) - 2.7
-        OzoneLines.info['computed'] = True
+        OzoneLines.params['computed'] = True
         self._setclassattrs()
 
     def _setclassattrs(self):
-        self.info = OzoneLines.info
+        self.params = OzoneLines.params
         self.freq = OzoneLines.freq
         self.taus = OzoneLines.taus
         self.tbs  = OzoneLines.tbs
 
     def __getattr__(self, name):
-        return self.info[name]
+        return self.params[name]
 
     def __repr__(self):
-        string = str.format(
+        return str.format(
             'OzoneLines(fitmode={0}, computed={1})',
             self.fitmode, self.computed,
         )
-
-        return string
