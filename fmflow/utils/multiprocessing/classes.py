@@ -86,3 +86,9 @@ class MPPool(object):
             proc.join()
 
         return results
+
+    def __repr__(self):
+        return str.format(
+            'MPPool(n_processes={0}, mpcompatible={1})',
+            self.n_processes, self.mpcompatible
+        )

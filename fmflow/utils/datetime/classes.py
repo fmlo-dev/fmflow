@@ -37,7 +37,7 @@ class DatetimeParser(object):
                 if their type is bytes. Default is utf-8.
 
         """
-        self.info = {
+        self.params = {
             'outputiso': outputiso,
             'cutoffsec': cutoffsec,
             'encoding': encoding
@@ -58,7 +58,7 @@ class DatetimeParser(object):
         if issubclass(type(datetime_like), str):
             dt_string = datetime_like
         elif issubclass(type(datetime_like), bytes):
-            dt_string = datetime_like.decode(self.info['encoding'])
+            dt_string = datetime_like.decode(self.encoding)
         elif type(datetime_like) == datetime:
             dt_string = datetime_like.strftime(ISO_8601)
         else:
@@ -70,12 +70,12 @@ class DatetimeParser(object):
             self._setpattern(dt_string)
             dt = datetime.strptime(dt_string, self._pattern)
 
-        if self.info['cutoffsec']:
+        if self.cutoffsec:
             dt_isostring = dt.strftime(ISO_8601)[:-5] + '00000'
         else:
             dt_isostring = dt.strftime(ISO_8601)
 
-        if self.info['outputiso']:
+        if self.outputiso:
             return dt_isostring
         else:
             return datetime.strptime(dt_isostring, ISO_8601)
@@ -88,3 +88,12 @@ class DatetimeParser(object):
                 break
             except ValueError:
                 continue
+
+    def __getattr__(self, name):
+        return self.params[name]
+
+    def __repr__(self):
+        return str.format(
+            'DatetimeParser(outputiso={0}, offsetsec={1}, encoding={2})',
+            self.outputiso, self.offsetsec, self.encoding
+        )
