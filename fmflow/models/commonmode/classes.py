@@ -12,7 +12,7 @@ import numpy as np
 
 # classes
 class EMPCA(object):
-    def __init__(self, n_components=10, n_maxiters=25, random_seed=None):
+    def __init__(self, n_components=20, n_maxiters=10, random_seed=None):
         self.info = {
             'n_components': n_components,
             'n_maxiters': n_maxiters,
@@ -42,7 +42,6 @@ class EMPCA(object):
 
         # EM algorithm
         for i in range(self.n_maxiters):
-            print(i+1, end=' ')
             C = self._update_coefficients(X, W, P)
             P = self._update_eigenvectors(X, W, C)
 
@@ -51,7 +50,7 @@ class EMPCA(object):
         return C
 
     def _update_coefficients(self, X, W, P):
-        C = np.zeros([self.N, self.K])
+        C = np.empty([self.N, self.K])
         for n in range(self.N):
             Pn = P @ (P * W[n]).T
             xn = P @ (X[n] * W[n])
@@ -61,11 +60,10 @@ class EMPCA(object):
 
     def _update_eigenvectors(self, X, W, C):
         X = X.copy()
-        P = np.zeros([self.K, self.D])
+        P = np.empty([self.K, self.D])
         for k in range(self.K):
-            ck = C[:,k]
-            P[k] = (ck @ (X*W)) / (ck**2 @ W)
-            X -= np.outer(ck, P[k])
+            P[k] = (C[:,k] @ (X*W)) / (C[:,k]**2 @ W)
+            X -= np.outer(C[:,k], P[k])
 
         return fm.utils.orthonormalize(P)
 
@@ -75,7 +73,7 @@ class EMPCA(object):
     def __repr__(self):
         string = str.format(
             'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed
+            self.n_components, self.n_maxiters, self.random_seed,
         )
 
         return string

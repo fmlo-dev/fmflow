@@ -31,55 +31,64 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
     with fits.open(os.path.expanduser(fitsname)) as f:
         # fits data
         fmlo = f['fmlolog'].data
-        be   = f['backend'].data
+        be = f['backend'].data
         if 'antenna' in f:
             ant = f['antenna'].data
 
-        # data other than ON (e.g. R, SKY, ZERO)
-        if not scantype == 'ON':
-            flag_be = (be['arrayid']==arrayid) & (be['scantype']==scantype)
-            return np.squeeze(be['arraydata'][flag_be])
-
-        # fmarray data
-        t_com, flag_fmlo, flag_be, flag_ant = flag(f, arrayid, scantype, offsetsec)
-        data = np.squeeze(be['arraydata'][flag_be])
-
-        # fmarray coords
-        info = f['obsinfo'].data
-        flag_info = (info['arrayid']==arrayid)
-        info = dict(zip(info.names, info[flag_info][0]))
+        # info for *coords
+        d = f['obsinfo'].data
+        info = dict(zip(d.names, d[d['arrayid']==arrayid][0]))
         info.update(f['obsinfo'].header)
 
-        tcoords = {'time': t_com}
-        chcoords = {}
-        ptcoords = {'status': 'MODULATED'}
+        # ptcoords
+        ptcoords = {
+            'xref': info['RA'],
+            'yref': info['DEC'],
+            'coordsys': 'RADEC',
+            'status': 'MODULATED',
+        }
 
-        ## fmch, vrad
-        fmfreq = fmlo['FMFREQ'][flag_fmlo]
-        vrad = fmlo['VRAD'][flag_fmlo]
-        fmch = (fmfreq / info['chanwidth']).astype(int)
-        tcoords.update({'fmch': fmch, 'vrad': vrad})
-
-        ## x/yrel, x/yref (if any)
-        if 'antenna' in f:
-            xref, yref = info['RA'], info['DEC']
-            xrel = ant['RA'][flag_ant] - xref
-            yrel = ant['DEC'][flag_ant] - yref
-            tcoords.update({'xrel': xrel, 'yrel': yrel})
-            ptcoords.update({'xref': xref, 'yref': yref, 'coordsys': 'RADEC'})
-
-        ## fsig, fimg
+        # chcoords
         step = info['chanwidth']
-        start = info['restfreq'] - info['restchan']*step
-        end = start + info['numchan']*step
-        fsig = np.arange(start, end, step)
-        fimg = fsig[::-1] - 2*info['intmfreq']
-        chcoords.update({'fsig': fsig, 'fimg': fimg})
+        start = info['restfreq'] - step*info['restchan']
+        end = start + step*info['numchan']
 
-        return fm.array(data, tcoords, chcoords, ptcoords)
+        chcoords = {
+            'fsig': np.arange(start, end, step),
+            'fimg': np.arange(start, end, step)[::-1] - 2*info['intmfreq'],
+        }
+
+        # tcoords and flags
+        tcoords = {}
+
+        if scantype == 'ON':
+            t, flag_fmlo, flag_be, flag_ant = makeflags(f, arrayid, scantype, offsetsec)
+
+            tcoords.update({
+                'fmch': (fmlo['FMFREQ'][flag_fmlo]/step).astype(int),
+                'vrad': fmlo['VRAD'][flag_fmlo].astype('float64'),
+                'time': t,
+            })
+
+            if 'antenna' in f:
+                tcoords.update({
+                    'xrel': ant['RA'][flag_ant] - ptcoords['xref'],
+                    'yrel': ant['DEC'][flag_ant] - ptcoords['yref'],
+                })
+        else:
+            flag_be = (be['arrayid']==arrayid) & (be['scantype']==scantype)
+
+        # finally
+        data = be['arraydata'][flag_be].astype('float64')
+        array = fm.array(data, tcoords, chcoords, ptcoords)
+
+        if scantype == 'ON':
+            return array.squeeze()
+        else:
+            return array.squeeze().drop(array.fm.tcoords.keys())
 
 
-def flag(f, arrayid, scantype, offsetsec=0.0):
+def makeflags(f, arrayid, scantype, offsetsec=0.0):
     p = fm.utils.DatetimeParser(False)
     c = lambda dt: np.vectorize(p)(np.asarray(dt))
     t_list = []
@@ -102,7 +111,7 @@ def flag(f, arrayid, scantype, offsetsec=0.0):
         t_ant = c(ant['starttime'])
         t_list.append(t_ant)
 
-    # flags
+    # time and flags
     t_com = reduce(lambda t, s: np.intersect1d(t, s), t_list)
     flag_fmlo = np.in1d(t_fmlo, t_com) & f_fmlo
     flag_be   = np.in1d(t_be, t_com) & f_be
