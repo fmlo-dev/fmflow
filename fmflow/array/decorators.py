@@ -81,20 +81,18 @@ def numchunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays = []
-        sequences = []
-
+        arrays, sequences = [], []
         params = signature(func).parameters
+
         for i, key in enumerate(params):
             if params[key].kind == POS_OR_KWD:
                 if params[key].default == EMPTY:
-                    arrays.append(np.asarray(args[i]))
+                    arrays.append(args[i])
                 else:
                     try:
                         kwargs.update({key: args[i]})
                     except IndexError:
-                        if not key in kwargs:
-                            kwargs.update({key: params[key].default})
+                        kwargs.setdefault(key, params[key].default)
 
         p = fm.utils.MPPool(kwargs.pop('n_processes', None))
         N = kwargs.pop('numchunk', p.n_processes)
@@ -131,20 +129,18 @@ def timechunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays = []
-        sequences = []
-
+        arrays, sequences = [], []
         params = signature(func).parameters
+
         for i, key in enumerate(params):
             if params[key].kind == POS_OR_KWD:
                 if params[key].default == EMPTY:
-                    arrays.append(np.asarray(args[i]))
+                    arrays.append(args[i])
                 else:
                     try:
                         kwargs.update({key: args[i]})
                     except IndexError:
-                        if not key in kwargs:
-                            kwargs.update({key: params[key].default})
+                        kwargs.setdefault(key, params[key].default)
 
         p = fm.utils.MPPool(kwargs.pop('n_processes', None))
         T = kwargs.pop('timechunk', len(arrays[0]))
