@@ -53,7 +53,7 @@ class CStructReader(object):
     Attributes:
         data (OrderedDict): An ordered dictionary that stores unpacked values.
         jsondata (OrderedDict): An JSON string that stores unpacked values.
-        info (dict): Stored information about the structure, ignored, and byteorder.
+        params (dict): Stored information about the structure, ignored, and byteorder.
 
     References:
         https://docs.python.jp/3/library/struct.html#module-struct
@@ -74,9 +74,14 @@ class CStructReader(object):
                 if their type is bytes (for the jsondata attribute). Default is utf-8.
 
         """
-        self.info = {'ignored': ignored, 'byteorder': byteorder, 'encoding': encoding}
-        self.info['ctypes'], self.info['shapes'] = self._parse(structure)
-        self._data = OrderedDict((name,[]) for name in self.info['ctypes'])
+        self.params = {
+            'ignored': ignored,
+            'byteorder': byteorder,
+            'encoding': encoding,
+        }
+
+        self.params['ctypes'], self.params['shapes'] = self._parse(structure)
+        self._data = OrderedDict((name,[]) for name in self.params['ctypes'])
         self._unpacker = Struct(self._joinedctypes())
 
     def read(self, f):
@@ -92,7 +97,7 @@ class CStructReader(object):
         """
         bindata = f.read(self._unpacker.size)
         unpdata = deque(self._unpacker.unpack(bindata))
-        for name, shape in self.info['shapes'].items():
+        for name, shape in self.shapes.items():
             datum = [unpdata.popleft() for i in range(np.prod(shape))]
             self._data[name].append(np.asarray(datum))
 
@@ -100,8 +105,8 @@ class CStructReader(object):
     def data(self):
         """An ordered dictionary that stores unpacked values."""
         data = OrderedDict()
-        for name, shape in self.info['shapes'].items():
-            if re.search(self.info['ignored'], name):
+        for name, shape in self.shapes.items():
+            if re.search(self.ignored, name):
                 continue
 
             _data = self._data[name]
@@ -117,7 +122,7 @@ class CStructReader(object):
     def jsondata(self):
         """An JSON string that stores unpacked values."""
         data = self.data
-        encoding = self.info['encoding']
+        encoding = self.encoding
         for name, datum in data.items():
             if type(datum) == bytes:
                 data[name] = datum.decode(encoding)
@@ -133,9 +138,9 @@ class CStructReader(object):
 
     def _joinedctypes(self):
         """A Joined C-type string for the Struct class."""
-        joinedctypes = self.info['byteorder']
-        for name, ctype in self.info['ctypes'].items():
-            count = np.prod(self.info['shapes'][name])
+        joinedctypes = self.byteorder
+        for name, ctype in self.ctypes.items():
+            count = np.prod(self.shapes[name])
             joinedctypes += ctype * count
 
         return joinedctypes
@@ -161,3 +166,12 @@ class CStructReader(object):
             shapes[name] = shape
 
         return ctypes, shapes
+
+    def __getattr__(self, name):
+        return self.params[name]
+
+    def __repr__(self):
+        return str.format(
+            'CStructReader(ignored={0}, byteorder={1}, encoding={2})',
+            self.ignored, self.byteorder, self.encoding
+        )
