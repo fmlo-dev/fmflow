@@ -7,5 +7,6 @@ __author__  = 'Akio Taniguchi'
 # submodules
 from . import utils
 from .array import *
+from .logging import *
 from . import fits
 from . import models
