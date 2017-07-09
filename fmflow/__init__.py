@@ -10,3 +10,10 @@ from .logging import *
 from . import fits
 from . import models
 from . import utils
+
+# default logger
+import logging
+logger = logging.getLogger('fmflow')
+setlogfile(logger=logger)
+setloglevel(logger=logger)
+del logging
