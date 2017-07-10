@@ -2,7 +2,7 @@
 
 # imported items
 __all__ = [
-    'OzoneLines',
+    'AtmosLines',
 ]
 
 # standard library
@@ -30,7 +30,7 @@ with open(os.path.join(DATA_DIR, 'am.yaml')) as f:
 
 
 # classes
-class OzoneLines(object):
+class AtmosLines(object):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
     computed = False
