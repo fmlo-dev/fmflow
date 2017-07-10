@@ -3,8 +3,11 @@
 # imported items
 __all__ = [
     'fmgf',
+    'gaussian',
+    'lorentzian',
     'mad',
     'orthonormalize',
+    'pseudovoigt',
     'rollrows',
     'slicewhere',
 ]
@@ -59,6 +62,42 @@ def fmgf(array, sigma):
     return filtered
 
 
+def gaussian(x, x0=0.0, fwhm=1.0, ampl=1.0):
+    """Return Gaussian with given parameters.
+
+    y = ampl * exp(-4ln2 * (x-x0)^2 / fwhm^2)
+
+    Args:
+        x (numpy.ndarray): An input 1D array.
+        x0 (float): Center of the Gaussian.
+        fwhm (float): FWHM of the Gaussian.
+        ampl (float): Amplitude of the Gaussian.
+
+    Returns:
+        y (numpy.ndarray): An output 1D Gaussian.
+
+    """
+    return ampl * np.exp(-4*np.log(2)*((x-x0)/fwhm)**2)
+
+
+def lorentzian(x, x0=0.0, fwhm=1.0, ampl=1.0):
+    """Return Lorentzian with given parameters.
+
+    y = ampl / (1 + 4(x-x0)^2 / fwhm^2)
+
+    Args:
+        x (numpy.ndarray): An input 1D array.
+        x0 (float): Center of the Lorentzian.
+        fwhm (float): FWHM of the Lorentzian.
+        ampl (float): Amplitude of the Lorentzian.
+
+    Returns:
+        y (numpy.ndarray): An output 1D Lorentzian.
+
+    """
+    return ampl * (1+4*((x-x0)/fwhm)**2)**(-1)
+
+
 def mad(array, axis=None, keepdims=False):
     """Compute the median absolute deviation (MAD) along the given axis.
 
@@ -100,6 +139,28 @@ def orthonormalize(Ain):
         Aout[i] /= np.linalg.norm(Aout[i])
 
     return Aout
+
+
+def pseudovoigt(x, x0=0.0, fwhm=1.0, ampl=1.0, frac=0.5):
+    """Return Pseudo-Voigt with given parameters.
+
+    y = frac * gaussian(x, x0, fwhm) + (1-frac) * lorentzian(x, x0, fwhm)
+
+    Args:
+        x (numpy.ndarray): An input 1D array.
+        x0 (float): Center of the Pseudo-Voigt.
+        fwhm (float): FWHM of the Pseudo-Voigt.
+        ampl (float): Amplitude of the Pseudo-Voigt.
+        frac (float): Fraction of Gaussian and Lorentzian. Must be 0 <= frac <= 1.
+
+    Returns:
+        y (numpy.ndarray): An output 1D Pseudo-Voigt.
+
+    """
+    if not 0 <= frac <= 1:
+        raise ValueError('frac must be 0 <= frac <= 1')
+
+    return frac*gaussian(x, x0, fwhm, ampl) + (1-frac)*lorentzian(x, x0, fwhm, ampl)
 
 
 def rollrows(array, shifts):
