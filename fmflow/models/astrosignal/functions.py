@@ -2,7 +2,7 @@
 
 # imported items
 __all__ = [
-    'atmoslines',
+    'astrolines',
 ]
 
 # dependent packages
@@ -11,16 +11,17 @@ import numpy as np
 
 
 # functions
-def atmoslines(array, weights=None, mode='fit'):
-    model = fm.models.AtmosLines()
+def astrolines(array, weights=None, mode='fit', snr_threshold=10, ch_fwhm=5, ch_smooth=50):
+    model = fm.models.AstroLines(snr_threshold, ch_fwhm, ch_smooth)
     freq = fm.getfreq(array, unit='GHz').values
     spec = fm.getspec(array, weights=weights).values
-    vrad = array.vrad.values.mean()
 
     if mode == 'fit':
-        tb_ = model.fit(freq, spec, vrad)
-    elif mode == 'generate':
-        tb_ = model.generate(freq, vrad)
+        tb_ = model.fit(freq, spec)
+    elif mode == 'smooth':
+        tb_ = model.smooth(freq, spec)
+    elif mode == 'raw':
+        tb_ = spec
 
     array_ = fm.demodulate(array)
     return fm.modulate(fm.zeros_like(array_) + tb_)
