@@ -23,7 +23,10 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 # functions
 @fm.arrayfunc
 @fm.timechunk
-def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, centering=True, **kwargs):
+def empca(
+        array, weights, n_components=20, n_maxiters=10, convergence=0.01,
+        random_seed=None, centering=True, **kwargs
+    ):
     """Reconstruct an array from decomposed one with EMPCA.
 
     Args:
@@ -50,7 +53,7 @@ def empca(array, weights, n_components=20, n_maxiters=10, random_seed=None, cent
     else:
         mean = np.zeros_like(array.shape[1])
 
-    model = fm.models.EMPCA(n_components, n_maxiters, random_seed)
+    model = fm.models.EMPCA(n_components, convergence, n_maxiters, random_seed)
     transformed = model.fit_transform(array-mean, weights)
     return transformed @ model.components_ + mean
 
