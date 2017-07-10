@@ -2,7 +2,7 @@
 
 # imported items
 __all__ = [
-    'ozonelines',
+    'atmoslines',
 ]
 
 # dependent packages
@@ -11,8 +11,8 @@ import numpy as np
 
 
 # functions
-def ozonelines(array, weights=None, mode='fit'):
-    model = fm.models.OzoneLines()
+def atmoslines(array, weights=None, mode='fit'):
+    model = fm.models.AtmosLines()
     freq = fm.getfreq(array, unit='GHz').values
     spec = fm.getspec(array, weights=weights).values
     vrad = array.vrad.values.mean()
@@ -23,4 +23,4 @@ def ozonelines(array, weights=None, mode='fit'):
         tb_ = model.generate(freq, vrad)
 
     array_ = fm.demodulate(array)
-    return fm.modulate(fm.zeros_like(array_)+tb_)
+    return fm.modulate(fm.zeros_like(array_) + tb_)
