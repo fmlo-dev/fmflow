@@ -14,7 +14,7 @@ from scipy.ndimage import gaussian_filter
 
 # classes
 class RFGain(object):
-    def __init__(self, ch_smooth=50, convergence=0.01, n_maxiters=100, *, include_logain=False):
+    def __init__(self, ch_smooth=50, convergence=0.01, n_maxiters=100, include_logain=False):
         self.params = {
             'ch_smooth': ch_smooth,
             'convergence': convergence,
@@ -27,7 +27,7 @@ class RFGain(object):
 
         # interpolated fmch
         fmch = logON.fmch.values
-        ifmch = np.arange(fmch.min(), fmch.max()+3, 3)
+        ifmch = np.arange(fmch.min(), fmch.max()+2, 2)
         ifmch[ifmch>fmch.max()] = fmch.max()
 
         # interpolated logON
