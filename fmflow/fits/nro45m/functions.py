@@ -21,7 +21,7 @@ from astropy.io import fits
 
 # constants
 C           = constants.c.value # spped of light in vacuum
-D_NRO45m      = (45.0 * u.m).value # diameter of the NRO45m
+D_NRO45m    = (45.0 * u.m).value # diameter of the NRO45m
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
 IGNORED_KEY = '^reserve' # reserved[1|4|8]
 LAT_NRO45m  = coordinates.Angle('+35d56m40.9s').deg # latitude of the NRO45m
