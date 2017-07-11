@@ -5,8 +5,12 @@ __all__ = [
     'array', 'demodulate', 'modulate', 'getfreq', 'getspec',
     'ones', 'zeros', 'full', 'empty',
     'ones_like', 'zeros_like', 'full_like', 'empty_like',
+    'save', 'load',
     'align', 'concat', 'merge',
 ]
+
+# standard library
+import uuid
 
 # dependent packages
 import fmflow as fm
@@ -194,9 +198,9 @@ def empty_like(array, dtype=None, keepmeta=True):
 
     """
     if keepmeta:
-        return fm.empty(array.shape,
-            array.fm.tcoords, array.fm.chcoords, array.fm.ptcoords,
-            array.attrs, array.name
+        return fm.empty(array.shape, dtype,
+            tcoords=array.fm.tcoords, chcoords=array.fm.chcoords,
+            ptcoords=array.fm.ptcoords, attrs=array.attrs, name=array.name
         )
     else:
         return fm.empty(array.shape, dtype)
@@ -295,3 +299,50 @@ def getspec(array, reverse=False, weights=None):
     masked_array = np.ma.array(array, mask=np.isnan(array))
     spec = np.ma.average(masked_array, axis=0, weights=weights).data
     return fm.zeros_like(array[0].drop(array.fm.tcoords.keys())) + spec
+
+
+def save(array, filename=None):
+    """Save an array to a NetCDF file.
+
+    Args:
+        array (xarray.DataArray):
+        filename (str): A filename (used as <filename>.nc).
+            If not spacified, random 8-character name will be used.
+
+    """
+    if filename is None:
+        if array.name is not None:
+            filename = array.name
+        else:
+            filename = uuid.uuid4().hex[:8]
+
+    if not filename.endswith('.nc'):
+        filename += '.nc'
+
+    array.to_netcdf(filename)
+
+
+def load(filename, copy=True):
+    """Load an array from a NetCDF file.
+
+    Args:
+        filename (str): A file name (*.nc).
+        copy (bool): If True, array is copied in memory. Default is True.
+
+    Returns:
+        array (xarray.DataArray): A loaded array.
+
+    """
+    if copy:
+        array = xr.open_dataarray(filename).copy()
+    else:
+        array = xr.open_dataarray(filename)
+
+    if array.name is None:
+        array.name = filename.rstrip('.nc')
+
+    for coord in array.coords:
+        if array[coord].dtype.kind == 'S':
+            array[coord] = array[coord].astype('U')
+
+    return array

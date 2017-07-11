@@ -1,7 +1,11 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['arrayfunc', 'numchunk', 'timechunk']
+__all__ = [
+    'arrayfunc',
+    'numchunk',
+    'timechunk',
+]
 
 # standard library
 from functools import partial, wraps
@@ -40,13 +44,17 @@ def arrayfunc(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        array = args[0]
+        if any(isinstance(arg, xr.DataArray) for arg in args):
+            newargs = []
+            for arg in args:
+                if isinstance(arg, xr.DataArray):
+                    newargs.append(arg.values)
+                else:
+                    newargs.append(arg)
 
-        if isinstance(array, xr.DataArray):
-            result = func(array.values, *args[1:], **kwargs)
-            return fm.ones_like(array) * result
+            return fm.empty_like(args[0]) + func(*newargs, **kwargs)
         else:
-            return func(array, *args[1:], **kwargs)
+            return func(*args, **kwargs)
 
     return wrapper
 
@@ -73,20 +81,18 @@ def numchunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays = []
-        sequences = []
-
+        arrays, sequences = [], []
         params = signature(func).parameters
+
         for i, key in enumerate(params):
             if params[key].kind == POS_OR_KWD:
                 if params[key].default == EMPTY:
-                    arrays.append(np.asarray(args[i]))
+                    arrays.append(args[i])
                 else:
                     try:
                         kwargs.update({key: args[i]})
                     except IndexError:
-                        if not key in kwargs:
-                            kwargs.update({key: params[key].default})
+                        kwargs.setdefault(key, params[key].default)
 
         p = fm.utils.MPPool(kwargs.pop('n_processes', None))
         N = kwargs.pop('numchunk', p.n_processes)
@@ -123,20 +129,18 @@ def timechunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays = []
-        sequences = []
-
+        arrays, sequences = [], []
         params = signature(func).parameters
+
         for i, key in enumerate(params):
             if params[key].kind == POS_OR_KWD:
                 if params[key].default == EMPTY:
-                    arrays.append(np.asarray(args[i]))
+                    arrays.append(args[i])
                 else:
                     try:
                         kwargs.update({key: args[i]})
                     except IndexError:
-                        if not key in kwargs:
-                            kwargs.update({key: params[key].default})
+                        kwargs.setdefault(key, params[key].default)
 
         p = fm.utils.MPPool(kwargs.pop('n_processes', None))
         T = kwargs.pop('timechunk', len(arrays[0]))

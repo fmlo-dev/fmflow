@@ -57,7 +57,7 @@ class MPPool(object):
             return any([mkl, blas, atlas])
 
     def _mpmap(self, func, *sequences):
-        """Multiprosessing map function that can works with non-local function."""
+        """Multiprosessing map function that can work with non-local function."""
         mpsequences = [[] for i in range(self.n_processes)]
         procs, parents, results = [], [], []
 
@@ -86,3 +86,9 @@ class MPPool(object):
             proc.join()
 
         return results
+
+    def __repr__(self):
+        return str.format(
+            'MPPool(n_processes={0}, mpcompatible={1})',
+            self.n_processes, self.mpcompatible
+        )

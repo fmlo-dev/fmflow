@@ -12,9 +12,10 @@ import numpy as np
 
 # classes
 class EMPCA(object):
-    def __init__(self, n_components=20, n_maxiters=10, random_seed=None):
-        self.info = {
+    def __init__(self, n_components=20, convergence=0.01, n_maxiters=100, random_seed=None):
+        self.params = {
             'n_components': n_components,
+            'convergence': convergence,
             'n_maxiters': n_maxiters,
             'random_seed': random_seed,
         }
@@ -29,11 +30,11 @@ class EMPCA(object):
             W = np.ones_like(X)
 
         if not X.shape == W.shape:
-            raise fm.utils.FMFlowError('X and W must have same shapes')
+            raise ValueError('X and W must have same shapes')
 
         # shapes of matrices
         (N, D), K = X.shape, self.n_components
-        self.info.update({'N': N, 'D': D, 'K': K})
+        self.params.update({'N': N, 'D': D, 'K': K})
 
         # initial random eigen vectors
         np.random.seed(self.random_seed)
@@ -41,9 +42,13 @@ class EMPCA(object):
         P = fm.utils.orthonormalize(A)
 
         # EM algorithm
-        for i in range(self.n_maxiters):
-            C = self._update_coefficients(X, W, P)
-            P = self._update_eigenvectors(X, W, C)
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
+        try:
+            while not cv(P):
+                C = self._update_coefficients(X, W, P)
+                P = self._update_eigenvectors(X, W, C)
+        except StopIteration:
+            fm.logger.warning('reached maximum iteration')
 
         # finally
         self.components_ = P
@@ -68,12 +73,10 @@ class EMPCA(object):
         return fm.utils.orthonormalize(P)
 
     def __getattr__(self, name):
-        return self.info[name]
+        return self.params[name]
 
     def __repr__(self):
-        string = str.format(
+        return str.format(
             'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
             self.n_components, self.n_maxiters, self.random_seed,
         )
-
-        return string
