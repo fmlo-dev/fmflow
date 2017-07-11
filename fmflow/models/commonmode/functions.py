@@ -24,7 +24,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.arrayfunc
 @fm.timechunk
 def empca(
-        array, weights, n_components=20, n_maxiters=10, convergence=0.01,
+        array, weights, n_components=20, convergence=0.01, n_maxiters=100,
         random_seed=None, centering=True, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
