@@ -80,7 +80,7 @@ def read_fmlolog(fmlolog):
 
     """
     # read fmlolog
-    fmts = yaml.load(get_data('fmflow', 'fits/aste/data/fmlolog.yaml'))
+    fmts = yaml.load(get_data('fmflow', 'fits/data/aste_fmlolog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -107,7 +107,7 @@ def read_antennalog(antennalog):
 
     """
     # read fmlolog
-    fmts = yaml.load(get_data('fmflow', 'fits/aste/data/antennalog.yaml'))
+    fmts = yaml.load(get_data('fmflow', 'fits/data/aste_antennalog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -151,7 +151,7 @@ def check_backend(backendlog, byteorder):
         backend (str): Backend type.
 
     """
-    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
+    com = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_common.yaml'))
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
 
@@ -177,8 +177,8 @@ def read_backendlog_mac(backendlog, byteorder):
         hdu (BinTableHDU): HDU containing the read backend logging.
 
     """
-    com = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_common.yaml'))
-    mac = yaml.load(get_data('fmflow', 'fits/aste/data/backendlog_mac.yaml'))
+    com = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_common.yaml'))
+    mac = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_mac.yaml'))
 
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
