@@ -81,29 +81,8 @@ def numchunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays, sequences = [], []
-        params = signature(func).parameters
-
-        for i, key in enumerate(params):
-            if params[key].kind == POS_OR_KWD:
-                if params[key].default == EMPTY:
-                    arrays.append(args[i])
-                else:
-                    try:
-                        kwargs.update({key: args[i]})
-                    except IndexError:
-                        kwargs.setdefault(key, params[key].default)
-
-        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
         N = kwargs.pop('numchunk', p.n_processes)
-        pfunc = partial(func, **kwargs)
-        for i in range(len(arrays)):
-            try:
-                sequences.append(np.array_split(arrays[i], N))
-            except:
-                sequences.append(np.tile(arrays[i], N))
-
-        return np.concatenate(p.map(pfunc, *sequences))
+        return _numchunk(func, args, kwargs, N)
 
     return wrapper
 
@@ -129,9 +108,16 @@ def timechunk(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        arrays, sequences = [], []
-        params = signature(func).parameters
+        T = kwargs.pop('timechunk', len(args[0]))
+        N = int(round(len(args[0]) / T))
+        return _numchunk(func, args, kwargs, N)
 
+    return wrapper
+
+
+def _numchunk(func, args, kwargs, N):
+        arrays = []
+        params = signature(func).parameters
         for i, key in enumerate(params):
             if params[key].kind == POS_OR_KWD:
                 if params[key].default == EMPTY:
@@ -142,16 +128,17 @@ def timechunk(func):
                     except IndexError:
                         kwargs.setdefault(key, params[key].default)
 
-        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
-        T = kwargs.pop('timechunk', len(arrays[0]))
-        N = int(round(len(arrays[0]) / T))
-        pfunc = partial(func, **kwargs)
-        for i in range(len(arrays)):
+        sequences = []
+        for array in arrays:
             try:
-                sequences.append(np.array_split(arrays[i], N))
-            except:
-                sequences.append(np.tile(arrays[i], N))
+                sequences.append(np.array_split(array, N))
+            except TypeError:
+                sequences.append(np.tile(array, N))
 
-        return np.concatenate(p.map(pfunc, *sequences))
+        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
+        result = p.map(partial(func, **kwargs), *sequences)
 
-    return wrapper
+        try:
+            return xr.concat(result, 't')
+        except TypeError:
+            return np.concatenate(result, 0)
