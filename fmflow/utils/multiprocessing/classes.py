@@ -58,7 +58,8 @@ class MPPool(object):
 
     def _mpmap(self, func, *sequences):
         """Multiprosessing map function that can work with non-local function."""
-        mpsequences = [[] for i in range(self.n_processes)]
+        n_processes = np.min([len(sequences[0]), self.n_processes])
+        mpsequences = [[] for i in range(n_processes)]
         procs, parents, results = [], [], []
 
         def pfunc(child, psequences):
@@ -66,7 +67,8 @@ class MPPool(object):
             child.close()
 
         for sequence in sequences:
-            sseqs = np.array_split(sequence, self.n_processes)
+            idxs = np.array_split(range(len(sequence)), n_processes)
+            sseqs = [sequence[idx.min():idx.max()+1] for idx in idxs]
             for n in range(len(sseqs)):
                 mpsequences[n].append(sseqs[n])
 
