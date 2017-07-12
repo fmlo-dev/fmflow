@@ -5,7 +5,7 @@ __all__ = [
     'array', 'demodulate', 'modulate', 'getfreq', 'getspec',
     'ones', 'zeros', 'full', 'empty',
     'ones_like', 'zeros_like', 'full_like', 'empty_like',
-    'save', 'load',
+    'save', 'load', 'chbinning',
     'align', 'concat', 'merge',
 ]
 
@@ -346,3 +346,42 @@ def load(filename, copy=True):
             array[coord] = array[coord].astype('U')
 
     return array
+
+
+def chbinning(array, size=2):
+    """Binning an array along ch axis with given size.
+
+    Args:
+        array (xarray.DataArray): An input array.
+        size (int): Ch length of a bin.
+
+    Returns:
+        binarray (xarray.DataArray): An output binned array.
+
+    """
+    if set(array.dims) == {'t', 'ch'}:
+        shape = array.shape
+    elif set(array.dims) == {'ch'}:
+        shape = (1, *array.shape)
+
+    if shape[1] % size:
+        raise ValueError('ch shape cannot be divided by size')
+
+    binshape = shape[0], int(shape[1]/size)
+    binarray = fm.zeros(binshape)
+
+    # binning of data
+    binarray.values = array.values.reshape([*binshape, size]).mean(2)
+
+    # binning of fsig, fimg
+    binarray['fsig'].values = array['fsig'].values.reshape([binshape[1], size]).mean(1)
+    binarray['fimg'].values = array['fsig'].values.reshape([binshape[1], size]).mean(1)
+
+    # convert fmch (if any)
+    if 'fmch' in array:
+        binarray['fmch'].values = (array['fmch'].values / size).astype(int)
+
+    if set(array.dims) == {'t', 'ch'}:
+        return binarray.squeeze()
+    elif set(array.dims) == {'ch'}:
+        return binarray.squeeze().drop(binarray.fm.tcoords.keys())
