@@ -99,4 +99,4 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
     elif hasattr(model, 'inverse_transform'):
         return model.inverse_transform(transformed) + mean
     else:
-        raise fm.utils.FMFlowError('cannot reconstruct with the spacified algorithm')
+        raise ValueError('cannot reconstruct with the spacified algorithm')

@@ -58,7 +58,7 @@ def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder='<'):
         hdus.append(read_backendlog_sam45(backendlog, byteorder))
         hdus.insert(1, make_obsinfo_sam45(hdus))
     else:
-        raise fm.utils.FMFlowError('invalid logging type')
+        raise ValueError('invalid logging type')
 
     # ANTENNA HDU (if any)
     if antennalog is not None:
