@@ -11,5 +11,5 @@ import numpy as np
 
 # functions
 def rfgain(ON, ch_smooth=50, convergence=0.01, n_maxiters=100, *, include_logain=False):
-    model = fm.models.RFGain(ch_smooth, convergence, n_maxiters)
+    model = fm.models.RFGain(ch_smooth, convergence, n_maxiters, include_logain)
     return model.fit(ON)

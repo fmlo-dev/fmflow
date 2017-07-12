@@ -71,7 +71,7 @@ class AtmosLines(object):
             return (coeffs*tbs).sum(0)
 
         p0 = np.full(len(tbs), 0.5)
-        bs = (0.0, 2.0)
+        bs = (0.0, 1.0)
         popt, pcov = curve_fit(func, freq, spec, p0, bounds=bs)
         return func(freq, *popt)
 
