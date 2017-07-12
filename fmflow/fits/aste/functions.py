@@ -58,9 +58,9 @@ def fromaste(fmlolog, backendlog, antennalog=None, byteorder='<'):
         hdus.append(read_backendlog_mac(backendlog, byteorder))
         hdus.insert(1, make_obsinfo_mac(hdus))
     elif backend == b'FFX':
-        raise fm.utils.FMFlowError('WHSF logging is not supported yet')
+        raise ValueError('WHSF logging is not supported yet')
     else:
-        raise fm.utils.FMFlowError('invalid logging type')
+        raise ValueError('invalid logging type')
 
     # ANTENNA HDU (if any)
     if antennalog is not None:
