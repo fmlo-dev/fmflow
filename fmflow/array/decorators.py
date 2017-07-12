@@ -52,7 +52,7 @@ def arrayfunc(func):
                 else:
                     newargs.append(arg)
 
-            return fm.empty_like(args[0]) + func(*newargs, **kwargs)
+            return fm.zeros_like(args[0]) + func(*newargs, **kwargs)
         else:
             return func(*args, **kwargs)
 
