@@ -25,7 +25,7 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
     """Create a modulated array as an instance of xarray.DataArray with FM accessor.
 
     Args:
-        data (array): A 2D (time x channel) array.
+        data (numpy.ndarray): A 2D (time x channel) array.
         tcoords (dict, optional): A dictionary of arrays that label time axis.
         chcoords (dict, optional): A dictionary of arrays that label channel axis.
         ptcoords (dict, optional): A dictionary of values that don't label any axes (point-like).
