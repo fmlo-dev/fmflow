@@ -187,7 +187,7 @@ def full_like(array, fill_value, reverse=False, dtype=None, keepmeta=True):
                 raise ValueError(err)
 
             array_ = fm.demodulate(array, reverse)
-            return fm.modulate(array_ + fill_value).astype(dtype)
+            return fm.modulate(fm.zeros_like(array_) + fill_value).astype(dtype)
     else:
         return fm.full(array.shape, fill_value, dtype)
 
