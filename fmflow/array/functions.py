@@ -90,7 +90,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
 
     Args:
         shape (sequence of ints): 2D shape of the array.
-        fill_value (scalar): Fill value.
+        fill_value (scalar or numpy.ndarray): Fill value or array.
         dtype (data-type, optional): The desired data-type for the array.
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
@@ -98,8 +98,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
         array (xarray.DataArray): A modulated array filled with `fill_value`.
 
     """
-    data = np.full(shape, dtype)
-    return fm.array(data, **kwargs)
+    return (fm.zeros(shape, **kwargs) + fill_value).astype(dtype)
 
 
 def empty(shape, dtype=None, **kwargs):
