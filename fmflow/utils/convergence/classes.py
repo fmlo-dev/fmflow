@@ -7,6 +7,7 @@ __all__ = [
 
 # dependent packages
 import numpy as np
+from numpy.linalg import norm
 
 
 # classes
@@ -18,8 +19,16 @@ class Convergence(object):
         }
 
         self.array = None
-        self.variation = None
+        self.value = None
         self.n_iters = 0
+
+    @property
+    def status(self):
+        return {'value': self.value, 'n_iters': self.n_iters}
+
+    @staticmethod
+    def _compute(array_new, array_old):
+        return np.abs(norm(array_new-array_old) / norm(array_old))
 
     def __call__(self, array_new):
         self.n_iters += 1
@@ -31,12 +40,8 @@ class Convergence(object):
         if self.n_iters == 1:
             return False
 
-        self.variation = self._compute(array_new, array_old)
-        return np.abs(self.variation) < self.convergence
-
-    @staticmethod
-    def _compute(array_new, array_old):
-        return np.linalg.norm(array_new-array_old) / np.linalg.norm(array_old)
+        self.value = self._compute(array_new, array_old)
+        return self.value < self.convergence
 
     def __getattr__(self, name):
         return self.params[name]
