@@ -10,6 +10,6 @@ import fmflow as fm
 import numpy as np
 
 # functions
-def rfgain(ON, ch_step=2, ch_smooth=50, n_maxiters=5):
-    model = fm.models.RFGain(ch_step, ch_smooth, n_maxiters)
+def rfgain(ON, ch_smooth=50, convergence=0.01, n_maxiters=100, *, include_logain=False):
+    model = fm.models.RFGain(ch_smooth, convergence, n_maxiters, include_logain)
     return model.fit(ON)

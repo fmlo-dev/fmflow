@@ -1,5 +1,4 @@
-# Generic midaltitude atmosphere
-# Ported from generic_mid.amc
+# Ported from ALMA_annual_50.amc
 
 config: |
   f {fmin} GHz {fmax} GHz {fstep} GHz
@@ -13,28 +12,34 @@ config: |
   layer
   Pbase {Pbase} mbar
   Tbase {Tbase} K
-  column o3 hydrostatic {O3col}
+  column o3 vmr {O3col}
 
 layers:
-  - {Pbase: 3,    Tbase: 252,   O3col: 4.0e-6}
-  - {Pbase: 6,    Tbase: 240.5, O3col: 6.156e-6}
-  - {Pbase: 9,    Tbase: 235,   O3col: 8.844e-6}
-  - {Pbase: 12,   Tbase: 232,   O3col: 9.225e-6}
-  - {Pbase: 15,   Tbase: 228,   O3col: 8.890e-6}
-  - {Pbase: 20,   Tbase: 225,   O3col: 7.808e-6}
-  - {Pbase: 25,   Tbase: 221.5, O3col: 6.187e-6}
-  - {Pbase: 30,   Tbase: 219,   O3col: 4.930e-6}
-  - {Pbase: 40,   Tbase: 215,   O3col: 3.480e-6}
-  - {Pbase: 50,   Tbase: 210.5, O3col: 2.077e-6}
-  - {Pbase: 60,   Tbase: 207,   O3col: 1.269e-6}
-  - {Pbase: 80,   Tbase: 201,   O3col: 0.649e-6}
-  - {Pbase: 100,  Tbase: 200,   O3col: 0.248e-6}
-  - {Pbase: 150,  Tbase: 208,   O3col: 0.101e-6}
-  - {Pbase: 200,  Tbase: 219,   O3col: 0.053e-6}
-  - {Pbase: 314,  Tbase: 230.5, O3col: 0.042e-6}
-  - {Pbase: 407,  Tbase: 243,   O3col: 0.045e-6}
-  - {Pbase: 516,  Tbase: 258,   O3col: 0.047e-6}
-  - {Pbase: 618,  Tbase: 265,   O3col: 0.048e-6}
-  - {Pbase: 707,  Tbase: 272,   O3col: 0.048e-6}
-  - {Pbase: 853,  Tbase: 279,   O3col: 0.048e-6}
-  - {Pbase: 1100, Tbase: 286,   O3col: 0.048e-6}
+- {Pbase: 0.1, Tbase: 221.1, O3col: 1.74e-06}
+- {Pbase: 0.3, Tbase: 243.3, O3col: 1.64e-06}
+- {Pbase: 0.4, Tbase: 249.4, O3col: 1.62e-06}
+- {Pbase: 0.5, Tbase: 254.9, O3col: 1.81e-06}
+- {Pbase: 0.7, Tbase: 262.8, O3col: 2.12e-06}
+- {Pbase: 1,   Tbase: 265.8, O3col: 2.66e-06}
+- {Pbase: 2,   Tbase: 256.4, O3col: 3.99e-06}
+- {Pbase: 3,   Tbase: 248.9, O3col: 5.83e-06}
+- {Pbase: 4,   Tbase: 244.3, O3col: 7.19e-06}
+- {Pbase: 5,   Tbase: 240.5, O3col: 8.00e-06}
+- {Pbase: 7,   Tbase: 234.8, O3col: 8.51e-06}
+- {Pbase: 10,  Tbase: 230.0, O3col: 8.71e-06}
+- {Pbase: 20,  Tbase: 221.7, O3col: 7.69e-06}
+- {Pbase: 30,  Tbase: 216.5, O3col: 5.52e-06}
+- {Pbase: 40,  Tbase: 212.4, O3col: 3.53e-06}
+- {Pbase: 50,  Tbase: 208.9, O3col: 2.20e-06}
+- {Pbase: 70,  Tbase: 200.4, O3col: 1.16e-06}
+- {Pbase: 100, Tbase: 197.8, O3col: 3.92e-07}
+- {Pbase: 150, Tbase: 207.4, O3col: 1.14e-07}
+- {Pbase: 200, Tbase: 219.4, O3col: 6.18e-08}
+- {Pbase: 250, Tbase: 230.4, O3col: 5.02e-08}
+- {Pbase: 300, Tbase: 239.9, O3col: 4.70e-08}
+- {Pbase: 350, Tbase: 247.9, O3col: 4.58e-08}
+- {Pbase: 400, Tbase: 254.9, O3col: 4.52e-08}
+- {Pbase: 450, Tbase: 261.2, O3col: 4.47e-08}
+- {Pbase: 500, Tbase: 266.8, O3col: 4.39e-08}
+- {Pbase: 550, Tbase: 271.8, O3col: 4.30e-08}
+- {Pbase: 554, Tbase: 272.2, O3col: 4.24e-08}

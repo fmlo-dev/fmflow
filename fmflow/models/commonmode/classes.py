@@ -12,9 +12,10 @@ import numpy as np
 
 # classes
 class EMPCA(object):
-    def __init__(self, n_components=20, n_maxiters=10, random_seed=None):
+    def __init__(self, n_components=20, convergence=0.01, n_maxiters=100, random_seed=None):
         self.params = {
             'n_components': n_components,
+            'convergence': convergence,
             'n_maxiters': n_maxiters,
             'random_seed': random_seed,
         }
@@ -29,7 +30,7 @@ class EMPCA(object):
             W = np.ones_like(X)
 
         if not X.shape == W.shape:
-            raise fm.utils.FMFlowError('X and W must have same shapes')
+            raise ValueError('X and W must have same shapes')
 
         # shapes of matrices
         (N, D), K = X.shape, self.n_components
@@ -41,9 +42,13 @@ class EMPCA(object):
         P = fm.utils.orthonormalize(A)
 
         # EM algorithm
-        for i in range(self.n_maxiters):
-            C = self._update_coefficients(X, W, P)
-            P = self._update_eigenvectors(X, W, C)
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
+        try:
+            while not cv(P):
+                C = self._update_coefficients(X, W, P)
+                P = self._update_eigenvectors(X, W, C)
+        except StopIteration:
+            fm.logger.warning('reached maximum iteration')
 
         # finally
         self.components_ = P
