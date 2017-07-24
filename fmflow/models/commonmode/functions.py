@@ -82,16 +82,13 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
+    logger = logging.getLogger('fmflow.models.decomposition')
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
-
-    if centering:
-        mean = np.mean(array, 0)
-    else:
-        mean = np.zeros_like(array.shape[1])
-
     model = AlgorithmClass(n_components, **params)
+
+    mean = np.mean(array, 0) if centering else 0
     transformed = model.fit_transform(array-mean)
 
     if hasattr(model, 'components_'):
