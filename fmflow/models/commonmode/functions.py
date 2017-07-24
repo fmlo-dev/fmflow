@@ -7,6 +7,7 @@ __all__ = [
 ]
 
 # standard library
+import logging
 from collections import defaultdict
 from copy import deepcopy
 
@@ -34,6 +35,8 @@ def empca(
         weights (xarray.DataArray): A weight array. It must have the same shape
             as `array`. Just spacify `None` in the case of no weights.
         n_components (int): A number of components to keep.
+        convergence (float): A convergence threshold.
+            See `fmflow.utils.Convergence` for more detail.
         n_maxiters (int): A number of maximum iterations of the EM step.
         random_seed (int): random seed values used for the initial state.
         centering (bool): If True, mean vector along time axis is subtracted from
@@ -45,15 +48,12 @@ def empca(
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    if weights is None:
-        weights = np.ones_like(array)
+    logger = logging.getLogger('fmflow.models.empca')
+    model = fm.models.EMPCA(
+        n_components, convergence, n_maxiters, random_seed, logger=logger
+    )
 
-    if centering:
-        mean = np.mean(array, 0)
-    else:
-        mean = np.zeros_like(array.shape[1])
-
-    model = fm.models.EMPCA(n_components, convergence, n_maxiters, random_seed)
+    mean = np.mean(array, 0) if centering else 0
     transformed = model.fit_transform(array-mean, weights)
     return transformed @ model.components_ + mean
 
