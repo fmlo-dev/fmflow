@@ -12,13 +12,18 @@ import numpy as np
 
 # classes
 class EMPCA(object):
-    def __init__(self, n_components=20, convergence=0.01, n_maxiters=100, random_seed=None):
+    def __init__(
+            self, n_components=20, convergence=0.01, n_maxiters=100,
+            random_seed=None, *, logger=None
+        ):
         self.params = {
             'n_components': n_components,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
             'random_seed': random_seed,
         }
+
+        self.logger = logger or fm.logger
 
     def fit_transform(self, X, W=None):
         # check array and weights
@@ -45,10 +50,11 @@ class EMPCA(object):
         cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
         try:
             while not cv(P):
+                self.logger.debug(cv.status)
                 C = self._update_coefficients(X, W, P)
                 P = self._update_eigenvectors(X, W, C)
         except StopIteration:
-            fm.logger.warning('reached maximum iteration')
+            self.logger.warning('reached maximum iteration')
 
         # finally
         self.components_ = P
@@ -78,5 +84,5 @@ class EMPCA(object):
     def __repr__(self):
         return str.format(
             'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed,
+            self.n_components, self.n_maxiters, self.random_seed
         )
