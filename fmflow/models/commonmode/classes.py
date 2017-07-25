@@ -38,22 +38,24 @@ class EMPCA(object):
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
 
-        XW = X * W
-
         # shapes of matrices
-        (N, D), K = X.shape, self.n_components
+        N, D, K = *X.shape, self.n_components
 
-        # initial coefficients and eigenvectors
+        # initial arrays
+        _XW = X * W
         C = np.empty([N, K])
         P = self._random_orthogonal([K, D])
 
-        # EM algorithm
+        # convergence
         cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
+
+        # EM algorithm
         try:
             while not cv(C @ P):
                 self.logger.debug(cv.status)
-                C = self._update_coefficients(XW, W, P, C)
-                P = self._update_eigenvectors(XW.copy(), W, P, C)
+                XW = _XW.copy()
+                C = self._update_coefficients(C, P, XW, W)
+                P = self._update_eigenvectors(C, P, XW, W)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -74,8 +76,9 @@ class EMPCA(object):
 
     @staticmethod
     @jit(nopython=True, cache=True, nogil=True)
-    def _update_coefficients(XW, W, P, C):
+    def _update_coefficients(C, P, XW, W):
         N, D = XW.shape
+
         for n in range(N):
             Pn = P @ (P * W[n]).T
             xn = P @ XW[n]
@@ -85,21 +88,20 @@ class EMPCA(object):
 
     @staticmethod
     @jit(nopython=True, cache=True, nogil=True)
-    def _update_eigenvectors(XW, W, P, C):
-        (N, D), K = XW.shape, C.shape[1]
+    def _update_eigenvectors(C, P, XW, W):
+        N, D = XW.shape
+        K = P.shape[0]
+
         for k in range(K):
             ck = C[:, k]
-            pk = (ck @ XW) / (ck**2 @ W)
+            P[k] = (ck @ XW) / (ck**2 @ W)
 
             for n in range(N):
                 for d in range(D):
-                    XW[n, d] -= W[n, d] * ck[n] * pk[d]
+                    XW[n, d] -= W[n, d] * P[k, d] * ck[n]
 
-            P[k] = pk
-
-        for k in range(K):
-            for l in range(k):
-                P[k] -= (P[k] @ P[l]) * P[l]
+            for m in range(k):
+                P[k] -= (P[k] @ P[m]) * P[m]
 
             P[k] /= np.linalg.norm(P[k])
 
