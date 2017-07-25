@@ -1,6 +1,5 @@
 # coding: utf-8
 
-# submodules
 from .binary import *
 from .convergence import *
 from .datetime import *

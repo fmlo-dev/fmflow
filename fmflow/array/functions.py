@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'array', 'demodulate', 'modulate', 'getfreq', 'getspec',
     'ones', 'zeros', 'full', 'empty',

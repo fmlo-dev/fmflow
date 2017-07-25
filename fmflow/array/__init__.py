@@ -1,6 +1,5 @@
 # coding: utf-8
 
-# submodules
 from .classes import *
 from .decorators import *
 from .functions import *

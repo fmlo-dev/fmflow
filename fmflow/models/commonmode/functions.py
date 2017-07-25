@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'empca',
     'decomposition',
@@ -16,7 +16,7 @@ import numpy as np
 import fmflow as fm
 from sklearn import decomposition as _decomposition
 
-# constants
+# module constants
 SKPARAMS = defaultdict(dict)
 SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
