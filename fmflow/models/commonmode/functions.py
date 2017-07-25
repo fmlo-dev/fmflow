@@ -7,9 +7,9 @@ __all__ = [
 ]
 
 # standard library
-import logging
 from collections import defaultdict
 from copy import deepcopy
+from logging import getLogger
 
 # dependent packages
 import numpy as np
@@ -25,7 +25,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.arrayfunc
 @fm.timechunk
 def empca(
-        array, weights, n_components=20, convergence=0.01, n_maxiters=100,
+        array, weights, n_components=20, convergence=0.001, n_maxiters=100,
         random_seed=None, centering=True, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
@@ -48,7 +48,7 @@ def empca(
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    logger = logging.getLogger('fmflow.models.empca')
+    logger = getLogger('fmflow.models.empca')
     model = fm.models.EMPCA(
         n_components, convergence, n_maxiters, random_seed, logger=logger
     )
@@ -82,7 +82,7 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    logger = logging.getLogger('fmflow.models.decomposition')
+    logger = getLogger('fmflow.models.decomposition')
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
