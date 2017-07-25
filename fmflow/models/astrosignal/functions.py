@@ -6,7 +6,7 @@ __all__ = [
 ]
 
 # standard library
-import logging
+from logging import getLogger
 
 # dependent packages
 import fmflow as fm
@@ -18,7 +18,7 @@ def astrolines(
         array, weights=None, mode='fit', fit_function='gaussian',
         snr_threshold=5, subtraction_gain=0.5
     ):
-    logger = logging.getLogger('fmflow.models.atmoslines')
+    logger = getLogger('fmflow.models.atmoslines')
 
     model = fm.models.AstroLines(
         fit_function, snr_threshold, subtraction_gain, logger=logger
