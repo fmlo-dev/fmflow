@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'arrayfunc',
     'numchunk',
@@ -16,7 +16,7 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 
-# constants
+# module constants
 EMPTY = Parameter.empty
 POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 

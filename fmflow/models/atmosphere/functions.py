@@ -1,9 +1,12 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'atmoslines',
 ]
+
+# standard library
+from logging import getLogger
 
 # dependent packages
 import fmflow as fm
@@ -12,17 +15,21 @@ import numpy as np
 
 # functions
 def atmoslines(array, weights=None, mode='fit', ch_tolerance=5):
-    model = fm.models.AtmosLines(ch_tolerance)
+    logger = getLogger('fmflow.models.atmoslines')
+    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
+
     freq = fm.getfreq(array, unit='GHz').values
     spec = fm.getspec(array, weights=weights).values
     vrad = array.vrad.values.mean()
 
     if mode == 'fit':
-        fm.logger.info('mode: fit')
-        tb_ = model.fit(freq, spec, vrad)
+        logger.info('mode: fit')
+        tb = model.fit(freq, spec, vrad)
     elif mode == 'generate':
-        fm.logger.info('mode: generate')
-        tb_ = model.generate(freq, vrad)
+        logger.info('mode: generate')
+        tb = model.generate(freq, vrad)
+    else:
+        logger.error('invalid mode')
+        raise ValueError(mode)
 
-    array_ = fm.demodulate(array)
-    return fm.modulate(fm.zeros_like(array_) + tb_)
+    return fm.full_like(array, tb)

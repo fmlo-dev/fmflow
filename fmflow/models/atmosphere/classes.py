@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'AtmosLines',
 ]
@@ -18,7 +18,7 @@ from astropy import units as u
 from scipy.interpolate import interp1d
 from scipy.optimize import curve_fit
 
-# constants
+# module constants
 C = constants.c.value
 DATA_DIR = os.path.join(fm.__path__[0], 'models', 'data')
 
@@ -34,31 +34,39 @@ class AtmosLines(object):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
     computed = False
+    coeffs = None
     freq = None
     taus = None
-    tbs  = None
-    tbbg = 2.7
+    tbs = None
 
-    def __init__(self, ch_tolerance=5):
+    def __init__(self, ch_tolerance=5, *, logger=None):
         self.params = {
             'ch_tolerance': ch_tolerance,
         }
 
+        self.logger = logger or fm.logger
+
     def fit(self, freq, spec, vrad=0.0, *, forcibly=False):
-        self.compute(freq, forcibly=forcibly)
+        self._compute(freq, forcibly=forcibly, logger=self.logger)
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
 
+        amfreqs = []
         amspecs = []
         for ch in range(-self.ch_tolerance, self.ch_tolerance+1):
-            amspecs.append(self._fit(freq-frad-ch*fstep, spec))
+            amfreq = freq - frad - ch*fstep
+            self._fit(amfreq, spec)
+            amspec = self._generate(amfreq)
+            amfreqs.append(amfreq)
+            amspecs.append(amspec)
 
         amspecs = np.array(amspecs)
-        bestfit = np.argmin(np.sum((amspecs-spec)**2, 1))
-        return amspecs[bestfit]
+        index = np.argmin(np.sum((amspecs-spec)**2, 1))
+        self._fit(amfreqs[index], spec)
+        return amspecs[index]
 
     def generate(self, freq, vrad=0.0, coeffs=None, *, forcibly=False):
-        self.compute(freq, forcibly=forcibly)
+        self._compute(freq, forcibly=forcibly, logger=self.logger)
         frad = np.median(freq) * vrad/C
         return self._generate(freq-frad, coeffs)
 
@@ -67,25 +75,30 @@ class AtmosLines(object):
         tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
 
         def func(freq, *coeffs):
-            coeffs = np.asarray(coeffs)[:,np.newaxis]
-            return (coeffs*tbs).sum(0)
+            coeffs = np.asarray(coeffs)
+            return (coeffs[:, np.newaxis]*tbs).sum(0)
 
-        p0 = np.full(len(tbs), 0.5)
-        bs = (0.0, 1.0)
-        popt, pcov = curve_fit(func, freq, spec, p0, bounds=bs)
-        return func(freq, *popt)
+        p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
+        cls.coeffs = curve_fit(func, freq, spec, p0, bounds=bounds)[0]
 
     @classmethod
     def _generate(cls, freq, coeffs=None):
         tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
 
         if coeffs is None:
-            coeffs = np.ones(len(cls.tbs), dtype=float)
+            if cls.coeffs is None:
+                coeffs = np.ones(len(cls.tbs), dtype=float)
+            else:
+                coeffs = cls.coeffs
+        else:
+            coeffs = np.asarray(coeffs)
 
-        return (coeffs * tbs).sum(0)
+        return (coeffs[:, np.newaxis]*tbs).sum(0)
 
     @classmethod
-    def compute(cls, freq, *, forcibly=False):
+    def _compute(cls, freq, *, forcibly=False, logger=None):
+        logger = fm.logger if logger is None else logger
+
         if forcibly or (not cls.computed):
             params = {
                 'fmin': np.floor(np.min(freq)),
@@ -93,12 +106,14 @@ class AtmosLines(object):
                 'fstep': float('{:.0e}'.format(0.5*np.diff(freq).mean())),
             }
 
-            amfreq = None
-            amtaus, amtbs = [], []
+            logger.info('computing am')
+            logger.info('this may take several minutes')
+            logger.debug(params)
 
+            amtaus, amtbs = [], []
             N = len(cls.amlayers)
             for n in range(N):
-                fm.utils.progressbar((n+1)/N)
+                logger.debug('computing layer {0}/{1}'.format(n+1, N))
 
                 params.update(**cls.amlayers[n])
                 amc = cls.amconfig.format(**params)
@@ -107,16 +122,14 @@ class AtmosLines(object):
                 stdout = cp.stdout.decode('utf-8')
                 output = np.loadtxt(stdout.split('\n'))
 
-                if amfreq is None:
-                    amfreq = output[:, 0]
-
                 amtaus.append(output[:, 1])
                 amtbs.append(output[:, 2])
 
-            cls.freq = amfreq
-            cls.taus = np.array(amtaus)
-            cls.tbs  = np.array(amtbs) - cls.tbbg
             cls.computed = True
+            cls.freq = output[:, 0]
+            cls.taus = np.array(amtaus)
+            cls.tbs = np.array(amtbs) - 2.7
+            logger.info('computing finished')
 
     def __getattr__(self, name):
         return self.params[name]

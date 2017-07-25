@@ -1,7 +1,9 @@
 # coding: utf-8
 
-# imported items
-__all__ = ['CStructReader']
+# public items
+__all__ = [
+    'CStructReader'
+]
 
 # standard library
 import json
