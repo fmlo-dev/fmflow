@@ -6,7 +6,7 @@ __all__ = [
 ]
 
 # standard library
-import logging
+from logging import getLogger
 
 # dependent packages
 import fmflow as fm
@@ -15,7 +15,7 @@ import numpy as np
 
 # functions
 def atmoslines(array, weights=None, mode='fit', ch_tolerance=5):
-    logger = logging.getLogger('fmflow.models.atmoslines')
+    logger = getLogger('fmflow.models.atmoslines')
     model = fm.models.AtmosLines(ch_tolerance, logger=logger)
 
     freq = fm.getfreq(array, unit='GHz').values
@@ -29,7 +29,7 @@ def atmoslines(array, weights=None, mode='fit', ch_tolerance=5):
         logger.info('mode: generate')
         tb = model.generate(freq, vrad)
     else:
-        fm.logger.error('invalid mode')
+        logger.error('invalid mode')
         raise ValueError(mode)
 
     return fm.full_like(array, tb)
