@@ -5,8 +5,6 @@ __all__ = [
     'AstroLines',
 ]
 
-# standard library
-
 # dependent packages
 import fmflow as fm
 import numpy as np
