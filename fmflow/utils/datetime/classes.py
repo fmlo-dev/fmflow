@@ -1,13 +1,12 @@
 # coding: utf-8
 
 # imported items
-__all__ = ['DatetimeParser']
+__all__ = [
+    'DatetimeParser'
+]
 
 # standard library
 from datetime import datetime
-
-# dependent packages
-import numpy as np
 
 # constants
 ISO_8601 = '%Y-%m-%dT%H:%M:%S.%f'
