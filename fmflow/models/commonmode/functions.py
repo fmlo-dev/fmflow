@@ -22,7 +22,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
-@fm.arrayfunc
+@fm.numpyfunc
 @fm.timechunk
 def empca(
         array, weights, n_components=20, convergence=0.001, n_maxiters=100,
@@ -58,7 +58,7 @@ def empca(
     return transformed @ model.components_ + mean
 
 
-@fm.arrayfunc
+@fm.numpyfunc
 @fm.timechunk
 def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
