@@ -69,7 +69,7 @@ class FMAccessor(object):
 
         """
         if self.isdemodulated:
-            raise fm.utils.FMFlowError('already demodulated')
+            raise FMError('already demodulated')
 
         fmch = [1, -1][reverse] * self.fmch.values
         newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
@@ -110,7 +110,7 @@ class FMAccessor(object):
 
         """
         if self.ismodulated:
-            raise fm.utils.FMFlowError('already modulated')
+            raise FMError('already modulated')
 
         fmch = self.fmch.values.copy()
         lextch = np.max([0, np.min(self.chid.values)])
@@ -188,3 +188,12 @@ class FMAccessor(object):
     def __getattr__(self, name):
         """array.fm.name <=> array.name"""
         return getattr(self._array, name)
+
+
+class FMError(Exception):
+    """Error class of frequency modulation."""
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)

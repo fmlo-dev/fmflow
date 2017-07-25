@@ -52,7 +52,7 @@ def arrayfunc(func):
                 else:
                     newargs.append(arg)
 
-            return fm.empty_like(args[0]) + func(*newargs, **kwargs)
+            return fm.zeros_like(args[0]) + func(*newargs, **kwargs)
         else:
             return func(*args, **kwargs)
 
@@ -115,30 +115,44 @@ def timechunk(func):
     return wrapper
 
 
-def _numchunk(func, args, kwargs, N):
-        arrays = []
-        params = signature(func).parameters
-        for i, key in enumerate(params):
-            if params[key].kind == POS_OR_KWD:
-                if params[key].default == EMPTY:
-                    arrays.append(args[i])
-                else:
-                    try:
-                        kwargs.update({key: args[i]})
-                    except IndexError:
-                        kwargs.setdefault(key, params[key].default)
+def _numchunk(func, args, kwargs, n_chunks):
+    """Execute a function with multicore numchunk processing.
 
-        sequences = []
-        for array in arrays:
-            try:
-                sequences.append(np.array_split(array, N))
-            except TypeError:
-                sequences.append(np.tile(array, N))
+    This function is only used within decorators of num/timechunk.
 
-        p = fm.utils.MPPool(kwargs.pop('n_processes', None))
-        result = p.map(partial(func, **kwargs), *sequences)
+    Args:
+        func (function): A function to be executed.
+        args (list or tuple): Arguments of the function.
+        kwargs (dict): Keyword arguments of the function.
+        n_chunks (int): Number of chunks.
 
+    Returns:
+        result (numpy.ndarray or xarray.DataArray): An output array.
+
+    """
+    arrays = []
+    params = signature(func).parameters
+    for i, key in enumerate(params):
+        if params[key].kind == POS_OR_KWD:
+            if params[key].default == EMPTY:
+                arrays.append(args[i])
+            else:
+                try:
+                    kwargs.update({key: args[i]})
+                except IndexError:
+                    kwargs.setdefault(key, params[key].default)
+
+    sequences = []
+    for array in arrays:
         try:
-            return xr.concat(result, 't')
+            sequences.append(np.array_split(array, n_chunks))
         except TypeError:
-            return np.concatenate(result, 0)
+            sequences.append(np.tile(array, n_chunks))
+
+    p = fm.utils.MPPool(kwargs.pop('n_processes', None))
+    result = p.map(partial(func, **kwargs), *sequences)
+
+    try:
+        return xr.concat(result, 't')
+    except TypeError:
+        return np.concatenate(result, 0)
