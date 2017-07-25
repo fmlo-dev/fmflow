@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'arrayfunc',
+    'numpyfunc',
     'numchunk',
     'timechunk',
 ]
@@ -22,7 +22,7 @@ POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 
 
 # decorators
-def arrayfunc(func):
+def numpyfunc(func):
     """Make a function compatible with xarray.DataArray.
 
     This function should be used as a decorator like::
