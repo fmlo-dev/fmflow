@@ -8,7 +8,7 @@ __all__ = [
 # standard library
 from datetime import datetime
 
-# constants
+# module constants
 ISO_8601 = '%Y-%m-%dT%H:%M:%S.%f'
 PATTERNS = [
     '%y%m%d%H%M%S',

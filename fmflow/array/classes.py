@@ -15,7 +15,7 @@ import numpy as np
 import xarray as xr
 from scipy.interpolate import interp1d
 
-# constants
+# module constants
 TCOORDS = lambda size=0: OrderedDict([
     ('fmch', ('t', np.zeros(size, dtype=int))),
     ('vrad', ('t', np.zeros(size, dtype=float))),

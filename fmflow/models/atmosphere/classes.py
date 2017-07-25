@@ -18,7 +18,7 @@ from astropy import units as u
 from scipy.interpolate import interp1d
 from scipy.optimize import curve_fit
 
-# constants
+# module constants
 C = constants.c.value
 DATA_DIR = os.path.join(fm.__path__[0], 'models', 'data')
 

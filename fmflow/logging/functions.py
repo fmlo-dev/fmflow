@@ -14,7 +14,7 @@ import sys
 # dependent packages
 import fmflow as fm
 
-# constants
+# module constants
 DATEFORMAT = '%Y-%m-%d %H:%M:%S'
 FORMAT = '{asctime}\t{name}\t[{levelname}]\t{message}'
 
