@@ -8,6 +8,7 @@ __all__ = [
 # dependent packages
 import fmflow as fm
 import numpy as np
+from numba import jit
 
 
 # classes
@@ -37,22 +38,22 @@ class EMPCA(object):
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
 
+        XW = X * W
+
         # shapes of matrices
         (N, D), K = X.shape, self.n_components
-        self.params.update({'N': N, 'D': D, 'K': K})
 
-        # initial random eigen vectors
-        np.random.seed(self.random_seed)
-        A = np.random.randn(self.K, self.D)
-        P = fm.utils.orthonormalize(A)
+        # initial coefficients and eigenvectors
+        C = np.empty([N, K])
+        P = self._random_orthogonal([K, D])
 
         # EM algorithm
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
         try:
-            while not cv(P):
+            while not cv(C @ P):
                 self.logger.debug(cv.status)
-                C = self._update_coefficients(X, W, P)
-                P = self._update_eigenvectors(X, W, C)
+                C = self._update_coefficients(XW, W, P, C)
+                P = self._update_eigenvectors(XW.copy(), W, P, C)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -60,23 +61,49 @@ class EMPCA(object):
         self.components_ = P
         return C
 
-    def _update_coefficients(self, X, W, P):
-        C = np.empty([self.N, self.K])
-        for n in range(self.N):
+    def _random_orthogonal(self, shape):
+        np.random.seed(self.random_seed)
+        A = np.random.randn(*shape)
+        for i in range(A.shape[0]):
+            for j in range(i):
+                A[i] -= (A[i] @ A[j]) * A[j]
+
+            A[i] /= np.linalg.norm(A[i])
+
+        return A
+
+    @staticmethod
+    @jit(nopython=True, cache=True, nogil=True)
+    def _update_coefficients(XW, W, P, C):
+        N, D = XW.shape
+        for n in range(N):
             Pn = P @ (P * W[n]).T
-            xn = P @ (X[n] * W[n])
+            xn = P @ XW[n]
             C[n] = np.linalg.solve(Pn, xn)
 
         return C
 
-    def _update_eigenvectors(self, X, W, C):
-        X = X.copy()
-        P = np.empty([self.K, self.D])
-        for k in range(self.K):
-            P[k] = (C[:,k] @ (X*W)) / (C[:,k]**2 @ W)
-            X -= np.outer(C[:,k], P[k])
+    @staticmethod
+    @jit(nopython=True, cache=True, nogil=True)
+    def _update_eigenvectors(XW, W, P, C):
+        (N, D), K = XW.shape, C.shape[1]
+        for k in range(K):
+            ck = C[:, k]
+            pk = (ck @ XW) / (ck**2 @ W)
 
-        return fm.utils.orthonormalize(P)
+            for n in range(N):
+                for d in range(D):
+                    XW[n, d] -= W[n, d] * ck[n] * pk[d]
+
+            P[k] = pk
+
+        for k in range(K):
+            for l in range(k):
+                P[k] -= (P[k] @ P[l]) * P[l]
+
+            P[k] /= np.linalg.norm(P[k])
+
+        return P
 
     def __getattr__(self, name):
         return self.params[name]
