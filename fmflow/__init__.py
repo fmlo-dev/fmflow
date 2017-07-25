@@ -1,8 +1,7 @@
 # coding: utf-8
 
-# information
-__version__ = 'v0.0'
-__author__  = 'Akio Taniguchi'
+__version__ = '0.0'
+__author__  = 'snoopython'
 
 from .array import *
 from .logging import *
