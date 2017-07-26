@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'RFGain',
+    'ONGain',
 ]
 
 # dependent packages
@@ -13,7 +13,7 @@ from scipy.ndimage import gaussian_filter
 
 
 # classes
-class RFGain(object):
+class ONGain(object):
     def __init__(
             self, ch_smooth=50, convergence=0.01, n_maxiters=100,
             include_logain=False, *, logger=None
