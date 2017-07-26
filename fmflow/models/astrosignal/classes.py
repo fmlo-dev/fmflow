@@ -26,17 +26,17 @@ class AstroLines(object):
 
         self.logger = logger or fm.logger
 
-    def fit(self, freq, spec, weight):
+    def fit(self, freq, spec, nrms):
+        func = getattr(fm.utils, self.fit_function)
         model = np.zeros_like(spec)
         resid = spec.copy()
-        func = getattr(fm.utils, self.fit_function)
 
-        def snr(spec, weight):
-            return spec*weight / fm.utils.mad(spec)
+        def snr(spec):
+            return spec / (fm.utils.mad(spec) * nrms)
 
-        while np.max(snr(resid, weight)) > self.snr_threshold:
-            cent0 = freq[np.argmax(resid*weight)]
-            ampl0 = resid[np.argmax(resid*weight)]
+        while np.max(snr(resid)) > self.snr_threshold:
+            cent0 = freq[np.argmax(resid/nrms)]
+            ampl0 = resid[np.argmax(resid/nrms)]
             fwhm0 = np.diff(freq).mean()
 
             p0 = [cent0, fwhm0, ampl0]
