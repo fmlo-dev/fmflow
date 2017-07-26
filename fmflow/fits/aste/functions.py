@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = ['fromaste']
 
 # standard library
@@ -19,7 +19,7 @@ from astropy import coordinates
 from astropy import units as u
 from astropy.io import fits
 
-# constants
+# module constants
 C           = constants.c.value # spped of light in vacuum
 D_ASTE      = (10.0 * u.m).value # diameter of the ASTE
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D

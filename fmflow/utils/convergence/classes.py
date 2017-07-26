@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'Convergence',
 ]
@@ -12,15 +12,16 @@ from numpy.linalg import norm
 
 # classes
 class Convergence(object):
-    def __init__(self, convergence=0.01, n_maxiters=100):
+    def __init__(self, convergence=0.01, n_maxiters=100, raise_maxiters=False):
         self.params = {
             'convergence': convergence,
             'n_maxiters': n_maxiters,
+            'raise_maxiters': raise_maxiters,
         }
 
-        self.array = None
-        self.value = None
         self.n_iters = 0
+        self.value = None
+        self._cache = None
 
     @property
     def status(self):
@@ -32,13 +33,16 @@ class Convergence(object):
 
     def __call__(self, array_new):
         self.n_iters += 1
-        self.array, array_old = array_new.copy(), self.array
+        self._cache, array_old = array_new.copy(), self._cache
+
+        if self.n_iters <= 2:
+            return False
 
         if self.n_iters > self.n_maxiters:
-            raise StopIteration('reached maximum iteration')
-
-        if self.n_iters == 1:
-            return False
+            if self.raise_maxiters:
+                raise StopIteration('reached maximum iteration')
+            else:
+                return True
 
         self.value = self._compute(array_new, array_old)
         return self.value < self.convergence
@@ -48,6 +52,6 @@ class Convergence(object):
 
     def __repr__(self):
         return str.format(
-            'Convergence(convergence={0}, n_maxiters={1})',
-            self.convergence, self.n_maxiters
+            'Convergence(convergence={0}, n_maxiters={1}, raise_maxiters={2})',
+            self.convergence, self.n_maxiters, self.raise_maxiters
         )

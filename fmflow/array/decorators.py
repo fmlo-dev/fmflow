@@ -1,8 +1,8 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
-    'arrayfunc',
+    'numpyfunc',
     'numchunk',
     'timechunk',
 ]
@@ -16,13 +16,13 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 
-# constants
+# module constants
 EMPTY = Parameter.empty
 POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 
 
 # decorators
-def arrayfunc(func):
+def numpyfunc(func):
     """Make a function compatible with xarray.DataArray.
 
     This function should be used as a decorator like::

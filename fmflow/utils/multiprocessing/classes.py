@@ -1,7 +1,9 @@
 # coding: utf-8
 
-# imported items
-__all__ = ['MPPool']
+# public items
+__all__ = [
+    'MPPool'
+]
 
 # standard library
 import multiprocessing as mp

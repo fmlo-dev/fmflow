@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'array', 'demodulate', 'modulate', 'getfreq', 'getspec',
     'ones', 'zeros', 'full', 'empty',
@@ -25,7 +25,7 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
     """Create a modulated array as an instance of xarray.DataArray with FM accessor.
 
     Args:
-        data (array): A 2D (time x channel) array.
+        data (numpy.ndarray): A 2D (time x channel) array.
         tcoords (dict, optional): A dictionary of arrays that label time axis.
         chcoords (dict, optional): A dictionary of arrays that label channel axis.
         ptcoords (dict, optional): A dictionary of values that don't label any axes (point-like).
@@ -90,7 +90,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
 
     Args:
         shape (sequence of ints): 2D shape of the array.
-        fill_value (scalar): Fill value.
+        fill_value (scalar or numpy.ndarray): Fill value or array.
         dtype (data-type, optional): The desired data-type for the array.
         kwargs (optional): Other arguments of the array (*coords, attrs, and name).
 
@@ -98,8 +98,7 @@ def full(shape, fill_value, dtype=None, **kwargs):
         array (xarray.DataArray): A modulated array filled with `fill_value`.
 
     """
-    data = np.full(shape, dtype)
-    return fm.array(data, **kwargs)
+    return (fm.zeros(shape, **kwargs) + fill_value).astype(dtype)
 
 
 def empty(shape, dtype=None, **kwargs):
@@ -160,13 +159,17 @@ def ones_like(array, dtype=None, keepmeta=True):
         return fm.ones(array.shape, dtype)
 
 
-def full_like(array, fill_value, dtype=None, keepmeta=True):
+def full_like(array, fill_value, reverse=False, dtype=None, keepmeta=True):
     """Create an array of `fill_value` with the same shape and type as the input array.
 
     Args:
         array (xarray.DataArray): The shape and data-type of it define
             these same attributes of the output array.
-        fill_value (scalar): Fill value.
+        fill_value (scalar or numpy.ndarray): Fill value or array. If broadcast
+            is failed, then try to compute this function in demodulated space.
+        reverse (bool, optional): If True, and if the array is modulated, then
+            the array is reverse-demodulated in the case of computing this
+            function in demodulated space. Default is False.
         dtype (data-type, optional): If spacified, this function overrides
             the data-type of the output array.
         keepmeta (bool, optional): Whether *coords, attrs, and name of the input
@@ -177,9 +180,16 @@ def full_like(array, fill_value, dtype=None, keepmeta=True):
 
     """
     if keepmeta:
-        return xr.full_like(array, dtype)
+        try:
+            return (fm.zeros_like(array) + fill_value).astype(dtype)
+        except ValueError as err:
+            if array.fm.isdemodulated:
+                raise ValueError(err)
+
+            array_ = fm.demodulate(array, reverse)
+            return fm.modulate(fm.zeros_like(array_) + fill_value).astype(dtype)
     else:
-        return fm.full(array.shape, dtype)
+        return fm.full(array.shape, fill_value, dtype)
 
 
 def empty_like(array, dtype=None, keepmeta=True):
