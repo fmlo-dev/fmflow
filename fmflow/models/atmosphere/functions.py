@@ -36,3 +36,10 @@ def atmoslines(array, weights=None, output='tb', ch_tolerance=5):
     else:
         logger.error('invalid output')
         raise ValueError(output)
+
+
+def computeam(array):
+    logger = getLogger('fmflow.models.computeam')
+
+    freq = fm.getfreq(array, unit='GHz').values
+    fm.models.AtmosLines._compute(freq, logger=logger)
