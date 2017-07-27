@@ -26,8 +26,10 @@ class AstroLines(object):
 
         self.logger = logger or fm.logger
 
-    def fit(self, freq, spec, nrms):
+    def fit(self, freq, spec, nrms=None):
         func = getattr(fm.utils, self.fit_function)
+        nrms = nrms or np.ones_like(spec)
+
         model = np.zeros_like(spec)
         resid = spec.copy()
 

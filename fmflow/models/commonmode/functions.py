@@ -26,7 +26,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.timechunk
 def empca(
         array, weights, n_components=20, centering=True,
-        convergence=0.001, n_maxiters=100, random_seed=None, **kwargs
+        convergence=1e-3, n_maxiters=100, random_seed=None, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
@@ -49,8 +49,8 @@ def empca(
 
     """
     logger = getLogger('fmflow.models.empca')
-    logger.info('n_components: {0}'.format(n_components))
-    logger.info('centering: {0}'.format(centering))
+    logger.debug('n_components: {0}'.format(n_components))
+    logger.debug('centering: {0}'.format(centering))
     logger.debug('convergence: {0}'.format(convergence))
     logger.debug('n_maxiters: {0}'.format(n_maxiters))
     logger.debug('random_seed: {0}'.format(random_seed))
@@ -89,9 +89,9 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
 
     """
     logger = getLogger('fmflow.models.decomposition')
-    logger.info('decomposer: {0}'.format(decomposer))
-    logger.info('n_components: {0}'.format(n_components))
-    logger.info('centering: {0}'.format(centering))
+    logger.debug('decomposer: {0}'.format(decomposer))
+    logger.debug('n_components: {0}'.format(n_components))
+    logger.debug('centering: {0}'.format(centering))
 
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
