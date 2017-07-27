@@ -28,7 +28,9 @@ class AstroLines(object):
 
     def fit(self, freq, spec, nrms=None):
         func = getattr(fm.utils, self.fit_function)
-        nrms = nrms or np.ones_like(spec)
+
+        if nrms is None:
+            nrmsr = np.ones_like(spec)
 
         model = np.zeros_like(spec)
         resid = spec.copy()
