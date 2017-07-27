@@ -17,7 +17,7 @@ import numpy as np
 @fm.timechunk
 def ongain(ON, include=['RF', 'LO'], convergence=0.01, n_maxiters=100):
     logger = getLogger('fmflow.models.ongain')
-    logger.info('include: {0}'.format(include))
+    logger.debug('include: {0}'.format(include))
     logger.debug('convergence: {0}'.format(convergence))
     logger.debug('n_maxiters: {0}'.format(n_maxiters))
 
