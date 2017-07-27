@@ -3,6 +3,7 @@
 # public items
 __all__ = [
     'atmoslines',
+    'computeam',
 ]
 
 # standard library
@@ -27,10 +28,10 @@ def atmoslines(array, weights=None, output='tb', ch_tolerance=5):
     tau, tb = model.fit(freq, spec, vrad)
 
     if output == 'tau':
-        logger.info('output: tau')
+        logger.debug('output: tau')
         return fm.full_like(array, tau)
     elif output == 'tb':
-        logger.info('output: tb')
+        logger.debug('output: tb')
         return fm.full_like(array, tb)
     else:
         logger.error('invalid output')
