@@ -42,12 +42,15 @@ class AstroLines(object):
             cent0 = freq[np.argmax(resid/nrms)]
             ampl0 = resid[np.argmax(resid/nrms)]
             fwhm0 = np.diff(freq).mean()
-
             p0 = [cent0, fwhm0, ampl0]
-            popt, pcov = curve_fit(fm.utils.gaussian, freq, resid, p0)
 
-            model += self.subtraction_gain * func(freq, *popt)
-            resid -= self.subtraction_gain * func(freq, *popt)
+            try:
+                popt, pcov = curve_fit(fm.utils.gaussian, freq, resid, p0)
+                model += self.subtraction_gain * func(freq, *popt)
+                resid -= self.subtraction_gain * func(freq, *popt)
+            except RuntimeError:
+                self.logger.warning('breaks with runtime error')
+                break
 
         return model
 
