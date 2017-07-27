@@ -28,7 +28,8 @@ class EMPCA(object):
 
     def fit_transform(self, X, W=None):
         # check array and weights
-        W = W or np.ones_like(X)
+        if W is None:
+            W = np.ones_like(X)
 
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
