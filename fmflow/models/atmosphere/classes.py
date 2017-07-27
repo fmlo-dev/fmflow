@@ -59,10 +59,10 @@ class AtmosLines(object):
         index = np.argmin(np.sum((np.array(tbs)-spec)**2, 1))
         return taus[index], tbs[index]
 
-    def _fit(self, freq, spec):
+    def _fit(self, freq, spec, *, logger=None):
         try:
             taus = interp1d(self.freq, self.taus, axis=1)(freq)
-            tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
         except:
             self._compute(freq, logger=self.logger)
             taus = interp1d(self.freq, self.taus, axis=1)(freq)
@@ -78,7 +78,7 @@ class AtmosLines(object):
 
         p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
         coeffs = curve_fit(f_tb, freq, spec, p0, bounds=bounds)[0]
-        return tau(freq, *coeffs), tb(freq, *coeffs)
+        return f_tau(freq, *coeffs), f_tb(freq, *coeffs)
 
     @classmethod
     def _compute(cls, freq, *, logger=None):
@@ -88,7 +88,7 @@ class AtmosLines(object):
             params = {
                 'fmin': np.min(freq) - 0.1*np.ptp(freq),
                 'fmax': np.max(freq) + 0.1*np.ptp(freq),
-                'fstep': np.mean(0.5*np.diff(freq)),
+                'fstep': 0.5*np.mean(np.diff(freq)),
             }
 
             logger.info('computing am')
