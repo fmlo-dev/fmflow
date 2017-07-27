@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'setlogfile',
     'setloglevel',
@@ -14,18 +14,19 @@ import sys
 # dependent packages
 import fmflow as fm
 
-# constants
+# module constants
 DATEFORMAT = '%Y-%m-%d %H:%M:%S'
-FORMAT = '%(asctime)s\t%(funcName)s\t[%(levelname)s]\t%(message)s'
+FORMAT = '{asctime} {name:25} [{levelname}] {message}'
 
 
 # functions
-def setlogfile(filename=None, *, logger=None):
+def setlogfile(filename=None, overwrite=False, *, logger=None):
     """Create a file where messages will be logged.
 
     Args:
         filename (str): A file name of logging.
             If not spacified, messages will be printed to stdout.
+        overwrite (bool): Whether overwriting the file or not if it already exists.
         logger (logging.Logger, optional): A logger. Default is `fm.logger`.
 
     """
@@ -39,9 +40,13 @@ def setlogfile(filename=None, *, logger=None):
     if filename is None:
         handler = logging.StreamHandler(sys.stdout)
     else:
-        handler = logging.FileHandler(os.path.expanduser(filename))
+        filename = os.path.expanduser(filename)
+        if overwrite:
+            handler = logging.FileHandler(filename, 'w', encoding='utf-8')
+        else:
+            handler = logging.FileHandler(filename, 'a', encoding='utf-8')
 
-    formatter = logging.Formatter(FORMAT, DATEFORMAT)
+    formatter = logging.Formatter(FORMAT, DATEFORMAT, style='{')
     handler.setFormatter(formatter)
     handler.setLevel(logger.level)
     logger.addHandler(handler)

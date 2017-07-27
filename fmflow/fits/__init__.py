@@ -1,6 +1,5 @@
 # coding: utf-8
 
-# submodules
 from .array import *
 from .aste import *
 from .nro45m import *

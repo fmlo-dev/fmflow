@@ -1,7 +1,10 @@
 # coding: utf-8
 
-# imported items
-__all__ = ['ctype_to_tform', 'dtype_to_tform']
+# public items
+__all__ = [
+    'ctype_to_tform',
+    'dtype_to_tform',
+]
 
 # standard library
 import re

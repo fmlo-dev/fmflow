@@ -1,15 +1,32 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
-    'rfgain',
+    'ongain',
+    'rgain',
 ]
+
+# standard library
+from logging import getLogger
 
 # dependent packages
 import fmflow as fm
 import numpy as np
 
 # functions
-def rfgain(ON, ch_smooth=50, convergence=0.01, n_maxiters=100, *, include_logain=False):
-    model = fm.models.RFGain(ch_smooth, convergence, n_maxiters, include_logain)
+@fm.timechunk
+def ongain(ON, include=['RF', 'LO'], convergence=0.01, n_maxiters=100):
+    logger = getLogger('fmflow.models.ongain')
+    logger.debug('include: {0}'.format(include))
+    logger.debug('convergence: {0}'.format(convergence))
+    logger.debug('n_maxiters: {0}'.format(n_maxiters))
+
+    model = fm.models.ONGain(include, convergence, n_maxiters, logger=logger)
     return model.fit(ON)
+
+
+def rgain(Gon):
+    logger = getLogger('fmflow.models.rgain')
+    iGon = fm.models.ONGain.to_ilogON(Gon)
+    gr = iGon[iGon.fmch==0][0]
+    return fm.zeros_like(Gon[0].drop(Gon.fm.tcoords.keys())) + gr

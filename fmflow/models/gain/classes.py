@@ -1,67 +1,103 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
-    'RFGain',
+    'ONGain',
 ]
 
 # dependent packages
 import fmflow as fm
 import numpy as np
 from scipy.interpolate import interp1d
-from scipy.ndimage import gaussian_filter
 
 
 # classes
-class RFGain(object):
-    def __init__(self, ch_smooth=50, convergence=0.01, n_maxiters=100, include_logain=False):
+class ONGain(object):
+    def __init__(
+            self, include=['RF', 'LO'], convergence=0.01, n_maxiters=100,
+            *, logger=None
+        ):
+
+        if set(include) > {'RF', 'LO', 'IF'}:
+            raise ValueError(include)
+
         self.params = {
-            'ch_smooth': ch_smooth,
+            'include': include,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
-            'include_logain': include_logain,
         }
+
+        self.logger = logger or fm.logger
 
     def fit(self, ON):
         logON = np.log10(ON)
+        ilogON = self.to_ilogON(logON)
 
-        # interpolated fmch
-        fmch = logON.fmch.values
-        ifmch = np.arange(fmch.min(), fmch.max()+2, 2)
-        ifmch[ifmch>fmch.max()] = fmch.max()
-
-        # interpolated logON
-        interp = interp1d(np.sort(fmch), logON[np.argsort(fmch)], axis=0)
-        ilogON = fm.array(interp(ifmch), {'fmch': ifmch})
-
-        # interpolated logGrf and logGcom
+        # initial arrays
+        ilogGif = fm.zeros_like(ilogON[0])
+        ilogGlo = fm.zeros_like(ilogON[:,0])
         ilogGrf = fm.zeros_like(ilogON)
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
+
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
         try:
-            while not cv(ilogGrf):
-                ilogGcom = fm.models.empca(ilogON-ilogGrf, None, 1, centering=False)
-                ilogGrf  = self._estimate_logGrf(ilogON-ilogGcom)
+            while not cv(ilogON-ilogGif-ilogGlo-ilogGrf):
+                self.logger.debug(cv.status)
+                ilogGif = self._estimate_ilogGif(ilogON-ilogGrf-ilogGlo)
+                ilogGlo = self._estimate_ilogGlo(ilogON-ilogGrf-ilogGif)
+                ilogGrf = self._estimate_ilogGrf(ilogON-ilogGif-ilogGlo)
         except StopIteration:
-            fm.logger.warning('reached maximum iteration')
+            self.logger.warning('reached maximum iteration')
 
-        # revert logGrf to original plane
-        if self.include_logain:
-            ilogGlo = ilogGcom.mean(1, keepdims=True)
-            ilogGrf = ilogGrf + ilogGlo - ilogGlo.mean()
+        ilogGon = fm.zeros_like(ilogON)
 
-        interp = interp1d(ifmch, ilogGrf, axis=0)
-        return fm.zeros_like(logON) + 10**interp(fmch)
+        if 'RF' in self.include:
+            ilogGon += ilogGrf
 
-    def _estimate_logGrf(self, logX):
-        logGrf_ = gaussian_filter(fm.getspec(logX), self.ch_smooth)
-        logGrf_ = fm.zeros_like(fm.demodulate(logX)) + logGrf_
-        return fm.modulate(logGrf_)
+        if 'LO' in self.include:
+            ilogGon += ilogGlo
+
+        if 'IF' in self.include:
+            ilogGon += ilogGif
+
+        logGon = self.to_logON(ilogGon)
+        return fm.zeros_like(logON) + 10**(logGon.values)
+
+    @staticmethod
+    def to_ilogON(logON):
+        bfmch = logON.fmch.values.tobytes()
+        ifmch = np.arange(logON.fmch.min(), logON.fmch.max()+1)
+
+        glogON = logON.groupby('fmch').mean('t')
+        interp = interp1d(glogON.fmch, glogON, axis=0)
+        return fm.array(interp(ifmch), {'fmch': ifmch}, {}, {'bfmch': bfmch})
+
+    @staticmethod
+    def to_logON(ilogON):
+        ifmch = ilogON.fmch.values
+        fmch = np.fromstring(ilogON.bfmch.values, int)
+
+        interp = interp1d(ifmch, ilogON, axis=0)
+        return fm.array(interp(fmch), {'fmch': fmch})
+
+    @staticmethod
+    def _estimate_ilogGif(ilogX):
+        return ilogX.mean('t')
+
+    @staticmethod
+    def _estimate_ilogGlo(ilogX):
+        ilogGlo = ilogX.mean('ch')
+        return ilogGlo-ilogGlo.mean()
+
+    @staticmethod
+    def _estimate_ilogGrf(ilogX):
+        ilogGrf = fm.getspec(ilogX)
+        return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
 
     def __getattr__(self, name):
         return self.params[name]
 
     def __repr__(self):
         return str.format(
-            'RFGain(ch_step={0}, n_maxiters={1})',
-            self.ch_step, self.n_maxiters,
+            'ONGain(include={0}, convergence={1}, n_maxiters={2})',
+            self.include, self.convergence, self.n_maxiters
         )
