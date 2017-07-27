@@ -251,9 +251,9 @@ def read_backendlog_sam45(backendlog, byteorder):
             data['arraydata'][flag] = data['arraydata'][flag,::-1]
 
     # read and edit formats
-    names  = list(dat.info['ctypes'].keys())
-    ctypes = list(dat.info['ctypes'].values())
-    shapes = list(dat.info['shapes'].values())
+    names  = list(dat.ctypes.keys())
+    ctypes = list(dat.ctypes.values())
+    shapes = list(dat.shapes.values())
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
