@@ -276,7 +276,7 @@ def getfreq(array, reverse=False, unit='Hz'):
         freq_Hz = array.fsig.values
 
     freq = (freq_Hz*u.Hz).to(getattr(u, unit)).value
-    return fm.zeros_like(array[0].drop(array.fm.tcoords.keys())) + freq
+    return fm.full_like(array[0].drop(array.fm.tcoords.keys()), freq)
 
 
 def getspec(array, reverse=False, weights=None):
@@ -308,7 +308,7 @@ def getspec(array, reverse=False, weights=None):
 
     masked_array = np.ma.array(array, mask=np.isnan(array))
     spec = np.ma.average(masked_array, axis=0, weights=weights).data
-    return fm.zeros_like(array[0].drop(array.fm.tcoords.keys())) + spec
+    return fm.full_like(array[0].drop(array.fm.tcoords.keys()), spec)
 
 
 def save(array, filename=None):
