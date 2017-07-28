@@ -61,7 +61,8 @@ class ONGain(object):
         if 'IF' in self.include:
             ilogGon += ilogGif
 
-        logGon = self.to_logON(self._smooth(ilogON, self.ch_smooth))
+        ilogGon[:] = gaussian_filter(ilogGon, self.ch_smooth)
+        logGon = self.to_logON(ilogGon)
         return fm.full_like(logON, 10**(logGon.values))
 
     @staticmethod
@@ -94,11 +95,6 @@ class ONGain(object):
     def _estimate_ilogGrf(ilogX):
         ilogGrf = fm.getspec(ilogX)
         return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
-
-    @staticmethod
-    @fm.numpyfunc
-    def _smooth(logX, sigma):
-        return gaussian_filter(logX, sigma)
 
     def __getattr__(self, name):
         return self.params[name]
