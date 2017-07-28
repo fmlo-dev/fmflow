@@ -28,11 +28,7 @@ class EMPCA(object):
 
     def fit_transform(self, X, W=None):
         # check array and weights
-        X = np.asarray(X)
-
-        if W is not None:
-            W = np.asarray(W)
-        else:
+        if W is None:
             W = np.ones_like(X)
 
         if not X.shape == W.shape:
@@ -75,7 +71,7 @@ class EMPCA(object):
         return A
 
     @staticmethod
-    @jit(nopython=True, cache=True, nogil=True)
+    @jit(nopython=True, cache=True)
     def _update_coefficients(C, P, XW, W):
         N, D = XW.shape
 
@@ -87,7 +83,7 @@ class EMPCA(object):
         return C
 
     @staticmethod
-    @jit(nopython=True, cache=True, nogil=True)
+    @jit(nopython=True, cache=True)
     def _update_eigenvectors(C, P, XW, W):
         N, D = XW.shape
         K = P.shape[0]
@@ -111,7 +107,4 @@ class EMPCA(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed
-        )
+        return 'EMPCA({0})'.format(self.params)

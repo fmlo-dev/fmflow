@@ -22,6 +22,7 @@ from scipy.optimize import curve_fit
 C = constants.c.value
 DATA_DIR = os.path.join(fm.__path__[0], 'models', 'data')
 
+# am settings
 AMCMD = ['am', '-']
 with open(os.path.join(DATA_DIR, 'am.yaml')) as f:
     am = yaml.load(f)
@@ -34,7 +35,6 @@ class AtmosLines(object):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
     computed = False
-    coeffs = None
     freq = None
     taus = None
     tbs = None
@@ -46,64 +46,64 @@ class AtmosLines(object):
 
         self.logger = logger or fm.logger
 
-    def fit(self, freq, spec, vrad=0.0, *, forcibly=False):
-        self._compute(freq, forcibly=forcibly, logger=self.logger)
+    def fit(self, freq, spec, vrad=0.0):
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
 
-        amfreqs = []
-        amspecs = []
+        taus, tbs = [], []
         for ch in range(-self.ch_tolerance, self.ch_tolerance+1):
-            amfreq = freq - frad - ch*fstep
-            self._fit(amfreq, spec)
-            amspec = self._generate(amfreq)
-            amfreqs.append(amfreq)
-            amspecs.append(amspec)
+            tau, tb = self._fit(freq-frad-ch*fstep, spec)
+            taus.append(tau)
+            tbs.append(tb)
 
-        amspecs = np.array(amspecs)
-        index = np.argmin(np.sum((amspecs-spec)**2, 1))
-        self._fit(amfreqs[index], spec)
-        return amspecs[index]
+        index = np.argmin(np.sum((np.array(tbs)-spec)**2, 1))
+        return taus[index], tbs[index]
 
-    def generate(self, freq, vrad=0.0, coeffs=None, *, forcibly=False):
-        self._compute(freq, forcibly=forcibly, logger=self.logger)
+    def generate(self, freq, vrad=0.0):
         frad = np.median(freq) * vrad/C
-        return self._generate(freq-frad, coeffs)
+        return self._generate(freq-frad)
 
-    @classmethod
-    def _fit(cls, freq, spec):
-        tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+    def _fit(self, freq, spec):
+        try:
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+        except:
+            self._compute(freq, logger=self.logger)
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
 
-        def func(freq, *coeffs):
+        def f_tau(freq, *coeffs):
+            coeffs = np.asarray(coeffs)
+            return (coeffs[:, np.newaxis]*taus).sum(0)
+
+        def f_tb(freq, *coeffs):
             coeffs = np.asarray(coeffs)
             return (coeffs[:, np.newaxis]*tbs).sum(0)
 
         p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
-        cls.coeffs = curve_fit(func, freq, spec, p0, bounds=bounds)[0]
+        coeffs = curve_fit(f_tb, freq, spec, p0, bounds=bounds)[0]
+        return f_tau(freq, *coeffs), f_tb(freq, *coeffs)
+
+    def _generate(self, freq):
+        try:
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+        except:
+            self._compute(freq, logger=self.logger)
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+
+        return taus.sum(0), tbs.sum(0)
 
     @classmethod
-    def _generate(cls, freq, coeffs=None):
-        tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+    def _compute(cls, freq, *, logger=None):
+        logger = logger or fm.logger
 
-        if coeffs is None:
-            if cls.coeffs is None:
-                coeffs = np.ones(len(cls.tbs), dtype=float)
-            else:
-                coeffs = cls.coeffs
-        else:
-            coeffs = np.asarray(coeffs)
-
-        return (coeffs[:, np.newaxis]*tbs).sum(0)
-
-    @classmethod
-    def _compute(cls, freq, *, forcibly=False, logger=None):
-        logger = fm.logger if logger is None else logger
-
-        if forcibly or (not cls.computed):
+        if not cls.computed:
             params = {
-                'fmin': np.floor(np.min(freq)),
-                'fmax': np.ceil(np.max(freq)),
-                'fstep': float('{:.0e}'.format(0.5*np.diff(freq).mean())),
+                'fmin': np.min(freq) - 0.1*np.ptp(freq),
+                'fmax': np.max(freq) + 0.1*np.ptp(freq),
+                'fstep': 0.5*np.mean(np.diff(freq)),
             }
 
             logger.info('computing am')
@@ -117,11 +117,10 @@ class AtmosLines(object):
 
                 params.update(**cls.amlayers[n])
                 amc = cls.amconfig.format(**params)
-
                 cp = run(AMCMD, input=amc.encode('utf-8'), stdout=PIPE)
+
                 stdout = cp.stdout.decode('utf-8')
                 output = np.loadtxt(stdout.split('\n'))
-
                 amtaus.append(output[:, 1])
                 amtbs.append(output[:, 2])
 
@@ -135,7 +134,4 @@ class AtmosLines(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'OzoneLines(ch_tolerance={0})',
-            self.ch_tolerance
-        )
+        return 'AtmosLines({0})'.format(self.params)

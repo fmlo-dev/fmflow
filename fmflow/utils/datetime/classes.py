@@ -92,7 +92,4 @@ class DatetimeParser(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'DatetimeParser(outputiso={0}, offsetsec={1}, encoding={2})',
-            self.outputiso, self.offsetsec, self.encoding
-        )
+        return 'DatetimeParser({0})'.format(self.params)
