@@ -22,7 +22,9 @@ class MPPool(object):
                 <CPU count of your machine> -1 (one thread is saved for backup).
 
         """
-        self.n_processes = n_processes or mp.cpu_count() - 1
+        self.params = {
+            'n_processes': n_processes or mp.cpu_count()-1,
+        }
 
     def map(self, func, *sequences):
         """Return a list of the results of applying the function to the sequence.
@@ -91,8 +93,8 @@ class MPPool(object):
 
         return results
 
+    def __getattr__(self, name):
+        return self.params[name]
+
     def __repr__(self):
-        return str.format(
-            'MPPool(n_processes={0}, mpcompatible={1})',
-            self.n_processes, self.mpcompatible
-        )
+        return 'MPPool({0})'.format(self.params)
