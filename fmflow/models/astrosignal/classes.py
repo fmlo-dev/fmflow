@@ -30,7 +30,7 @@ class AstroLines(object):
         func = getattr(fm.utils, self.fit_function)
 
         if nrms is None:
-            nrmsr = np.ones_like(spec)
+            nrms = np.ones_like(spec)
 
         model = np.zeros_like(spec)
         resid = spec.copy()
@@ -58,7 +58,4 @@ class AstroLines(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'AstroLines(fit_function={0}, snr_threshold={1})',
-            self.fit_function, self.snr_threshold
-        )
+        return 'AstroLines({0})'.format(self.params)
