@@ -2,11 +2,25 @@
 
 # public items
 __all__ = [
-    'array', 'demodulate', 'modulate', 'getfreq', 'getspec',
-    'ones', 'zeros', 'full', 'empty',
-    'ones_like', 'zeros_like', 'full_like', 'empty_like',
-    'save', 'load', 'chbinning',
-    'align', 'concat', 'merge',
+    'array',
+    'demodulate',
+    'modulate',
+    'getfreq',
+    'getspec',
+    'ones',
+    'zeros',
+    'full',
+    'empty',
+    'ones_like',
+    'zeros_like',
+    'full_like',
+    'empty_like',
+    'save',
+    'load',
+    'chbinning',
+    'align',
+    'concat',
+    'merge',
 ]
 
 # standard library
