@@ -107,7 +107,4 @@ class EMPCA(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed
-        )
+        return 'EMPCA({0})'.format(self.params)
