@@ -59,7 +59,11 @@ class AtmosLines(object):
         index = np.argmin(np.sum((np.array(tbs)-spec)**2, 1))
         return taus[index], tbs[index]
 
-    def _fit(self, freq, spec, *, logger=None):
+    def generate(self, freq, vrad=0.0):
+        frad = np.median(freq) * vrad/C
+        return self._generate(freq-frad)
+
+    def _fit(self, freq, spec):
         try:
             taus = interp1d(self.freq, self.taus, axis=1)(freq)
             tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
@@ -79,6 +83,17 @@ class AtmosLines(object):
         p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
         coeffs = curve_fit(f_tb, freq, spec, p0, bounds=bounds)[0]
         return f_tau(freq, *coeffs), f_tb(freq, *coeffs)
+
+    def _generate(self, freq):
+        try:
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+        except:
+            self._compute(freq, logger=self.logger)
+            taus = interp1d(self.freq, self.taus, axis=1)(freq)
+            tbs = interp1d(self.freq, self.tbs, axis=1)(freq)
+
+        return taus.sum(0), tbs.sum(0)
 
     @classmethod
     def _compute(cls, freq, *, logger=None):
@@ -119,4 +134,4 @@ class AtmosLines(object):
         return self.params[name]
 
     def __repr__(self):
-        return 'AtmosLines(ch_tolerance={0})'.format(self.ch_tolerance)
+        return 'AtmosLines({0})'.format(self.params)

@@ -9,13 +9,14 @@ __all__ = [
 import fmflow as fm
 import numpy as np
 from scipy.interpolate import interp1d
+from scipy.ndimage import gaussian_filter
 
 
 # classes
 class ONGain(object):
     def __init__(
-            self, include=['RF', 'LO'], convergence=0.01, n_maxiters=100,
-            *, logger=None
+            self, include=['RF', 'LO'], ch_smooth=1,
+            convergence=0.01, n_maxiters=100, *, logger=None
         ):
 
         if set(include) > {'RF', 'LO', 'IF'}:
@@ -23,6 +24,7 @@ class ONGain(object):
 
         self.params = {
             'include': include,
+            'ch_smooth': ch_smooth,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
@@ -59,8 +61,8 @@ class ONGain(object):
         if 'IF' in self.include:
             ilogGon += ilogGif
 
-        logGon = self.to_logON(ilogGon)
-        return fm.zeros_like(logON) + 10**(logGon.values)
+        logGon = self.to_logON(self._smooth(ilogON, self.ch_smooth))
+        return fm.full_like(logON, 10**(logGon.values))
 
     @staticmethod
     def to_ilogON(logON):
@@ -93,11 +95,13 @@ class ONGain(object):
         ilogGrf = fm.getspec(ilogX)
         return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
 
+    @staticmethod
+    @fm.numpyfunc
+    def _smooth(logX, sigma):
+        return gaussian_filter(logX, sigma)
+
     def __getattr__(self, name):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'ONGain(include={0}, convergence={1}, n_maxiters={2})',
-            self.include, self.convergence, self.n_maxiters
-        )
+        return 'ONGain({0})'.format(self.params)
