@@ -52,7 +52,7 @@ def numpyfunc(func):
                 else:
                     newargs.append(arg)
 
-            return fm.zeros_like(args[0]) + func(*newargs, **kwargs)
+            return fm.full_like(args[0], func(*newargs, **kwargs))
         else:
             return func(*args, **kwargs)
 
