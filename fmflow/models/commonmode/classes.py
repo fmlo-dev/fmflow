@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'EMPCA',
 ]
@@ -8,6 +8,7 @@ __all__ = [
 # dependent packages
 import fmflow as fm
 import numpy as np
+from numba import jit
 
 
 # classes
@@ -27,32 +28,30 @@ class EMPCA(object):
 
     def fit_transform(self, X, W=None):
         # check array and weights
-        X = np.asarray(X)
-
-        if W is not None:
-            W = np.asarray(W)
-        else:
+        if W is None:
             W = np.ones_like(X)
 
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
 
         # shapes of matrices
-        (N, D), K = X.shape, self.n_components
-        self.params.update({'N': N, 'D': D, 'K': K})
+        N, D, K = *X.shape, self.n_components
 
-        # initial random eigen vectors
-        np.random.seed(self.random_seed)
-        A = np.random.randn(self.K, self.D)
-        P = fm.utils.orthonormalize(A)
+        # initial arrays
+        _XW = X * W
+        C = np.empty([N, K])
+        P = self._random_orthogonal([K, D])
+
+        # convergence
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
 
         # EM algorithm
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters)
         try:
-            while not cv(P):
+            while not cv(C @ P):
                 self.logger.debug(cv.status)
-                C = self._update_coefficients(X, W, P)
-                P = self._update_eigenvectors(X, W, C)
+                XW = _XW.copy()
+                C = self._update_coefficients(C, P, XW, W)
+                P = self._update_eigenvectors(C, P, XW, W)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -60,29 +59,52 @@ class EMPCA(object):
         self.components_ = P
         return C
 
-    def _update_coefficients(self, X, W, P):
-        C = np.empty([self.N, self.K])
-        for n in range(self.N):
+    def _random_orthogonal(self, shape):
+        np.random.seed(self.random_seed)
+        A = np.random.randn(*shape)
+        for i in range(A.shape[0]):
+            for j in range(i):
+                A[i] -= (A[i] @ A[j]) * A[j]
+
+            A[i] /= np.linalg.norm(A[i])
+
+        return A
+
+    @staticmethod
+    @jit(nopython=True, cache=True)
+    def _update_coefficients(C, P, XW, W):
+        N, D = XW.shape
+
+        for n in range(N):
             Pn = P @ (P * W[n]).T
-            xn = P @ (X[n] * W[n])
+            xn = P @ XW[n]
             C[n] = np.linalg.solve(Pn, xn)
 
         return C
 
-    def _update_eigenvectors(self, X, W, C):
-        X = X.copy()
-        P = np.empty([self.K, self.D])
-        for k in range(self.K):
-            P[k] = (C[:,k] @ (X*W)) / (C[:,k]**2 @ W)
-            X -= np.outer(C[:,k], P[k])
+    @staticmethod
+    @jit(nopython=True, cache=True)
+    def _update_eigenvectors(C, P, XW, W):
+        N, D = XW.shape
+        K = P.shape[0]
 
-        return fm.utils.orthonormalize(P)
+        for k in range(K):
+            ck = C[:, k]
+            P[k] = (ck @ XW) / (ck**2 @ W)
+
+            for n in range(N):
+                for d in range(D):
+                    XW[n, d] -= W[n, d] * P[k, d] * ck[n]
+
+            for m in range(k):
+                P[k] -= (P[k] @ P[m]) * P[m]
+
+            P[k] /= np.linalg.norm(P[k])
+
+        return P
 
     def __getattr__(self, name):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'EMPCA(n_components={0}, n_maxiters={1}, random_seed={2})',
-            self.n_components, self.n_maxiters, self.random_seed
-        )
+        return 'EMPCA({0})'.format(self.params)

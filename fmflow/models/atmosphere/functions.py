@@ -1,12 +1,13 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'atmoslines',
+    'computeam',
 ]
 
 # standard library
-import logging
+from logging import getLogger
 
 # dependent packages
 import fmflow as fm
@@ -14,22 +15,40 @@ import numpy as np
 
 
 # functions
-def atmoslines(array, weights=None, mode='fit', ch_tolerance=5):
-    logger = logging.getLogger('fmflow.models.atmoslines')
-    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
+@fm.timechunk
+def atmoslines(array, weights=None, output='tb', ch_tolerance=5):
+    logger = getLogger('fmflow.models.atmoslines')
+    logger.debug('ch_tolerance: {0}'.format(ch_tolerance))
 
     freq = fm.getfreq(array, unit='GHz').values
     spec = fm.getspec(array, weights=weights).values
     vrad = array.vrad.values.mean()
 
-    if mode == 'fit':
-        logger.info('mode: fit')
-        tb = model.fit(freq, spec, vrad)
-    elif mode == 'generate':
-        logger.info('mode: generate')
-        tb = model.generate(freq, vrad)
-    else:
-        fm.logger.error('invalid mode')
-        raise ValueError(mode)
+    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
+    tau, tb = model.fit(freq, spec, vrad)
 
-    return fm.full_like(array, tb)
+    if output == 'tau':
+        logger.debug('output: tau')
+        return fm.full_like(array, tau)
+    elif output == 'tb':
+        logger.debug('output: tb')
+        return fm.full_like(array, tb)
+    else:
+        logger.error('invalid output')
+        raise ValueError(output)
+
+
+def computeam(array, output='tb'):
+    logger = getLogger('fmflow.models.computeam')
+
+    freq = fm.getfreq(array, unit='GHz').values
+    model = fm.models.AtmosLines(logger=logger)
+    tau, tb = model.generate(freq)
+
+    if output == 'tau':
+        return fm.full_like(array, tau)
+    elif output == 'tb':
+        return fm.full_like(array, tb)
+    else:
+        logger.error('invalid output')
+        raise ValueError(output)

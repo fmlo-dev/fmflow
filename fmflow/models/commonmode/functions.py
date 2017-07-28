@@ -1,32 +1,32 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'empca',
     'decomposition',
 ]
 
 # standard library
-import logging
 from collections import defaultdict
 from copy import deepcopy
+from logging import getLogger
 
 # dependent packages
 import numpy as np
 import fmflow as fm
 from sklearn import decomposition as _decomposition
 
-# constants
+# module constants
 SKPARAMS = defaultdict(dict)
 SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
-@fm.arrayfunc
+@fm.numpyfunc
 @fm.timechunk
 def empca(
-        array, weights, n_components=20, convergence=0.01, n_maxiters=100,
-        random_seed=None, centering=True, **kwargs
+        array, weights, n_components=20, centering=True,
+        convergence=1e-3, n_maxiters=100, random_seed=None, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
@@ -35,12 +35,12 @@ def empca(
         weights (xarray.DataArray): A weight array. It must have the same shape
             as `array`. Just spacify `None` in the case of no weights.
         n_components (int): A number of components to keep.
+        centering (bool): If True, mean vector along time axis is subtracted from
+            `array` before computing EMPCA and then added to the reconstructed one.
         convergence (float): A convergence threshold.
             See `fmflow.utils.Convergence` for more detail.
         n_maxiters (int): A number of maximum iterations of the EM step.
         random_seed (int): random seed values used for the initial state.
-        centering (bool): If True, mean vector along time axis is subtracted from
-            `array` before computing EMPCA and then added to the reconstructed one.
         kwargs (dict): Parameters for the timechunk calculation such as
             `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
 
@@ -48,7 +48,13 @@ def empca(
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    logger = logging.getLogger('fmflow.models.empca')
+    logger = getLogger('fmflow.models.empca')
+    logger.debug('n_components: {0}'.format(n_components))
+    logger.debug('centering: {0}'.format(centering))
+    logger.debug('convergence: {0}'.format(convergence))
+    logger.debug('n_maxiters: {0}'.format(n_maxiters))
+    logger.debug('random_seed: {0}'.format(random_seed))
+
     model = fm.models.EMPCA(
         n_components, convergence, n_maxiters, random_seed, logger=logger
     )
@@ -58,7 +64,7 @@ def empca(
     return transformed @ model.components_ + mean
 
 
-@fm.arrayfunc
+@fm.numpyfunc
 @fm.timechunk
 def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
@@ -82,7 +88,11 @@ def decomposition(array, decomposer='TruncatedSVD', n_components=None, centering
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    logger = logging.getLogger('fmflow.models.decomposition')
+    logger = getLogger('fmflow.models.decomposition')
+    logger.debug('decomposer: {0}'.format(decomposer))
+    logger.debug('n_components: {0}'.format(n_components))
+    logger.debug('centering: {0}'.format(centering))
+
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)

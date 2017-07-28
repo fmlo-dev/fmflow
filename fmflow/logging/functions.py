@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'setlogfile',
     'setloglevel',
@@ -14,9 +14,9 @@ import sys
 # dependent packages
 import fmflow as fm
 
-# constants
+# module constants
 DATEFORMAT = '%Y-%m-%d %H:%M:%S'
-FORMAT = '{asctime}\t{name}\t[{levelname}]\t{message}'
+FORMAT = '{asctime} {name:25} [{levelname}] {message}'
 
 
 # functions

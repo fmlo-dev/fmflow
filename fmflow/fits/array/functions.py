@@ -1,7 +1,9 @@
 # coding: utf-8
 
-# imported items
-__all__ = ['getarray']
+# public items
+__all__ = [
+    'getarray'
+]
 
 # standard library
 import os
@@ -112,7 +114,7 @@ def makeflags(f, arrayid, scantype, offsetsec=0.0):
         t_list.append(t_ant)
 
     # time and flags
-    t_com = reduce(lambda t, s: np.intersect1d(t, s), t_list)
+    t_com = reduce(np.intersect1d, t_list)
     flag_fmlo = np.in1d(t_fmlo, t_com) & f_fmlo
     flag_be   = np.in1d(t_be, t_com) & f_be
     if 'antenna' in f:

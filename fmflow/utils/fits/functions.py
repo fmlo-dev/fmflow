@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = [
     'ctype_to_tform',
     'dtype_to_tform',

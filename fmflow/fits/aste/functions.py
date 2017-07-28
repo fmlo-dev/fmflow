@@ -1,6 +1,6 @@
 # coding: utf-8
 
-# imported items
+# public items
 __all__ = ['fromaste']
 
 # standard library
@@ -19,7 +19,7 @@ from astropy import coordinates
 from astropy import units as u
 from astropy.io import fits
 
-# constants
+# module constants
 C           = constants.c.value # spped of light in vacuum
 D_ASTE      = (10.0 * u.m).value # diameter of the ASTE
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
@@ -256,9 +256,9 @@ def read_backendlog_mac(backendlog, byteorder):
             data['arraydata'][flag] = data['arraydata'][flag,::-1]
 
     # read and edit formats
-    names  = list(dat.info['ctypes'].keys())
-    ctypes = list(dat.info['ctypes'].values())
-    shapes = list(dat.info['shapes'].values())
+    names  = list(dat.ctypes.keys())
+    ctypes = list(dat.ctypes.values())
+    shapes = list(dat.shapes.values())
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
