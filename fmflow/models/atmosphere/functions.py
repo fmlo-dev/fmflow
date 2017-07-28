@@ -38,8 +38,17 @@ def atmoslines(array, weights=None, output='tb', ch_tolerance=5):
         raise ValueError(output)
 
 
-def computeam(array):
+def computeam(array, output='tb'):
     logger = getLogger('fmflow.models.computeam')
 
     freq = fm.getfreq(array, unit='GHz').values
-    fm.models.AtmosLines._compute(freq, logger=logger)
+    model = fm.models.AtmosLines(logger=logger)
+    tau, tb = model.generate(freq)
+
+    if output == 'tau':
+        return fm.full_like(array, tau)
+    elif output == 'tb':
+        return fm.full_like(array, tb)
+    else:
+        logger.error('invalid output')
+        raise ValueError(output)
