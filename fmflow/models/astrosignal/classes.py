@@ -5,11 +5,15 @@ __all__ = [
     'AstroLines',
 ]
 
+# standard library
+import warnings
+
 # dependent packages
 import fmflow as fm
 import numpy as np
 from scipy.ndimage import gaussian_filter
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, OptimizeWarning
+warnings.simplefilter('ignore', OptimizeWarning)
 
 
 # classes
@@ -38,16 +42,19 @@ class AstroLines(object):
         def snr(spec):
             return spec / (fm.utils.mad(spec) * nrms)
 
-        while np.max(snr(resid)) > self.snr_threshold:
-            cent0 = freq[np.argmax(resid/nrms)]
-            ampl0 = resid[np.argmax(resid/nrms)]
-            fwhm0 = np.diff(freq).mean()
+        fwhm0 = np.mean(np.diff(freq))
+        maxsnr = np.max(snr(resid))
+        while maxsnr > self.snr_threshold:
+            index = np.argmax(resid/nrms)
+            cent0, ampl0 = freq[index], resid[index]
             p0 = [cent0, fwhm0, ampl0]
 
             try:
                 popt, pcov = curve_fit(fm.utils.gaussian, freq, resid, p0)
                 model += self.subtraction_gain * func(freq, *popt)
                 resid -= self.subtraction_gain * func(freq, *popt)
+                maxsnr = np.max(snr(resid))
+                self.logger.debug('max residual S/N: {0}'.format(maxsnr))
             except RuntimeError:
                 self.logger.warning('breaks with runtime error')
                 break
