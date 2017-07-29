@@ -173,7 +173,4 @@ class CStructReader(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'CStructReader(ignored={0}, byteorder={1}, encoding={2})',
-            self.ignored, self.byteorder, self.encoding
-        )
+        return 'CStructReader({0})'.format(self.params)

@@ -35,14 +35,14 @@ class Convergence(object):
         self.n_iters += 1
         self._cache, array_old = array_new.copy(), self._cache
 
-        if self.n_iters <= 2:
-            return False
-
         if self.n_iters > self.n_maxiters:
             if self.raise_maxiters:
                 raise StopIteration('reached maximum iteration')
             else:
                 return True
+
+        if self.n_iters <= 2:
+            return False
 
         self.value = self._compute(array_new, array_old)
         return self.value < self.convergence
@@ -51,7 +51,4 @@ class Convergence(object):
         return self.params[name]
 
     def __repr__(self):
-        return str.format(
-            'Convergence(convergence={0}, n_maxiters={1}, raise_maxiters={2})',
-            self.convergence, self.n_maxiters, self.raise_maxiters
-        )
+        return 'Convergence({0})'.format(self.params)
