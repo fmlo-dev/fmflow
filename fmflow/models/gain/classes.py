@@ -19,7 +19,7 @@ class ONGain(object):
             convergence=0.01, n_maxiters=100, *, logger=None
         ):
 
-        if set(include) > {'RF', 'LO', 'IF'}:
+        if not set(include) <= {'RF', 'LO', 'IF'}:
             raise ValueError(include)
 
         self.params = {
@@ -61,7 +61,6 @@ class ONGain(object):
         if 'IF' in self.include:
             ilogGon += ilogGif
 
-        ilogGon[:] = gaussian_filter(ilogGon, self.ch_smooth)
         logGon = self.to_logON(ilogGon)
         return fm.full_like(logON, 10**(logGon.values))
 
@@ -82,18 +81,15 @@ class ONGain(object):
         interp = interp1d(ifmch, ilogON, axis=0)
         return fm.array(interp(fmch), {'fmch': fmch})
 
-    @staticmethod
-    def _estimate_ilogGif(ilogX):
+    def _estimate_ilogGif(self, ilogX):
         return ilogX.mean('t')
 
-    @staticmethod
-    def _estimate_ilogGlo(ilogX):
+    def _estimate_ilogGlo(self, ilogX):
         ilogGlo = ilogX.mean('ch')
         return ilogGlo-ilogGlo.mean()
 
-    @staticmethod
-    def _estimate_ilogGrf(ilogX):
-        ilogGrf = fm.getspec(ilogX)
+    def _estimate_ilogGrf(self, ilogX):
+        ilogGrf = gaussian_filter(fm.getspec(ilogX), self.ch_smooth)
         return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
 
     def __getattr__(self, name):
