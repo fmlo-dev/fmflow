@@ -7,6 +7,7 @@ __all__ = [
 
 # standard library
 import os
+import warnings
 from subprocess import PIPE, run
 
 # dependent packages
@@ -16,7 +17,8 @@ import numpy as np
 from astropy import constants
 from astropy import units as u
 from scipy.interpolate import interp1d
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, OptimizeWarning
+warnings.simplefilter('ignore', OptimizeWarning)
 
 # module constants
 C = constants.c.value
