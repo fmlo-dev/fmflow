@@ -337,7 +337,7 @@ def mad(array, dim=None, axis=None):
         mad (xarray.DataArray): An array of the MAD.
 
     """
-    return np.abs(array - array.madian(dim, axis)).median(dim, axis)
+    return np.abs(array - array.median(dim, axis)).median(dim, axis)
 
 
 def save(array, filename=None):
