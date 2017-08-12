@@ -7,6 +7,7 @@ __all__ = [
     'modulate',
     'getfreq',
     'getspec',
+    'mad',
     'ones',
     'zeros',
     'full',
@@ -18,9 +19,6 @@ __all__ = [
     'save',
     'load',
     'chbinning',
-    'align',
-    'concat',
-    'merge',
 ]
 
 # standard library
@@ -31,7 +29,6 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 from astropy import units as u
-from xarray import align, concat, merge
 
 
 # functions
@@ -323,6 +320,24 @@ def getspec(array, reverse=False, weights=None):
     masked_array = np.ma.array(array, mask=np.isnan(array))
     spec = np.ma.average(masked_array, axis=0, weights=weights).data
     return fm.full_like(array[0].drop(array.fm.tcoords.keys()), spec)
+
+
+def mad(array, dim=None, axis=None):
+    """Compute the median absolute deviation (MAD) along the given dim or axis.
+
+    Only one of the `dim` and `axis` arguments can be supplied.
+    If neither are supplied, then mad will be calculated over axes.
+
+    Args:
+        array (xarray.DataArray): An input array.
+        dim (str, optional): Dim along which the MADs are computed.
+        axis (int, optional): Axis along which the MADs are computed.
+
+    Returns:
+        mad (xarray.DataArray): An array of the MAD.
+
+    """
+    return np.abs(array - array.median(dim, axis)).median(dim, axis)
 
 
 def save(array, filename=None):
