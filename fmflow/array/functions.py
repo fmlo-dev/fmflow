@@ -18,9 +18,6 @@ __all__ = [
     'save',
     'load',
     'chbinning',
-    'align',
-    'concat',
-    'merge',
 ]
 
 # standard library
@@ -31,7 +28,6 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 from astropy import units as u
-from xarray import align, concat, merge
 
 
 # functions
