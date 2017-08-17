@@ -38,7 +38,7 @@ class EMPCA(object):
         N, D, K = *X.shape, self.n_components
 
         # initial arrays
-        _XW = X * W
+        _WX = W * X
         C = np.empty([N, K])
         P = self._random_orthogonal([K, D])
 
@@ -49,9 +49,9 @@ class EMPCA(object):
         try:
             while not cv(C @ P):
                 self.logger.debug(cv.status)
-                XW = _XW.copy()
-                C = self._update_coefficients(C, P, XW, W)
-                P = self._update_eigenvectors(C, P, XW, W)
+                WX = _WX.copy()
+                C = self._update_coefficients(C, P, WX, W)
+                P = self._update_eigenvectors(C, P, WX, W)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -72,29 +72,29 @@ class EMPCA(object):
 
     @staticmethod
     @jit(nopython=True, cache=True)
-    def _update_coefficients(C, P, XW, W):
-        N, D = XW.shape
+    def _update_coefficients(C, P, WX, W):
+        N, D = WX.shape
 
         # equiv to the equation (16)
         for n in range(N):
             Pn = P @ (P * W[n]).T
-            xn = P @ XW[n]
+            xn = P @ WX[n]
             C[n] = np.linalg.solve(Pn, xn)
 
         return C
 
     @staticmethod
     @jit(nopython=True, cache=True)
-    def _update_eigenvectors(C, P, XW, W):
-        N, D, K = *XW.shape, P.shape[0]
+    def _update_eigenvectors(C, P, WX, W):
+        N, D, K = *WX.shape, P.shape[0]
 
         for k in range(K):
             ck = C[:, k]
-            P[k] = (ck @ XW) / (ck**2 @ W)
+            P[k] = (ck @ WX) / (ck**2 @ W)
 
             for n in range(N):
                 for d in range(D):
-                    XW[n, d] -= W[n, d] * P[k, d] * ck[n]
+                    WX[n, d] -= W[n, d] * P[k, d] * ck[n]
 
             for m in range(k):
                 P[k] -= (P[k] @ P[m]) * P[m]
