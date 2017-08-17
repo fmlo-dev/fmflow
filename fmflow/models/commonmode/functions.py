@@ -25,8 +25,8 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.numpyfunc
 @fm.timechunk
 def empca(
-        array, weights, n_components=20, centering=True,
-        convergence=1e-3, n_maxiters=100, random_seed=None, **kwargs
+        array, weights, n_components=20, initialize='random', random_seed=None,
+        centering=True, convergence=1e-3, n_maxiters=100,  **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
@@ -35,12 +35,15 @@ def empca(
         weights (xarray.DataArray): A weight array. It must have the same shape
             as `array`. Just spacify `None` in the case of no weights.
         n_components (int): A number of components to keep.
+        initialize (string): A method of initializing eigenvectors.
+            Options are `random` (random orthogonal matrix) and `svd`
+            (orthogonal matrix from singular value decomposition).
+        random_seed (int): random seed values used for the initial state.
         centering (bool): If True, mean vector along time axis is subtracted from
             `array` before computing EMPCA and then added to the reconstructed one.
         convergence (float): A convergence threshold.
             See `fmflow.utils.Convergence` for more detail.
         n_maxiters (int): A number of maximum iterations of the EM step.
-        random_seed (int): random seed values used for the initial state.
         kwargs (dict): Parameters for the timechunk calculation such as
             `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
 
@@ -50,13 +53,15 @@ def empca(
     """
     logger = getLogger('fmflow.models.empca')
     logger.debug('n_components: {0}'.format(n_components))
+    logger.debug('initialize: {0}'.format(initialize))
+    logger.debug('random_seed: {0}'.format(random_seed))
     logger.debug('centering: {0}'.format(centering))
     logger.debug('convergence: {0}'.format(convergence))
     logger.debug('n_maxiters: {0}'.format(n_maxiters))
-    logger.debug('random_seed: {0}'.format(random_seed))
 
     model = fm.models.EMPCA(
-        n_components, convergence, n_maxiters, random_seed, logger=logger
+        n_components, initialize, random_seed, convergence, n_maxiters,
+        logger=logger
     )
 
     mean = np.mean(array, 0) if centering else 0
