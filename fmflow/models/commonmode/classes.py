@@ -75,6 +75,7 @@ class EMPCA(object):
     def _update_coefficients(C, P, XW, W):
         N, D = XW.shape
 
+        # equiv to the equation (16)
         for n in range(N):
             Pn = P @ (P * W[n]).T
             xn = P @ XW[n]
@@ -85,8 +86,7 @@ class EMPCA(object):
     @staticmethod
     @jit(nopython=True, cache=True)
     def _update_eigenvectors(C, P, XW, W):
-        N, D = XW.shape
-        K = P.shape[0]
+        N, D, K = *XW.shape, P.shape[0]
 
         for k in range(K):
             ck = C[:, k]
