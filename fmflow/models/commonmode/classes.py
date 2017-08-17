@@ -9,19 +9,21 @@ __all__ = [
 import fmflow as fm
 import numpy as np
 from numba import jit
+from sklearn import decomposition
 
 
 # classes
 class EMPCA(object):
     def __init__(
-            self, n_components=20, convergence=0.01, n_maxiters=100,
-            random_seed=None, *, logger=None
+            self, n_components=20, initialize='random', random_seed=None,
+            convergence=0.01, n_maxiters=100, *, logger=None
         ):
         self.params = {
             'n_components': n_components,
+            'initialize': initialize,
+            'random_seed': random_seed,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
-            'random_seed': random_seed,
         }
 
         self.logger = logger or fm.logger
@@ -34,22 +36,27 @@ class EMPCA(object):
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
 
-        # shapes of matrices
+        # shapes of matrices (for convergence)
         N, D, K = *X.shape, self.n_components
 
         # initial arrays
-        _WX = W * X
-        C = np.empty([N, K])
-        P = self._random_orthogonal([K, D])
+        C = np.zeros([N, K])
+        if self.initialize == 'random':
+            P = self._orthogonal_from_random(K, D)
+        elif self.initialize == 'svd':
+            P = self._orthogonal_from_svd(X, K)
+        else:
+            raise ValueError(self.initialize)
 
         # convergence
         cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
 
         # EM algorithm
         try:
+            _WX = W * X
             while not cv(C @ P):
-                self.logger.debug(cv.status)
                 WX = _WX.copy()
+                self.logger.debug(cv.status)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
         except StopIteration:
@@ -59,7 +66,7 @@ class EMPCA(object):
         self.components_ = P
         return C
 
-    def _random_orthogonal(self, shape):
+    def _orthogonal_from_random(self, *shape):
         np.random.seed(self.random_seed)
         A = np.random.randn(*shape)
         for i in range(A.shape[0]):
@@ -70,13 +77,18 @@ class EMPCA(object):
 
         return A
 
+    def _orthogonal_from_svd(self, X, K):
+        svd = decomposition.TruncatedSVD(K)
+        svd.fit(X)
+        return svd.components_
+
     @staticmethod
     @jit(nopython=True, cache=True)
     def _update_coefficients(C, P, WX, W):
         N, D = WX.shape
 
-        # equiv to the equation (16)
         for n in range(N):
+            # equiv to the equation 16
             Pn = P @ (P * W[n]).T
             xn = P @ WX[n]
             C[n] = np.linalg.solve(Pn, xn)
@@ -86,16 +98,21 @@ class EMPCA(object):
     @staticmethod
     @jit(nopython=True, cache=True)
     def _update_eigenvectors(C, P, WX, W):
-        N, D, K = *WX.shape, P.shape[0]
+        N, D = WX.shape
+        K = P.shape[0]
 
         for k in range(K):
-            ck = C[:, k]
-            P[k] = (ck @ WX) / (ck**2 @ W)
+            # equiv to the equation 21
+            Ck = C[:, k]
+            P[k] = (Ck @ WX) / (Ck**2 @ W)
 
+            # equiv to the equation 22
+            # but subtracting from WX
             for n in range(N):
                 for d in range(D):
-                    WX[n, d] -= W[n, d] * P[k, d] * ck[n]
+                    WX[n, d] -= W[n, d] * P[k, d] * Ck[n]
 
+            # renormalization
             for m in range(k):
                 P[k] -= (P[k] @ P[m]) * P[m]
 
