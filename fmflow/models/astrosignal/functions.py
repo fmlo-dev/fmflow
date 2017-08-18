@@ -19,12 +19,13 @@ def astrolines(
         array, weights=None, fit_function='gaussian',
         snr_threshold=5, subtraction_gain=0.5
     ):
+    params = locals()
+    logger = getLogger('fmflow.models.atmoslines')
+    logger.debug(params)
+
     model = fm.models.AstroLines(
         fit_function, snr_threshold, subtraction_gain, logger=logger
     )
-
-    logger = getLogger('fmflow.models.atmoslines')
-    logger.debug(model.params)
 
     freq = fm.getfreq(array, unit='GHz').values
     spec = fm.getspec(array, weights=weights).values
