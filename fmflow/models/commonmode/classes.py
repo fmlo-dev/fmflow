@@ -10,18 +10,20 @@ import fmflow as fm
 import numpy as np
 from numba import jit
 from sklearn import decomposition
+from scipy.signal import savgol_filter
 
 
 # classes
 class EMPCA(object):
     def __init__(
             self, n_components=20, initialize='random', random_seed=None,
-            convergence=0.01, n_maxiters=100, *, logger=None
+            smooth=None, convergence=0.01, n_maxiters=100, *, logger=None
         ):
         self.params = {
             'n_components': n_components,
             'initialize': initialize,
             'random_seed': random_seed,
+            'smooth': smooth,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
@@ -59,6 +61,8 @@ class EMPCA(object):
                 self.logger.debug(cv.status)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
+                if (smooth is not None) and smooth:
+                    P = self._smooth_eigenvectors(P)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -81,6 +85,9 @@ class EMPCA(object):
         svd = decomposition.TruncatedSVD(K)
         svd.fit(X)
         return svd.components_
+
+    def _smooth_eigenvectors(self, P):
+        return savgol_filter(P, self.smooth, axis=1)
 
     @staticmethod
     @jit(nopython=True, cache=True)
