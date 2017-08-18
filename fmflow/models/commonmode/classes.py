@@ -17,13 +17,12 @@ from scipy.signal import savgol_filter
 class EMPCA(object):
     def __init__(
             self, n_components=20, initialize='random', random_seed=None,
-            smooth=None, convergence=0.01, n_maxiters=100, *, logger=None
-        ):
+            ch_smooth=None, convergence=0.01, n_maxiters=100, *, logger=None):
         self.params = {
             'n_components': n_components,
             'initialize': initialize,
             'random_seed': random_seed,
-            'smooth': smooth,
+            'ch_smooth': ch_smooth,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
@@ -61,8 +60,8 @@ class EMPCA(object):
                 self.logger.debug(cv.status)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
-                if (self.smooth is not None) and self.smooth:
-                    P = self._smooth_eigenvectors(P, self.smooth)
+                if (self.ch_smooth is not None) and self.ch_smooth:
+                    P = self._smooth_eigenvectors(P, self.ch_smooth)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -86,8 +85,8 @@ class EMPCA(object):
         svd.fit(X)
         return svd.components_
 
-    def _smooth_eigenvectors(self, P, smooth):
-        return savgol_filter(P, smooth, polyorder=3, axis=1)
+    def _smooth_eigenvectors(self, P, ch_smooth):
+        return savgol_filter(P, ch_smooth, polyorder=3, axis=1)
 
     @staticmethod
     @jit(nopython=True, cache=True)
