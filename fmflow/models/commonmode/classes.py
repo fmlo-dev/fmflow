@@ -61,8 +61,8 @@ class EMPCA(object):
                 self.logger.debug(cv.status)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
-                if (smooth is not None) and smooth:
-                    P = self._smooth_eigenvectors(P)
+                if (self.smooth is not None) and self.smooth:
+                    P = self._smooth_eigenvectors(P, self.smooth)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
@@ -86,8 +86,8 @@ class EMPCA(object):
         svd.fit(X)
         return svd.components_
 
-    def _smooth_eigenvectors(self, P):
-        return savgol_filter(P, self.smooth, axis=1)
+    def _smooth_eigenvectors(self, P, smooth):
+        return savgol_filter(P, smooth, axis=1)
 
     @staticmethod
     @jit(nopython=True, cache=True)
