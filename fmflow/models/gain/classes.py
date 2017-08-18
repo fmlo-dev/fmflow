@@ -9,7 +9,7 @@ __all__ = [
 import fmflow as fm
 import numpy as np
 from scipy.interpolate import interp1d
-from scipy.ndimage import gaussian_filter
+from scipy.signal import savgol_filter
 
 
 # classes
@@ -18,7 +18,6 @@ class ONGain(object):
             self, include=['RF', 'LO'], ch_smooth=1,
             convergence=0.01, n_maxiters=100, *, logger=None
         ):
-
         if not set(include) <= {'RF', 'LO', 'IF'}:
             raise ValueError(include)
 
@@ -40,7 +39,10 @@ class ONGain(object):
         ilogGlo = fm.zeros_like(ilogON[:,0])
         ilogGrf = fm.zeros_like(ilogON)
 
+        # convergence
         cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
+
+        # algorithm
         try:
             while not cv(ilogON-ilogGif-ilogGlo-ilogGrf):
                 self.logger.debug(cv.status)
@@ -50,6 +52,7 @@ class ONGain(object):
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
+        # return result
         ilogGon = fm.zeros_like(ilogON)
 
         if 'RF' in self.include:
@@ -89,7 +92,10 @@ class ONGain(object):
         return ilogGlo-ilogGlo.mean()
 
     def _estimate_ilogGrf(self, ilogX):
-        ilogGrf = gaussian_filter(fm.getspec(ilogX), self.ch_smooth)
+        ilogGrf = fm.getspec(ilogX)
+        if (self.ch_smooth is not None) and self.ch_smooth:
+            ilogGrf = savgol_filter(ilogGrf, self.ch_smooth, polyorder=3)
+
         return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
 
     def __getattr__(self, name):
