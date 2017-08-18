@@ -8,11 +8,11 @@ __all__ = [
 ]
 
 # standard library
-import os
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from functools import wraps
 from inspect import Parameter, signature, stack
+from multiprocessing import cpu_count
 
 # dependent packages
 import fmflow as fm
@@ -22,7 +22,10 @@ import xarray as xr
 # module constants
 EMPTY = Parameter.empty
 POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
-MAX_WORKERS = os.cpu_count() - 1
+try:
+    MAX_WORKERS = cpu_count() - 1
+except:
+    MAX_WORKERS = 1
 
 
 # decorators
