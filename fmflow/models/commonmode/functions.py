@@ -53,13 +53,14 @@ def empca(
         array (xarray.DataArray): An output reconstructed array.
 
     """
+    params = locals()
+    logger = getLogger('fmflow.models.empca')
+    logger.debug(params)
+
     model = fm.models.EMPCA(
         n_components, initialize, random_seed,
         ch_smooth, convergence, n_maxiters, logger=logger
     )
-
-    logger = getLogger('fmflow.models.empca')
-    logger.debug(model.params)
 
     mean = np.mean(array, 0) if centering else 0
     transformed = model.fit_transform(array-mean, weights)
@@ -93,13 +94,14 @@ def decomposition(
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
+    params = locals()
+    logger = getLogger('fmflow.models.decomposition')
+    logger.debug(params)
+
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
     params.update(kwargs)
     model = AlgorithmClass(n_components, **params)
-
-    logger = getLogger('fmflow.models.decomposition')
-    logger.debug(model.params)
 
     mean = np.mean(array, 0) if centering else 0
     transformed = model.fit_transform(array-mean)
