@@ -26,7 +26,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.timechunk
 def empca(
         array, weights, n_components=20, initialize='random', random_seed=None,
-        centering=True, convergence=1e-3, n_maxiters=100,  **kwargs
+        smooth=None, centering=True, convergence=1e-3, n_maxiters=100,  **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
@@ -39,6 +39,8 @@ def empca(
             Options are `random` (random orthogonal matrix) and `svd`
             (orthogonal matrix from singular value decomposition).
         random_seed (int): random seed values used for the initial state.
+        smooth (int): A length of the filter window for smoothing eigenvectors.
+            It must be a positive odd integer.
         centering (bool): If True, mean vector along time axis is subtracted from
             `array` before computing EMPCA and then added to the reconstructed one.
         convergence (float): A convergence threshold.
@@ -55,13 +57,14 @@ def empca(
     logger.debug('n_components: {0}'.format(n_components))
     logger.debug('initialize: {0}'.format(initialize))
     logger.debug('random_seed: {0}'.format(random_seed))
+    logger.debug('smooth: {0}'.format(smooth))
     logger.debug('centering: {0}'.format(centering))
     logger.debug('convergence: {0}'.format(convergence))
     logger.debug('n_maxiters: {0}'.format(n_maxiters))
 
     model = fm.models.EMPCA(
-        n_components, initialize, random_seed, convergence, n_maxiters,
-        logger=logger
+        n_components, initialize, random_seed, smooth,
+        convergence, n_maxiters, logger=logger
     )
 
     mean = np.mean(array, 0) if centering else 0
