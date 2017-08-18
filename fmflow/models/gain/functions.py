@@ -16,15 +16,13 @@ import numpy as np
 # functions
 @fm.timechunk
 def ongain(ON, include=['RF', 'LO'], ch_smooth=1, convergence=0.01, n_maxiters=100):
-    logger = getLogger('fmflow.models.ongain')
-    logger.debug('include: {0}'.format(include))
-    logger.debug('ch_smooth: {0}'.format(ch_smooth))
-    logger.debug('convergence: {0}'.format(convergence))
-    logger.debug('n_maxiters: {0}'.format(n_maxiters))
-
     model = fm.models.ONGain(
-        include, ch_smooth, convergence, n_maxiters, logger=logger
+        include, ch_smooth, convergence, n_maxiters,
+        logger=logger
     )
+
+    logger = getLogger('fmflow.models.ongain')
+    logger.debug(model.params)
     return model.fit(ON)
 
 
