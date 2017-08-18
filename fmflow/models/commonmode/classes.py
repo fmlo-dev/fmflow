@@ -87,7 +87,7 @@ class EMPCA(object):
         return svd.components_
 
     def _smooth_eigenvectors(self, P, smooth):
-        return savgol_filter(P, smooth, axis=1)
+        return savgol_filter(P, smooth, polyorder=3, axis=1)
 
     @staticmethod
     @jit(nopython=True, cache=True)
