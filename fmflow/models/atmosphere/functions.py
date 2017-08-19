@@ -16,16 +16,15 @@ import numpy as np
 
 # functions
 @fm.timechunk
-def atmoslines(array, weights=None, output='tb', ch_tolerance=5):
+def atmoslines(array, reverse=False, weights=None, output='tb', ch_tolerance=5):
     params = locals()
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug(params)
 
-    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
-
-    freq = fm.getfreq(array, unit='GHz').values
-    spec = fm.getspec(array, weights=weights).values
+    freq = fm.getfreq(array, reverse, unit='GHz').values
+    spec = fm.getspec(array, reverse, weights=weights).values
     vrad = array.vrad.values.mean()
+    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
     tau, tb = model.fit(freq, spec, vrad)
 
     if output == 'tau':
@@ -44,9 +43,8 @@ def computeam(array, output='tb'):
     logger = getLogger('fmflow.models.computeam')
     logger.debug(params)
 
-    model = fm.models.AtmosLines(logger=logger)
-
     freq = fm.getfreq(array, unit='GHz').values
+    model = fm.models.AtmosLines(logger=logger)
     tau, tb = model.generate(freq)
 
     if output == 'tau':
