@@ -8,6 +8,7 @@ import json
 import os
 import re
 from collections import OrderedDict
+from pathlib import Path
 from pkgutil import get_data
 
 # dependent packages
@@ -18,6 +19,7 @@ from astropy import constants
 from astropy import coordinates
 from astropy import units as u
 from astropy.io import fits
+from tqdm import tqdm
 
 # module constants
 C           = constants.c.value # spped of light in vacuum
@@ -77,6 +79,9 @@ def read_fmlolog(fmlolog):
         hdu (BinTableHDU): HDU containing the read FMLO logging.
 
     """
+    # path
+    fmlolog = Path(fmlolog).expanduser()
+
     # read fmlolog
     fmts = yaml.load(get_data('fmflow', 'fits/data/nro45m_fmlolog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
@@ -88,7 +93,7 @@ def read_fmlolog(fmlolog):
     # bintable HDU
     header = fits.Header()
     header['extname'] = 'FMLOLOG'
-    header['filename'] = fmlolog
+    header['filename'] = str(fmlolog)
 
     cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
     return fits.BinTableHDU.from_columns(cols, header)
@@ -104,7 +109,10 @@ def read_antennalog(antennalog):
         hdu (BinTableHDU): HDU containing the read antenna logging.
 
     """
-    # read fmlolog
+    # path
+    antennalog = Path(antennalog).expanduser()
+
+    # read antennalog
     fmts = yaml.load(get_data('fmflow', 'fits/data/nro45m_antennalog.yaml'))
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
@@ -125,7 +133,7 @@ def read_antennalog(antennalog):
     # bintable HDU
     header = fits.Header()
     header['extname'] = 'ANTENNA'
-    header['filename'] = antennalog
+    header['filename'] = str(antennalog)
 
     cols = [fits.Column(n, tforms[i], units[i], array=d[n]) for i, n in enumerate(names)]
     cols.append(fits.Column('ra', 'D', 'deg', array=ra_real))
@@ -149,6 +157,9 @@ def check_backend(backendlog, byteorder):
         backend (str): Backend type.
 
     """
+    # path
+    backendlog = Path(backendlog).expanduser()
+
     com = yaml.load(get_data('fmflow', 'fits/data/nro45m_backendlog_common.yaml'))
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
@@ -175,9 +186,11 @@ def read_backendlog_sam45(backendlog, byteorder):
         hdu (BinTableHDU): HDU containing the read backend logging.
 
     """
+    # path
+    backendlog = Path(backendlog).expanduser()
+
     com = yaml.load(get_data('fmflow', 'fits/data/nro45m_backendlog_common.yaml'))
     mac = yaml.load(get_data('fmflow', 'fits/data/nro45m_backendlog_sam45.yaml'))
-
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
     obs  = fm.utils.CStructReader(mac['obs'], IGNORED_KEY, byteorder)
@@ -185,23 +198,22 @@ def read_backendlog_sam45(backendlog, byteorder):
 
     def eof(f):
         head.read(f)
+        pbar.update(head.size)
         return (head._data['crec_type'][-1][0] == b'ED')
 
     # read backendlog
-    fsize = os.path.getsize(backendlog)
     with open(backendlog, 'rb') as f:
-        eof(f)
-        ctl.read(f)
-        eof(f)
-        obs.read(f)
+        with tqdm(total=backendlog.stat().st_size) as pbar:
+            eof(f)
+            ctl.read(f)
+            pbar.update(ctl.size)
+            eof(f)
+            obs.read(f)
+            pbar.update(obs.size)
 
-        i = 0
-        while not eof(f):
-            i += 1
-            dat.read(f)
-            if i%100 == 0:
-                frac = f.tell() / fsize
-                fm.utils.progressbar(frac)
+            while not eof(f):
+                dat.read(f)
+                pbar.update(dat.size)
 
     # edit data
     data = dat.data
@@ -265,7 +277,7 @@ def read_backendlog_sam45(backendlog, byteorder):
     # bintable HDU
     header = fits.Header()
     header['extname']  = 'BACKEND'
-    header['filename'] = backendlog
+    header['filename'] = str(backendlog)
     header['ctlinfo']  = ctl.jsondata
     header['obsinfo']  = obs.jsondata
 
