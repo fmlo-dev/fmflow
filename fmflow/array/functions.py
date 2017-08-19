@@ -259,7 +259,7 @@ def modulate(array):
     return array.fm.modulate()
 
 
-def getfreq(array, reverse=False, unit='Hz'):
+def getfreq(array, reverse=False, unit='GHz'):
     """Compute the observed frequency of given unit.
 
     If the array is reverse-demodulated, or modulated and `reverse=True`,
@@ -272,7 +272,7 @@ def getfreq(array, reverse=False, unit='Hz'):
         reverse (bool, optional): If True, and if the array is modulated, then
             the array is reverse-demodulated (i.e. -1 * fmch is used for demodulation).
             Default is False.
-        unit (str, optional): An unit of the observed frequency. Default is Hz.
+        unit (str, optional): An unit of the observed frequency. Default is GHz.
 
     Returns:
         freq (xarray.DataArray): An array of the observed frequency in given unit.
