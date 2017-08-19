@@ -21,6 +21,7 @@ from astropy.io import fits
 from tqdm import tqdm
 
 # module constants
+BAR_FORMAT  = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
 C           = constants.c.value # spped of light in vacuum
 D_NRO45m    = (45.0 * u.m).value # diameter of the NRO45m
 EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
@@ -164,7 +165,7 @@ def check_backend(backendlog, byteorder):
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
 
     # read backendlog
-    with open(backendlog, 'rb') as f:
+    with backendlog.open('rb') as f:
         head.read(f)
         ctl.read(f)
 
@@ -197,22 +198,23 @@ def read_backendlog_sam45(backendlog, byteorder):
 
     def eof(f):
         head.read(f)
-        pbar.update(head.size)
+        bar.update(head.size)
         return (head._data['crec_type'][-1][0] == b'ED')
 
     # read backendlog
-    with open(backendlog, 'rb') as f:
-        with tqdm(total=backendlog.stat().st_size) as pbar:
+    with backendlog.open('rb') as f:
+        total = backendlog.stat().st_size
+        with tqdm(total=total, bar_format=BAR_FORMAT) as bar:
             eof(f)
             ctl.read(f)
-            pbar.update(ctl.size)
+            bar.update(ctl.size)
             eof(f)
             obs.read(f)
-            pbar.update(obs.size)
+            bar.update(obs.size)
 
             while not eof(f):
                 dat.read(f)
-                pbar.update(dat.size)
+                bar.update(dat.size)
 
     # edit data
     data = dat.data
