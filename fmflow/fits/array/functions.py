@@ -6,9 +6,9 @@ __all__ = [
 ]
 
 # standard library
-import os
 from datetime import timedelta
 from functools import reduce
+from pathlib import Path
 
 # dependent packages¬
 import numpy as np
@@ -30,7 +30,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
         array (xarray.DataArray): A modulated array of the spacified `arrayid` and `scantype`.
 
     """
-    with fits.open(os.path.expanduser(fitsname)) as f:
+    with fits.open(Path(fitsname).expanduser()) as f:
         # fits data
         fmlo = f['fmlolog'].data
         be = f['backend'].data
