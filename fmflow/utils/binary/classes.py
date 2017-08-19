@@ -53,8 +53,9 @@ class CStructReader(object):
         ])
 
     Attributes:
+        size (int): A byte size of the structure.
         data (OrderedDict): An ordered dictionary that stores unpacked values.
-        jsondata (OrderedDict): An JSON string that stores unpacked values.
+        jsondata (OrderedDict): A JSON string that stores unpacked values.
         params (dict): Stored information about the structure, ignored, and byteorder.
 
     References:
@@ -85,6 +86,7 @@ class CStructReader(object):
         self.params['ctypes'], self.params['shapes'] = self._parse(structure)
         self._data = OrderedDict((name,[]) for name in self.params['ctypes'])
         self._unpacker = Struct(self._joinedctypes())
+        self.size = self._unpacker.size
 
     def read(self, f):
         """Sequentially read a file object to unpack values in a C structure.
