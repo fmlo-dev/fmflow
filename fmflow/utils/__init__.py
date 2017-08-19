@@ -4,15 +4,11 @@ from .binary import *
 from .convergence import *
 from .datetime import *
 from .fits import *
-from .miscellaneous import *
-from .multiprocessing import *
+from .misc import *
 from .ndarray import *
-from .progress import *
 del binary
 del convergence
 del datetime
 del fits
-del miscellaneous
-del multiprocessing
+del misc
 del ndarray
-del progress
