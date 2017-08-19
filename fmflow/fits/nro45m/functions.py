@@ -5,7 +5,6 @@ __all__ = ['fromnro45m']
 
 # standard library
 import json
-import os
 import re
 from collections import OrderedDict
 from pathlib import Path
