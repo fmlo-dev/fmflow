@@ -115,12 +115,13 @@ def numchunk(func):
                     kwargs.setdefault(key, val.default)
 
         # run the function
-        with ProcessPoolExecutor(n_processes) as e:
-            futures = []
-            for args in zip(*nargs):
-                futures.append(e.submit(orgfunc, *args, **kwargs))
+        with fm.utils.one_thread_per_process():
+            with ProcessPoolExecutor(n_processes) as e:
+                futures = []
+                for args in zip(*nargs):
+                    futures.append(e.submit(orgfunc, *args, **kwargs))
 
-            results = [f.result() for f in futures]
+                results = [f.result() for f in futures]
 
         # make an output
         try:
@@ -180,12 +181,13 @@ def timechunk(func):
                     kwargs.setdefault(key, val.default)
 
         # run the function
-        with ProcessPoolExecutor(n_processes) as e:
-            futures = []
-            for args in zip(*nargs):
-                futures.append(e.submit(orgfunc, *args, **kwargs))
+        with fm.utils.one_thread_per_process():
+            with ProcessPoolExecutor(n_processes) as e:
+                futures = []
+                for args in zip(*nargs):
+                    futures.append(e.submit(orgfunc, *args, **kwargs))
 
-            results = [f.result() for f in futures]
+                results = [f.result() for f in futures]
 
         # make an output
         try:
