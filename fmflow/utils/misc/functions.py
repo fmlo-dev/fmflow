@@ -58,7 +58,7 @@ def copy_function(func, name=None):
 def one_thread_per_process():
     """Return a context manager where only one thread is allocated to a process.
 
-    This function is intended to be used as a with-statement like::
+    This function is intended to be used as a with statement like::
 
         >>> with process_per_thread():
         ...     do_something() # one thread per process
@@ -79,8 +79,10 @@ def one_thread_per_process():
         n_threads = mkl.get_max_threads()
         mkl.set_num_threads(1)
         try:
+            # block nested in the with statement
             yield
         finally:
+            # revert to the original value
             mkl.set_num_threads(n_threads)
     else:
         yield
