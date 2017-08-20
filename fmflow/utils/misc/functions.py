@@ -66,7 +66,7 @@ def one_thread_per_process():
     Notes:
         This function only works when MKL (Intel Math Kernel Library)
         is installed and used in, for example, NumPy and SciPy.
-        Otherwise this function do nothing.
+        Otherwise this function does nothing.
 
     """
     try:
