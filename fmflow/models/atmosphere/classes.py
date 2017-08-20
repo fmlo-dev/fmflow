@@ -104,7 +104,7 @@ class AtmosLines(object):
         params = {
             'fmin': np.min(freq) - 0.1*np.ptp(freq),
             'fmax': np.max(freq) + 0.1*np.ptp(freq),
-            'fstep': 0.5*np.mean(np.diff(freq)),
+            'fstep': np.abs(0.5*np.mean(np.diff(freq))),
         }
 
         logger.info('computing am')
