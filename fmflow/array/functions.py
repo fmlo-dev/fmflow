@@ -7,6 +7,7 @@ __all__ = [
     'modulate',
     'getfreq',
     'getspec',
+    'getnoiselevel',
     'mad',
     'ones',
     'zeros',
