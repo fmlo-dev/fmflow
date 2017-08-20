@@ -78,8 +78,9 @@ def one_thread_per_process():
     if is_mkl:
         n_threads = mkl.get_max_threads()
         mkl.set_num_threads(1)
-
-    yield
-
-    if is_mkl:
-        mkl.set_num_threads(n_threads)
+        try:
+            yield
+        finally:
+            mkl.set_num_threads(n_threads)
+    else:
+        yield
