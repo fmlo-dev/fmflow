@@ -29,6 +29,10 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 from astropy import units as u
+from scipy.special import erfinv
+
+# module constants
+MAD_TO_STD = (np.sqrt(2) * erfinv(0.5))**-1
 
 
 # functions
@@ -320,6 +324,50 @@ def getspec(array, reverse=False, weights=None):
     masked_array = np.ma.array(array, mask=np.isnan(array))
     spec = np.ma.average(masked_array, axis=0, weights=weights).data
     return fm.full_like(array[0].drop(array.fm.tcoords.keys()), spec)
+
+
+def getnoiselevel(array, reverse=False, weights=None, function='mad'):
+    """Compute the noise level of a spectrum created by `getspec`.
+
+    If the array is reverse-demodulated, or modulated and `reverse=True`,
+    this function computes the noise level of image sideband.
+    Otherwise, this function computes that of signal sideband.
+
+    By default, noise level is computed by MAD (median absolute deviation)
+    which is a robust measure of the variability of data.
+
+    Args:
+        array (xarray.DataArray): An array. If it is modulated, then this function
+            demodulates it with `reverse` option before computing the spectrum.
+        reverse (bool, optional): If True, and if the array is modulated, then
+            the array is reverse-demodulated (i.e. -1 * fmch is used for demodulation).
+            Default is False.
+        weights (xarray.DataArray, optional): An array of weights associated with the array.
+            The shape of it must be same as the input array.
+        function (str, optional): A function name with which the noise level is computed.
+            Default is 'mad' (median absolute deviation).
+            The other option is 'std' or 'sd' (standard deviation).
+
+    Returns:
+        spec (xarray.DataArray): An array of the noise level.
+
+    Warning:
+        At this version, computing with weights (weighted MAD or SD) is
+        not implemented yet. Thus the `weights` option does not work.
+    """
+    if array.fm.isdemodulated:
+        array = fm.modulate(array)
+
+    n_values = fm.demodulate(fm.ones_like(array), reverse).sum('t')
+
+    if mode == 'mad':
+        mad = fm.mad(fm.demodulate(array, reverse), 't')
+        return MAD_TO_STD * mad / np.sqrt(n_values)
+    elif (mode == 'std') or (mode == 'sd'):
+        std = fm.demodulate(array, reverse).std('t')
+        return std / np.sqrt(n_values)
+    else:
+        raise ValueError(function)
 
 
 def mad(array, dim=None, axis=None):
