@@ -42,7 +42,7 @@ class AstroLines(object):
         def snr(spec):
             return spec / (fm.utils.mad(spec) * nrms)
 
-        fwhm0 = np.mean(np.diff(freq))
+        fwhm0 = np.mean(np.abs(np.diff(freq)))
         maxsnr = np.max(snr(resid))
         while maxsnr > self.snr_threshold:
             index = np.argmax(resid/nrms)
