@@ -32,12 +32,12 @@ except:
 def numpyfunc(func):
     """Make a function compatible with xarray.DataArray.
 
-    This function should be used as a decorator like::
+    This function is intended to be used as a decorator like::
 
         >>> @fm.arrayfunc
         >>> def func(array):
-        ...     # some operations ...
-        ...     return array
+        ...     # do something
+        ...     return newarray
         >>>
         >>> result = func(array)
 
@@ -69,12 +69,12 @@ def numpyfunc(func):
 def numchunk(func):
     """Make a function compatible with multicore numchunk processing.
 
-    This function should be used as a decorator like::
+    This function is intended to be used as a decorator like::
 
         >>> @fm.numchunk
         >>> def func(array):
-        ...     # some operations ...
-        ...     return array # do nothing
+        ...     # do something
+        ...     return newarray
         >>>
         >>> result = func(array, numchunk=10)
 
@@ -135,11 +135,12 @@ def numchunk(func):
 def timechunk(func):
     """Make a function compatible with multicore timechunk processing.
 
-    This function is used as a decorator like::
+    This function is intended to be used as a decorator like::
 
         >>> @fm.timechunk
         >>> def func(array):
-        ...     return array # do nothing
+        ...     # do something
+        ...     return newarray
         >>>
         >>> result = func(array, timechunk=100)
 
