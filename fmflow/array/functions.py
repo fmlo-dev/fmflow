@@ -414,7 +414,7 @@ def chbinning(array, size=2):
 
     # binning of fsig, fimg
     binarray['fsig'].values = array['fsig'].values.reshape([binshape[1], size]).mean(1)
-    binarray['fimg'].values = array['fsig'].values.reshape([binshape[1], size]).mean(1)
+    binarray['fimg'].values = array['fimg'].values.reshape([binshape[1], size]).mean(1)
 
     # convert fmch (if any)
     if 'fmch' in array:
