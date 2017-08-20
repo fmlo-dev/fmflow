@@ -81,5 +81,5 @@ def one_thread_per_process():
 
     yield
 
-    if is_mkl
+    if is_mkl:
         mkl.set_num_threads(n_threads)
