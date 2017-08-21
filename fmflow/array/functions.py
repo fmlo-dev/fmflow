@@ -355,6 +355,7 @@ def getnoiselevel(array, reverse=False, weights=None, function='mad'):
     Warning:
         At this version, computing with weights (weighted MAD or SD) is
         not implemented yet. Thus the `weights` option does not work.
+
     """
     if array.fm.isdemodulated:
         array = fm.modulate(array)
