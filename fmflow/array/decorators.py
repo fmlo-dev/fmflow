@@ -34,7 +34,7 @@ def numpyfunc(func):
 
     This function is intended to be used as a decorator like::
 
-        >>> @fm.arrayfunc
+        >>> @fm.numpyfunc
         >>> def func(array):
         ...     # do something
         ...     return newarray
