@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'ONGain',
+    'Gain',
 ]
 
 # dependent packages
@@ -13,7 +13,7 @@ from scipy.signal import savgol_filter
 
 
 # classes
-class ONGain(object):
+class Gain(object):
     def __init__(
             self, include=['RF', 'LO'], ch_smooth=1,
             convergence=0.01, n_maxiters=100, *, logger=None
@@ -30,58 +30,58 @@ class ONGain(object):
 
         self.logger = logger or fm.logger
 
-    def fit(self, ON):
-        logON = np.log10(ON)
-        ilogON = self.to_ilogON(logON)
+    def fit(self, X):
+        logX = np.log10(X)
+        ilogX = self.to_ilogX(logX)
 
         # initial arrays
-        ilogGif = fm.zeros_like(ilogON[0])
-        ilogGlo = fm.zeros_like(ilogON[:,0])
-        ilogGrf = fm.zeros_like(ilogON)
+        ilogGif = fm.zeros_like(ilogX[0])
+        ilogGlo = fm.zeros_like(ilogX[:,0])
+        ilogGrf = fm.zeros_like(ilogX)
 
         # convergence
         cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
 
         # algorithm
         try:
-            while not cv(ilogON-ilogGif-ilogGlo-ilogGrf):
+            while not cv(ilogX-ilogGif-ilogGlo-ilogGrf):
                 self.logger.debug(cv.status)
-                ilogGif = self._estimate_ilogGif(ilogON-ilogGrf-ilogGlo)
-                ilogGlo = self._estimate_ilogGlo(ilogON-ilogGrf-ilogGif)
-                ilogGrf = self._estimate_ilogGrf(ilogON-ilogGif-ilogGlo)
+                ilogGif = self._estimate_ilogGif(ilogX-ilogGrf-ilogGlo)
+                ilogGlo = self._estimate_ilogGlo(ilogX-ilogGrf-ilogGif)
+                ilogGrf = self._estimate_ilogGrf(ilogX-ilogGif-ilogGlo)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
         # return result
-        ilogGon = fm.zeros_like(ilogON)
+        ilogG = fm.zeros_like(ilogX)
 
         if 'RF' in self.include:
-            ilogGon += ilogGrf
+            ilogG += ilogGrf
 
         if 'LO' in self.include:
-            ilogGon += ilogGlo
+            ilogG += ilogGlo
 
         if 'IF' in self.include:
-            ilogGon += ilogGif
+            ilogG += ilogGif
 
-        logGon = self.to_logON(ilogGon)
-        return fm.full_like(logON, 10**(logGon.values))
+        logG = self.to_logX(ilogG)
+        return fm.full_like(logX, 10**(logGon.values))
 
     @staticmethod
-    def to_ilogON(logON):
-        bfmch = logON.fmch.values.tobytes()
-        ifmch = np.arange(logON.fmch.min(), logON.fmch.max()+1)
+    def to_ilogX(logX):
+        bfmch = logX.fmch.values.tobytes()
+        ifmch = np.arange(logX.fmch.min(), logX.fmch.max()+1)
 
-        glogON = logON.groupby('fmch').mean('t')
-        interp = interp1d(glogON.fmch, glogON, axis=0)
+        glogX = logX.groupby('fmch').mean('t')
+        interp = interp1d(glogX.fmch, glogX, axis=0)
         return fm.array(interp(ifmch), {'fmch': ifmch}, {}, {'bfmch': bfmch})
 
     @staticmethod
-    def to_logON(ilogON):
-        ifmch = ilogON.fmch.values
-        fmch = np.fromstring(ilogON.bfmch.values, int)
+    def to_logX(ilogX):
+        ifmch = ilogX.fmch.values
+        fmch = np.fromstring(ilogX.bfmch.values, int)
 
-        interp = interp1d(ifmch, ilogON, axis=0)
+        interp = interp1d(ifmch, ilogX, axis=0)
         return fm.array(interp(fmch), {'fmch': fmch})
 
     def _estimate_ilogGif(self, ilogX):
@@ -102,4 +102,4 @@ class ONGain(object):
         return self.params[name]
 
     def __repr__(self):
-        return 'ONGain({0})'.format(self.params)
+        return 'Gain({0})'.format(self.params)
