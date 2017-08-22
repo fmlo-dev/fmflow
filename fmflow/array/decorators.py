@@ -19,7 +19,6 @@ import numpy as np
 import xarray as xr
 
 # module constants
-EMPTY = Parameter.empty
 POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
 try:
     MAX_WORKERS = cpu_count() - 1
