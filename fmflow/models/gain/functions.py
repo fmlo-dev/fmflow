@@ -20,11 +20,7 @@ def ongain(ON, include=['RF', 'LO'], ch_smooth=1, convergence=0.01, n_maxiters=1
     logger = getLogger('fmflow.models.ongain')
     logger.debug(params)
 
-    model = fm.models.ONGain(
-        include, ch_smooth, convergence, n_maxiters,
-        logger=logger
-    )
-
+    model = fm.models.Gain(include, ch_smooth, convergence, n_maxiters, logger=logger)
     return model.fit(ON)
 
 
