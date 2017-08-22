@@ -25,15 +25,14 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.numpyfunc
 @fm.timechunk
 def empca(
-        array, weights, n_components=20, initialize='random', random_seed=None,
+        array, weights=None, n_components=20, initialize='random', random_seed=None,
         ch_smooth=None, centering=True, convergence=1e-3, n_maxiters=100, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
     Args:
         array (xarray.DataArray): An input array to be decomposed.
-        weights (xarray.DataArray): A weight array. It must have the same shape
-            as `array`. Just spacify `None` in the case of no weights.
+        weights (xarray.DataArray): A weight array. The shape must be same as `array`.
         n_components (int): A number of components to keep.
         initialize (string): A method of initializing eigenvectors.
             Options are `random` (random orthogonal matrix) and `svd`
