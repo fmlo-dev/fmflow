@@ -29,6 +29,6 @@ def rgain(Gon):
     logger = getLogger('fmflow.models.rgain')
     logger.debug(params)
 
-    iGon = fm.models.ONGain.to_ilogON(Gon)
+    iGon = fm.models.Gain.to_ilogX(Gon)
     gr = iGon[iGon.fmch==0][0].values
     return fm.full_like(Gon[0].drop(Gon.fm.tcoords.keys()), gr)
