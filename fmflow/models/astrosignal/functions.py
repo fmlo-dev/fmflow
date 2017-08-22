@@ -14,7 +14,7 @@ import numpy as np
 
 
 # functions
-@fm.timechunk
+@fm.chunk('array')
 def astrolines(
         array, weights=None, fit_function='gaussian',
         snr_threshold=5, subtraction_gain=0.5

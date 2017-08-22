@@ -23,7 +23,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 # functions
 @fm.numpyfunc
-@fm.timechunk
+@fm.chunk('array', 'weights')
 def empca(
         array, weights=None, n_components=20, initialize='random', random_seed=None,
         ch_smooth=None, centering=True, convergence=1e-3, n_maxiters=100, **kwargs
@@ -67,7 +67,7 @@ def empca(
 
 
 @fm.numpyfunc
-@fm.timechunk
+@fm.chunk('array')
 def decomposition(
         array, n_components=None, decomposer='TruncatedSVD',
         centering=True, **kwargs

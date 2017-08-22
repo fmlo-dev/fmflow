@@ -14,7 +14,7 @@ import fmflow as fm
 import numpy as np
 
 # functions
-@fm.timechunk
+@fm.chunk('ON')
 def ongain(ON, include=['RF', 'LO'], ch_smooth=1, convergence=0.01, n_maxiters=100):
     params = locals()
     logger = getLogger('fmflow.models.ongain')

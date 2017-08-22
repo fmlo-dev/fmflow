@@ -15,7 +15,7 @@ import numpy as np
 
 
 # functions
-@fm.timechunk
+@fm.chunk('array')
 def atmoslines(array, reverse=False, weights=None, output='tb', ch_tolerance=5):
     params = locals()
     logger = getLogger('fmflow.models.atmoslines')
