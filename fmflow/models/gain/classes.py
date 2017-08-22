@@ -65,7 +65,7 @@ class Gain(object):
             ilogG += ilogGif
 
         logG = self.to_logX(ilogG)
-        return fm.full_like(logX, 10**(logGon.values))
+        return fm.full_like(logX, 10**(logG.values))
 
     @staticmethod
     def to_ilogX(logX):
