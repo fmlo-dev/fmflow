@@ -362,10 +362,10 @@ def getnoiselevel(array, reverse=False, weights=None, function='mad'):
 
     n_values = fm.demodulate(fm.ones_like(array), reverse).sum('t')
 
-    if mode == 'mad':
+    if function == 'mad':
         mad = fm.mad(fm.demodulate(array, reverse), 't')
         return MAD_TO_STD * mad / np.sqrt(n_values)
-    elif (mode == 'std') or (mode == 'sd'):
+    elif (function == 'std') or (function == 'sd'):
         std = fm.demodulate(array, reverse).std('t')
         return std / np.sqrt(n_values)
     else:
