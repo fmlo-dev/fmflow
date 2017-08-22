@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'chunkfunc',
+    'chunk',
     'numpyfunc',
     'numchunk',
     'timechunk',
@@ -67,12 +67,12 @@ def numpyfunc(func):
     return wrapper
 
 
-def chunkfunc(*argnames):
+def chunk(*argnames):
     """Make a function compatible with multicore chunk processing.
 
     This function is intended to be used as a decorator like::
 
-        >>> @fm.chunkfunc('array')
+        >>> @fm.chunk('array')
         >>> def func(array):
         ...     # do something
         ...     return newarray
@@ -80,7 +80,7 @@ def chunkfunc(*argnames):
         >>> result = func(array, timechunk=10)
 
     """
-    def _chunkfunc(func):
+    def _chunk(func):
         orgname = '_original_' + func.__name__
         orgfunc = fm.utils.copy_function(func, orgname)
         depth = [s.function for s in stack()].index('<module>')
@@ -140,7 +140,7 @@ def chunkfunc(*argnames):
 
         return wrapper
 
-    return _chunkfunc
+    return _chunk
 
 
 def numchunk(func):
