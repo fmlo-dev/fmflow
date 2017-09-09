@@ -40,26 +40,29 @@ class AtmosLines(object):
     taus = None
     tbs = None
 
-    def __init__(self, ch_tolerance=5, *, logger=None):
+    def __init__(self, snr_threshold=5, ch_tolerance=5, *, logger=None):
         self.params = {
+            'snr_threshold': snr_threshold,
             'ch_tolerance': ch_tolerance,
         }
 
         self.logger = logger or fm.logger
 
-    def fit(self, freq, spec, vrad=0.0):
+    def fit(self, freq, spec, noise, vrad=0.0):
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
 
-        taus, tbs = [], []
+        tbs = []
         for ch in range(-self.ch_tolerance, self.ch_tolerance+1):
             _freq = freq - frad - ch*fstep
-            tau, tb = self._fit(_freq, spec, logger=self.logger)
-            taus.append(tau)
-            tbs.append(tb)
+            tbs.append(self._fit(_freq, spec, logger=self.logger))
 
-        index = np.argmin(np.sum((np.array(tbs)-spec)**2, 1))
-        return taus[index], tbs[index]
+        tb = tbs[np.argmin(((tbs-spec)**2).sum(1))]
+
+        if np.max(tb/noise) < self.snr_threshold:
+            return np.zeros_like(tb)
+        else:
+            return tb
 
     def generate(self, freq, vrad=0.0):
         frad = np.median(freq) * vrad/C
@@ -68,36 +71,28 @@ class AtmosLines(object):
     @classmethod
     def _fit(cls, freq, spec, *, logger=None):
         try:
-            taus = interp1d(cls.freq, cls.taus, axis=1)(freq)
             tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
         except:
             cls._compute(freq, logger=logger)
-            taus = interp1d(cls.freq, cls.taus, axis=1)(freq)
             tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
 
-        def f_tau(freq, *coeffs):
-            coeffs = np.asarray(coeffs)
-            return (coeffs[:, np.newaxis]*taus).sum(0)
-
-        def f_tb(freq, *coeffs):
+        def func(freq, *coeffs):
             coeffs = np.asarray(coeffs)
             return (coeffs[:, np.newaxis]*tbs).sum(0)
 
         p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
-        coeffs = curve_fit(f_tb, freq, spec, p0, bounds=bounds)
-        return f_tau(freq, *coeffs[0]), f_tb(freq, *coeffs[0])
+        coeffs = curve_fit(func, freq, spec, p0, bounds=bounds)
+        return func(freq, *coeffs[0])
 
     @classmethod
     def _generate(cls, freq, *, logger=None):
         try:
-            taus = interp1d(cls.freq, cls.taus, axis=1)(freq)
             tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
         except:
             cls._compute(freq, logger=logger)
-            taus = interp1d(cls.freq, cls.taus, axis=1)(freq)
             tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
 
-        return taus.sum(0), tbs.sum(0)
+        return tbs.sum(0)
 
     @classmethod
     def _compute(cls, freq, *, logger=None):
@@ -112,9 +107,9 @@ class AtmosLines(object):
         logger.debug(params)
 
         amtaus, amtbs = [], []
-        N = len(cls.amlayers)
-        for n in range(N):
-            logger.debug('computing am layer {0}/{1}'.format(n+1, N))
+        n_layers = len(cls.amlayers)
+        for n in range(n_layers):
+            logger.debug('computing am layer {0}/{1}'.format(n+1, n_layers))
 
             params.update(**cls.amlayers[n])
             amc = cls.amconfig.format(**params)
