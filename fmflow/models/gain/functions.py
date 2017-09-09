@@ -14,14 +14,14 @@ import fmflow as fm
 import numpy as np
 
 # functions
-@fm.chunk('ON')
-def ongain(ON, include=['RF', 'LO'], ch_smooth=1, convergence=0.01, n_maxiters=100):
+@fm.chunk('Pon')
+def ongain(Pon, include=['RF', 'LO'], ch_smooth=1, convergence=0.01, n_maxiters=100):
     params = locals()
     logger = getLogger('fmflow.models.ongain')
     logger.debug(params)
 
     model = fm.models.Gain(include, ch_smooth, convergence, n_maxiters, logger=logger)
-    return model.fit(ON)
+    return model.fit(Pon)
 
 
 def rgain(Gon):
