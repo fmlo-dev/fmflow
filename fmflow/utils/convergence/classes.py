@@ -19,6 +19,9 @@ class Convergence(object):
             'raise_maxiters': raise_maxiters,
         }
 
+        self._reset_status()
+
+    def _reset_status(self):
         self.n_iters = 0
         self.value = None
         self._cache = None
@@ -37,15 +40,21 @@ class Convergence(object):
 
         if self.n_iters > self.n_maxiters:
             if self.raise_maxiters:
+                self._reset_status()
                 raise StopIteration('reached maximum iteration')
             else:
+                self._reset_status()
                 return True
 
         if self.n_iters <= 2:
             return False
-
-        self.value = self._compute(array_new, array_old)
-        return self.value < self.convergence
+        else:
+            self.value = self._compute(array_new, array_old)
+            if self.value < self.convergence:
+                self._reset_status()
+                return True
+            else:
+                return False
 
     def __getattr__(self, name):
         return self.params[name]
