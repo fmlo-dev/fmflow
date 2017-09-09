@@ -315,17 +315,16 @@ def getspec(array, reverse=False, weights=None):
         spec (xarray.DataArray): An array of the time-averaged spectrum.
 
     """
-    if weights is not None:
-        if array.fm.ismodulated:
-            weights = fm.demodulate(weights)
+    if weights is None:
+        weights = fm.ones_like(array)
 
     if array.fm.ismodulated:
         array = fm.demodulate(array, reverse)
 
-    masked_array = np.ma.array(array, mask=np.isnan(array))
-    spec = np.ma.average(masked_array, axis=0, weights=weights).data
-    return fm.full_like(array[0].drop(array.fm.tcoords.keys()), spec)
+    if weights.fm.ismodulated:
+        weights = fm.demodulate(weights, reverse)
 
+    return (weights*array).sum('t') / weights.sum('t')
 
 def getnoiselevel(array, reverse=False, weights=None, function='mad'):
     """Compute the noise level of a spectrum created by `getspec`.
