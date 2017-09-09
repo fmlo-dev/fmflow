@@ -16,7 +16,7 @@ import fmflow as fm
 
 # module constants
 DATEFORMAT = '%Y-%m-%d %H:%M:%S'
-FORMAT = '{asctime} {name:25} [{levelname}] {message}'
+FORMAT = '{asctime} | {levelname:8} | {name}: {message}'
 
 
 # functions
