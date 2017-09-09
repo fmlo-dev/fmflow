@@ -7,7 +7,7 @@ __all__ = [
     'modulate',
     'getfreq',
     'getspec',
-    'getnoiselevel',
+    'getnoise',
     'mad',
     'ones',
     'zeros',
@@ -326,7 +326,8 @@ def getspec(array, reverse=False, weights=None):
 
     return (weights*array).sum('t') / weights.sum('t')
 
-def getnoiselevel(array, reverse=False, weights=None, function='mad'):
+
+def getnoise(array, reverse=False, weights=None, function='mad'):
     """Compute the noise level of a spectrum created by `getspec`.
 
     If the array is reverse-demodulated, or modulated and `reverse=True`,
