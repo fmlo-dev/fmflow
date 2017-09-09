@@ -21,18 +21,18 @@ class Convergence(object):
 
         self._reset_status()
 
-    def _reset_status(self):
-        self.n_iters = 0
-        self.value = None
-        self._cache = None
-
     @property
     def status(self):
         return {'value': self.value, 'n_iters': self.n_iters}
 
     @staticmethod
     def _compute(array_new, array_old):
-        return np.abs(norm(array_new-array_old) / norm(array_old))
+        return norm(array_new-array_old) / norm(array_old)
+
+    def _reset_status(self):
+        self.n_iters = 0
+        self.value = None
+        self._cache = None
 
     def __call__(self, array_new):
         self.n_iters += 1
