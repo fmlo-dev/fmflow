@@ -19,11 +19,12 @@ warnings.simplefilter('ignore', OptimizeWarning)
 # classes
 class AstroLines(object):
     def __init__(
-            self, function='gaussian', snr_threshold=5,
-            subtraction_gain=0.5, *, logger=None
+            self, function='gaussian', despiking=True,
+            snr_threshold=5, subtraction_gain=0.5, *, logger=None
         ):
         self.params = {
             'function': function,
+            'despiking': despiking,
             'snr_threshold': snr_threshold,
             'subtraction_gain': subtraction_gain,
         }
@@ -31,23 +32,20 @@ class AstroLines(object):
         self.logger = logger or fm.logger
 
     def fit(self, freq, spec, noise):
+        # model making
         if self.function == 'none':
-            return spec
+            model = spec.copy()
         elif self.function == 'cutoff':
             model = spec.copy()
-
-            # cutoff
-            mask = (spec/noise) < self.snr_threshold
-            model[mask] = 0.0
-
-            # despike
-            mask = (np.hstack([model[1:], 0])+np.hstack([0, model[:-1]])) == 0
-            model[mask] = 0.0
-
-            return model
+            model[spec/noise<self.snr_threshold] = 0.0
         else:
             func = getattr(fm.utils, self.function)
-            return self._fit(func, freq, spec, noise)
+            model = self._fit(func, freq, spec, noise)
+
+        if self.despiking:
+            model = self._despike(model, noise)
+
+        return model
 
     def _fit(self, func, freq, spec, noise):
         model = np.zeros_like(spec)
@@ -73,6 +71,11 @@ class AstroLines(object):
                 self.logger.warning('breaks with runtime error')
                 break
 
+        return model
+
+    def _despike(self, model, noise):
+        spec = np.hstack([model[1:],0]) + np.hstack([0,model[:-1]])
+        model[spec/noise<0.5*self.snr_threshold] = 0.0
         return model
 
     def __getattr__(self, name):
