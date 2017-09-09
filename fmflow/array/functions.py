@@ -346,29 +346,38 @@ def getnoiselevel(array, reverse=False, weights=None, function='mad'):
             The shape of it must be same as the input array.
         function (str, optional): A function name with which the noise level is computed.
             Default is 'mad' (median absolute deviation).
-            The other option is 'std' or 'sd' (standard deviation).
+            Other options are 'std' (standard deviation) and 'rms' (root mean square).
 
     Returns:
         spec (xarray.DataArray): An array of the noise level.
 
     Warning:
-        At this version, computing with weights (weighted MAD or SD) is
+        At this version, computing with weights (weighted MAD, SD, RMS) is
         not implemented yet. Thus the `weights` option does not work.
 
     """
-    if array.fm.isdemodulated:
-        array = fm.modulate(array)
-
-    n_values = fm.demodulate(fm.ones_like(array), reverse).sum('t')
+    if array.fm.ismodulated:
+        ones = fm.ones_like(array)
+        num = fm.demodulate(ones, reverse).sum('t')
+        array = fm.demodulate(array, reverse)
+    else:
+        ones = fm.ones_like(fm.modulate(array))
+        num = fm.demodulate(ones, reverse).sum('t')
 
     if function == 'mad':
-        mad = fm.mad(fm.demodulate(array, reverse), 't')
-        return MAD_TO_STD * mad / np.sqrt(n_values)
-    elif (function == 'std') or (function == 'sd'):
-        std = fm.demodulate(array, reverse).std('t')
-        return std / np.sqrt(n_values)
+        noise = MAD_TO_STD * fm.mad(array, 't') / np.sqrt(num)
+    elif function == 'std':
+        noise = array.std('t') / np.sqrt(num)
+    elif function == 'rms':
+        noise = np.sqrt((array**2).mean('t')) / np.sqrt(num)
     else:
         raise ValueError(function)
+
+    # edge treatments
+    noise[0] = noise[0] or noise[1]
+    noise[-1] = noise[-1] or noise[-2]
+
+    return noise
 
 
 def mad(array, dim=None, axis=None):
