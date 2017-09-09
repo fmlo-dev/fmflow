@@ -15,42 +15,28 @@ import numpy as np
 
 
 # functions
-@fm.chunk('array')
-def atmoslines(array, reverse=False, weights=None, output='tb', ch_tolerance=5):
+@fm.chunk('array', 'weights')
+def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance=5):
     params = locals()
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug(params)
 
     freq = fm.getfreq(array, reverse, unit='GHz').values
     spec = fm.getspec(array, reverse, weights=weights).values
+    noise = fm.getnoise(array, reverse, weights=weights).values
     vrad = array.vrad.values.mean()
-    model = fm.models.AtmosLines(ch_tolerance, logger=logger)
-    tau, tb = model.fit(freq, spec, vrad)
 
-    if output == 'tau':
-        logger.debug('output: tau')
-        return fm.full_like(array, tau)
-    elif output == 'tb':
-        logger.debug('output: tb')
-        return fm.full_like(array, tb)
-    else:
-        logger.error('invalid output')
-        raise ValueError(output)
+    model = fm.models.AtmosLines(snr_threshold, ch_tolerance, logger=logger)
+    tb = model.fit(freq, spec, noise, vrad)
+    return fm.full_like(array, tb)
 
 
-def computeam(array, output='tb'):
+def computeam(array, reverse=False):
     params = locals()
     logger = getLogger('fmflow.models.computeam')
     logger.debug(params)
 
-    freq = fm.getfreq(array, unit='GHz').values
+    freq = fm.getfreq(array, reverse, unit='GHz').values
     model = fm.models.AtmosLines(logger=logger)
-    tau, tb = model.generate(freq)
-
-    if output == 'tau':
-        return fm.full_like(array, tau)
-    elif output == 'tb':
-        return fm.full_like(array, tb)
-    else:
-        logger.error('invalid output')
-        raise ValueError(output)
+    tb = model.generate(freq)
+    return fm.full_like(array, tb)
