@@ -14,9 +14,9 @@ import numpy as np
 
 
 # functions
-@fm.chunk('array')
+@fm.chunk('array', 'weights')
 def astrolines(
-        array, weights=None, fit_function='gaussian',
+        array, reverse=False, weights=None, function='gaussian',
         snr_threshold=5, subtraction_gain=0.5
     ):
     params = locals()
@@ -24,12 +24,11 @@ def astrolines(
     logger.debug(params)
 
     model = fm.models.AstroLines(
-        fit_function, snr_threshold, subtraction_gain, logger=logger
+        function, snr_threshold, subtraction_gain, logger=logger
     )
 
-    freq = fm.getfreq(array, unit='GHz').values
-    spec = fm.getspec(array, weights=weights).values
-    nrms = fm.demodulate(fm.ones_like(array)).sum('t').values**-0.5
-    nrms /= np.min(nrms)
-    tb = model.fit(freq, spec, nrms)
+    freq  = fm.getfreq(array, reverse, unit='GHz').values
+    spec  = fm.getspec(array, reverse, weights=weights).values
+    noise = fm.getnoise(array, reverse, weights=weights).values
+    tb = model.fit(freq, spec, noise)
     return fm.full_like(array, tb)
