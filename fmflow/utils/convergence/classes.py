@@ -26,9 +26,13 @@ class Convergence(object):
         self._ndigits = round(-log10(threshold))
         self._reset_status()
 
+    @property
+    def status(self):
+        return {'n_iters': self.n_iters, 'value': self.value}
+
     def _judge(self, array_new, array_old):
         diff = norm(array_new-array_old) / norm(array_old)
-        value = round(Decimal(dif), self._ndigits)
+        value = round(Decimal(diff), self._ndigits)
         self.value = str(value)
         return value
 
