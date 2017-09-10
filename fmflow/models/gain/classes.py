@@ -15,7 +15,7 @@ from scipy.signal import savgol_filter
 # classes
 class Gain(object):
     def __init__(
-            self, include=['RF', 'LO'], ch_smooth=1,
+            self, include=['RF', 'LO'], ch_smooth=None,
             convergence=0.01, n_maxiters=100, *, logger=None
         ):
         if not set(include) <= {'RF', 'LO', 'IF'}:
