@@ -40,7 +40,9 @@ class Gain(object):
         ilogGrf = fm.zeros_like(ilogX)
 
         # convergence
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
+        cv = fm.utils.Convergence(
+            self.convergence, self.n_maxiters, raise_exception=True
+        )
 
         # algorithm
         try:
