@@ -20,7 +20,7 @@ warnings.simplefilter('ignore', OptimizeWarning)
 class AstroLines(object):
     def __init__(
             self, function='cutoff', despiking=True,
-            snr_threshold=3, subtraction_gain=0.5, *, logger=None
+            snr_threshold=5, subtraction_gain=0.5, *, logger=None
         ):
         self.params = {
             'function': function,
