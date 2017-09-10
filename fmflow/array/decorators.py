@@ -78,11 +78,6 @@ def chunk(*argnames, concatfunc=None):
 
     or you can set a global chunk parameter outside the function::
 
-        >>> @fm.chunk('array')
-        >>> def func(array):
-        ...     # do something
-        ...     return newarray
-        >>>
         >>> timechunk = 10
         >>> result = func(array)
 
