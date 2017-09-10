@@ -7,11 +7,11 @@ __all__ = [
 ]
 
 # standard library
-import sys
 from concurrent.futures import ProcessPoolExecutor
 from functools import wraps
 from inspect import Parameter, signature, stack
 from multiprocessing import cpu_count
+from sys import _getframe as getframe
 
 # dependent packages
 import fmflow as fm
@@ -76,15 +76,31 @@ def chunk(*argnames, concatfunc=None):
         >>>
         >>> result = func(array, timechunk=10)
 
+    or you can set a global chunk parameter outside the function::
+
+        >>> @fm.chunk('array')
+        >>> def func(array):
+        ...     # do something
+        ...     return newarray
+        >>>
+        >>> timechunk = 10
+        >>> result = func(array)
+
     """
     def _chunk(func):
+        depth = [s.function for s in stack()].index('<module>')
+        f_globals = getframe(depth).f_globals
+
+        # original (unwrapped) function
         orgname = '_original_' + func.__name__
         orgfunc = fm.utils.copy_function(func, orgname)
-        depth = [s.function for s in stack()].index('<module>')
-        sys._getframe(depth).f_globals[orgname] = orgfunc
+        f_globals[orgname] = orgfunc
 
         @wraps(func)
         def wrapper(*args, **kwargs):
+            depth = [s.function for s in stack()].index('<module>')
+            f_globals = getframe(depth).f_globals
+
             # parse args and kwargs
             params = signature(func).parameters
             for i, (key, val) in enumerate(params.items()):
@@ -97,11 +113,16 @@ def chunk(*argnames, concatfunc=None):
                     kwargs.setdefault(key, val.default)
 
             # n_chunks and n_processes
+            length = len(kwargs[argnames[0]])
             if 'numchunk' in kwargs:
                 n_chunks = kwargs.pop('numchunk', 1)
             elif 'timechunk' in kwargs:
-                length = len(kwargs[argnames[0]])
                 tchunk = kwargs.pop('timechunk', length)
+                n_chunks = round(length / tchunk)
+            elif 'numchunk' in f_globals:
+                n_chunks = f_globals['numchunk']
+            elif 'timechunk' in f_globals:
+                tchunk = f_globals['timechunk']
                 n_chunks = round(length / tchunk)
             else:
                 n_chunks = 1
