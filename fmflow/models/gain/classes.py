@@ -47,7 +47,7 @@ class Gain(object):
         # algorithm
         try:
             while not cv(ilogX-ilogGif-ilogGlo-ilogGrf):
-                self.logger.debug(cv.status)
+                self.logger.debug(cv)
                 ilogGif = self._estimate_ilogGif(ilogX-ilogGrf-ilogGlo)
                 ilogGlo = self._estimate_ilogGlo(ilogX-ilogGrf-ilogGif)
                 ilogGrf = self._estimate_ilogGrf(ilogX-ilogGif-ilogGlo)
