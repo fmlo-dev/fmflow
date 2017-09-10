@@ -16,7 +16,7 @@ import numpy as np
 # functions
 @fm.chunk('array', 'weights')
 def astrolines(
-        array, reverse=False, weights=None, function='gaussian',
+        array, reverse=False, weights=None, function='cutoff',
         despiking=True, snr_threshold=5, subtraction_gain=0.5
     ):
     params = locals()
