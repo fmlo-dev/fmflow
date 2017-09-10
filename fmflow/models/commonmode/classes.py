@@ -59,7 +59,7 @@ class EMPCA(object):
             _WX = W * X
             while not cv(C @ P):
                 WX = _WX.copy()
-                self.logger.debug(cv.status)
+                self.logger.debug(cv)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
                 if (self.ch_smooth is not None) and self.ch_smooth:
