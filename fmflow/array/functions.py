@@ -23,7 +23,7 @@ __all__ = [
 ]
 
 # standard library
-import uuid
+from uuid import uuid4
 
 # dependent packages
 import fmflow as fm
@@ -412,7 +412,7 @@ def save(array, filename=None):
         if array.name is not None:
             filename = array.name
         else:
-            filename = uuid.uuid4().hex[:8]
+            filename = uuid4().hex[:8]
 
     if not filename.endswith('.nc'):
         filename += '.nc'
