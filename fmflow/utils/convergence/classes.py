@@ -16,14 +16,17 @@ from numpy.linalg import norm
 
 # classes
 class Convergence(object):
-    def __init__(self, threshold=0.01, n_maxiters=100, *, raise_exception=False):
+    def __init__(self, threshold=0.01, n_maxiters=100,
+            *, reuse_instance=True, raise_exception=False
+        ):
         self.params = {
             'threshold': threshold,
             'n_maxiters': n_maxiters,
+            'reuse_instance': reuse_instance,
             'raise_exception': raise_exception,
         }
-
-        self._ndigits = round(-log10(threshold))
+        self._ndigits = round(-log10(threshold)) + 1
+        self._threshold = round(Decimal(threshold), self._ndigits)
         self._reset_status()
 
     @property
@@ -37,7 +40,9 @@ class Convergence(object):
         return value
 
     def _converged(self, raise_exception=False):
-        self._reset_status()
+        if self.reuse_instance:
+            self._reset_status()
+
         if raise_exception:
             raise StopIteration('reached maximum iteration')
         else:
@@ -61,9 +66,9 @@ class Convergence(object):
             return self._converged(self.raise_exception)
         elif np.all((array_new-array_old)==0):
             return self._converged()
-        elif not np.all(array_old!=0):
+        elif np.all(array_old==0):
             return self._not_converged()
-        elif self._judge(array_new, array_old) <= self.threshold:
+        elif self._judge(array_new, array_old) <= self._threshold:
             return self._converged()
         else:
             return self._not_converged()
