@@ -50,7 +50,9 @@ class EMPCA(object):
             raise ValueError(self.initialize)
 
         # convergence
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters, True)
+        cv = fm.utils.Convergence(
+            self.convergence, self.n_maxiters, raise_exception=True
+        )
 
         # EM algorithm
         try:
