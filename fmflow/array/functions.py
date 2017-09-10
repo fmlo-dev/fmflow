@@ -375,8 +375,7 @@ def getnoise(array, reverse=False, weights=None, function='mad'):
         raise ValueError(function)
 
     # edge treatments
-    noise[0] = noise[0] or noise[1]
-    noise[-1] = noise[-1] or noise[-2]
+    noise[noise==0] = np.inf
 
     return noise
 
