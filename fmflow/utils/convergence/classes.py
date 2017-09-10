@@ -5,6 +5,9 @@ __all__ = [
     'Convergence',
 ]
 
+# standard library
+from decimal import Decimal
+
 # dependent packages
 import numpy as np
 from numpy.linalg import norm
@@ -19,15 +22,16 @@ class Convergence(object):
             'raise_maxiters': raise_maxiters,
         }
 
+        self._ndigits = round(float(-np.log10(convergence)))
         self._reset_status()
 
     @property
     def status(self):
         return {'value': self.value, 'n_iters': self.n_iters}
 
-    @staticmethod
-    def _compute(array_new, array_old):
-        return norm(array_new-array_old) / norm(array_old)
+    def _compute(self, array_new, array_old):
+        diff = norm(array_new-array_old) / norm(array_old)
+        return round(Decimal(diff), self._ndigits)
 
     def _reset_status(self):
         self.n_iters = 0
@@ -50,7 +54,7 @@ class Convergence(object):
             return False
         else:
             self.value = self._compute(array_new, array_old)
-            if self.value < self.convergence:
+            if self.value <= self.convergence:
                 self._reset_status()
                 return True
             else:
