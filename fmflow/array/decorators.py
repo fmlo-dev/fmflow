@@ -110,9 +110,9 @@ def chunk(*argnames, concatfunc=None):
             # n_chunks and n_processes
             length = len(kwargs[argnames[0]])
             if 'numchunk' in kwargs:
-                n_chunks = kwargs.pop('numchunk', 1)
+                n_chunks = kwargs.pop('numchunk')
             elif 'timechunk' in kwargs:
-                tchunk = kwargs.pop('timechunk', length)
+                tchunk = kwargs.pop('timechunk')
                 n_chunks = round(length / tchunk)
             elif 'numchunk' in f_globals:
                 n_chunks = f_globals['numchunk']
@@ -122,7 +122,12 @@ def chunk(*argnames, concatfunc=None):
             else:
                 n_chunks = 1
 
-            n_processes = kwargs.pop('n_processes', MAX_WORKERS)
+            if 'n_processes' in kwargs:
+                n_processes = kwargs.pop('n_processes')
+            elif 'n_processes' in f_globals:
+                n_processes = f_globals['n_processes']
+            else:
+                n_processes = MAX_WORKERS
 
             # make chunked args
             chunks = {}
