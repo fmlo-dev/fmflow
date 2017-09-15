@@ -54,7 +54,7 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
     """
     # initialize coords with default values
     array = xr.DataArray(data, dims=('t', 'ch'), attrs=attrs, name=name)
-    array.fm._initcoords()
+    array.fma._initcoords()
 
     # update coords with input values (if any)
     if tcoords is not None:
@@ -199,7 +199,7 @@ def full_like(array, fill_value, reverse=False, dtype=None, keepmeta=True):
         try:
             return (fm.zeros_like(array) + fill_value).astype(dtype)
         except ValueError as err:
-            if array.fm.isdemodulated:
+            if array.fma.isdemodulated:
                 raise ValueError(err)
 
             array_ = fm.demodulate(array, reverse)
@@ -225,8 +225,8 @@ def empty_like(array, dtype=None, keepmeta=True):
     """
     if keepmeta:
         return fm.empty(array.shape, dtype,
-            tcoords=array.fm.tcoords, chcoords=array.fm.chcoords,
-            ptcoords=array.fm.ptcoords, attrs=array.attrs, name=array.name
+            tcoords=array.fma.tcoords, chcoords=array.fma.chcoords,
+            ptcoords=array.fma.ptcoords, attrs=array.attrs, name=array.name
         )
     else:
         return fm.empty(array.shape, dtype)
@@ -246,7 +246,7 @@ def demodulate(array, reverse=False):
         array (xarray.DataArray): A demodulated array.
 
     """
-    return array.fm.demodulate(reverse)
+    return array.fma.demodulate(reverse)
 
 
 def modulate(array):
@@ -261,7 +261,7 @@ def modulate(array):
         array (xarray.DataArray): A modulated array.
 
     """
-    return array.fm.modulate()
+    return array.fma.modulate()
 
 
 def getfreq(array, reverse=False, unit='GHz'):
@@ -283,16 +283,16 @@ def getfreq(array, reverse=False, unit='GHz'):
         freq (xarray.DataArray): An array of the observed frequency in given unit.
 
     """
-    if array.fm.ismodulated:
+    if array.fma.ismodulated:
         array = fm.demodulate(array, reverse)
 
-    if array.fm.isdemodulated_r:
+    if array.fma.isdemodulated_r:
         freq_Hz = array.fimg.values
     else:
         freq_Hz = array.fsig.values
 
     freq = (freq_Hz*u.Hz).to(getattr(u, unit)).value
-    return fm.full_like(array[0].drop(array.fm.tcoords.keys()), freq)
+    return fm.full_like(array[0].drop(array.fma.tcoords.keys()), freq)
 
 
 def getspec(array, reverse=False, weights=None):
@@ -318,10 +318,10 @@ def getspec(array, reverse=False, weights=None):
     if weights is None:
         weights = fm.ones_like(array)
 
-    if array.fm.ismodulated:
+    if array.fma.ismodulated:
         array = fm.demodulate(array, reverse)
 
-    if weights.fm.ismodulated:
+    if weights.fma.ismodulated:
         weights = fm.demodulate(weights, reverse)
 
     return (weights*array).sum('t') / weights.sum('t')
@@ -357,7 +357,7 @@ def getnoise(array, reverse=False, weights=None, function='mad'):
         not implemented yet. Thus the `weights` option does not work.
 
     """
-    if array.fm.ismodulated:
+    if array.fma.ismodulated:
         ones = fm.ones_like(array)
         num = fm.demodulate(ones, reverse).sum('t')
         array = fm.demodulate(array, reverse)
@@ -481,4 +481,4 @@ def chbinning(array, size=2):
     if set(array.dims) == {'t', 'ch'}:
         return binarray.squeeze()
     elif set(array.dims) == {'ch'}:
-        return binarray.squeeze().drop(binarray.fm.tcoords.keys())
+        return binarray.squeeze().drop(binarray.fma.tcoords.keys())
