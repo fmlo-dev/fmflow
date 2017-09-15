@@ -339,7 +339,7 @@ def make_obsinfo_sam45(hdus):
     data['offsetaz']  = np.tile(0.0, N) # not implemented yet
     data['offsetel']  = np.tile(0.0, N) # not implemented yet
     data['chtotaln']  = np.array(obsinfo['ichannel'])[flag]
-    data['chcenter']  = data['chtotaln']/2 - 0.5
+    data['chcenter']  = data['chtotaln']/2 + 0.5
     data['rfcenter']  = np.array(obsinfo['dcent_freq'])[flag]
     data['ifcenter']  = np.array(obsinfo['dflif'])[flag]
     data['ifcenter']  += np.array(obsinfo['dcent_freq'])[flag]
