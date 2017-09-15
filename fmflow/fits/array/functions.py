@@ -15,9 +15,13 @@ import numpy as np
 import fmflow as fm
 from astropy.io import fits
 
+# module constants
+f8 = 'f8'
+i8 = 'i8'
+
 
 # functions
-def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
+def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
     """Create a modulated array from a FMFITS.
 
     Args:
@@ -25,6 +29,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
         arrayid (str): An array ID with which the output fmarray is created.
         scantype (str): A scan type with which the output fmarray is created.
         offsetsec (float, optional): A float value of FM offset time in units of sec.
+        ignore_antennalog (bool, optional): Whether ignoring antenna log. Default is False.
 
     Returns:
         array (xarray.DataArray): A modulated array of the spacified `arrayid` and `scantype`.
@@ -51,13 +56,13 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
         }
 
         # chcoords
-        step = info['chanwidth']
-        start = info['restfreq'] - step*info['restchan']
-        end = start + step*info['numchan']
+        step = info['chwidth']
+        start = info['rfcenter'] - step*(info['chcenter']-1)
+        end = start + step*info['chtotaln']
 
         chcoords = {
             'fsig': np.arange(start, end, step),
-            'fimg': np.arange(start, end, step)[::-1] - 2*info['intmfreq'],
+            'fimg': np.arange(start, end, step)[::-1] - 2*info['ifcenter'],
         }
 
         # tcoords and flags
@@ -67,21 +72,22 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
             t, flag_fmlo, flag_be, flag_ant = makeflags(f, arrayid, scantype, offsetsec)
 
             tcoords.update({
-                'fmch': (fmlo['FMFREQ'][flag_fmlo]/step).astype(int),
-                'vrad': fmlo['VRAD'][flag_fmlo].astype('float64'),
+                'fmch': (fmlo['FMFREQ'][flag_fmlo]/step).astype(i8),
+                'vrad': fmlo['VRAD'][flag_fmlo].astype(f8),
                 'time': t,
             })
 
             if 'antenna' in f:
-                tcoords.update({
-                    'xrel': ant['RA'][flag_ant] - ptcoords['xref'],
-                    'yrel': ant['DEC'][flag_ant] - ptcoords['yref'],
-                })
+                if not ignore_antennalog:
+                    tcoords.update({
+                        'x': ant['RA'][flag_ant],
+                        'y': ant['DEC'][flag_ant],
+                    })
         else:
             flag_be = (be['arrayid']==arrayid) & (be['scantype']==scantype)
 
         # finally
-        data = be['arraydata'][flag_be].astype('float64')
+        data = be['arraydata'][flag_be].astype(f8)
         array = fm.array(data, tcoords, chcoords, ptcoords)
 
         if scantype == 'ON':
@@ -90,7 +96,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0):
             return array.squeeze().drop(array.fm.tcoords.keys())
 
 
-def makeflags(f, arrayid, scantype, offsetsec=0.0):
+def makeflags(f, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
     p = fm.utils.DatetimeParser(False)
     c = lambda dt: np.vectorize(p)(np.asarray(dt))
     t_list = []
@@ -109,9 +115,10 @@ def makeflags(f, arrayid, scantype, offsetsec=0.0):
 
     # antenna
     if 'antenna' in f:
-        ant = f['antenna'].data
-        t_ant = c(ant['starttime'])
-        t_list.append(t_ant)
+        if not ignore_antennalog:
+            ant = f['antenna'].data
+            t_ant = c(ant['starttime'])
+            t_list.append(t_ant)
 
     # time and flags
     t_com = reduce(np.intersect1d, t_list)
