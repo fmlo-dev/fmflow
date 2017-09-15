@@ -19,9 +19,9 @@ from scipy.interpolate import interp1d
 TCOORDS = lambda size=0: OrderedDict([
     ('fmch', ('t', np.zeros(size, dtype=int))),
     ('vrad', ('t', np.zeros(size, dtype=float))),
-    ('xrel', ('t', np.zeros(size, dtype=float))),
-    ('yrel', ('t', np.zeros(size, dtype=float))),
     ('time', ('t', np.tile(datetime(2000,1,1), size))),
+    ('x',    ('t', np.zeros(size, dtype=float))),
+    ('y',    ('t', np.zeros(size, dtype=float))),
 ])
 
 CHCOORDS = lambda size=0: OrderedDict([
