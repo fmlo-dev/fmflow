@@ -21,12 +21,18 @@ from astropy.io import fits
 from tqdm import tqdm
 
 # module constants
-BAR_FORMAT  = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
-C           = constants.c.value # spped of light in vacuum
-D_ASTE      = (10.0 * u.m).value # diameter of the ASTE
-EFF_8257D   = 0.92 # exposure / interval time of Agilent 8257D
-IGNORED_KEY = '^[a-z]dmy([^_]|$)' # cdmy, cdmy2, ..., except for idmy_flag
-LAT_ASTE    = coordinates.Angle('-22d58m17.69447s').deg # latitude of the ASTE
+C                = constants.c.value # spped of light in vacuum
+D_ASTE           = (10.0 * u.m).value # diameter of the ASTE
+LON_ASTE         = coordinates.Angle('-67d42m11.89525s').deg # longitude of the ASTE
+LAT_ASTE         = coordinates.Angle('-22d58m17.69447s').deg # latitude of the ASTE
+EFF_8257D        = 0.92 # exposure / interval time of Agilent 8257D
+IGNORED_KEY      = '^[a-z]dmy([^_]|$)' # cdmy, cdmy2, ..., except for idmy_flag
+CONF_OBSINFO     = get_data('fmflow', 'fits/data/obsinfo.yaml')
+CONF_FMLOLOG     = get_data('fmflow', 'fits/data/aste_fmlolog.yaml')
+CONF_BACKEND_COM = get_data('fmflow', 'fits/data/aste_backendlog_common.yaml')
+CONF_BACKEND_MAC = get_data('fmflow', 'fits/data/aste_backendlog_mac.yaml')
+CONF_ANTENNA     = get_data('fmflow', 'fits/data/aste_antennalog.yaml')
+BAR_FORMAT       = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
 
 
 # functions
@@ -85,7 +91,7 @@ def read_fmlolog(fmlolog):
     fmlolog = Path(fmlolog).expanduser()
 
     # read fmlolog
-    fmts = yaml.load(get_data('fmflow', 'fits/data/aste_fmlolog.yaml'))
+    fmts = yaml.load(CONF_FMLOLOG)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -115,7 +121,7 @@ def read_antennalog(antennalog):
     antennalog = Path(antennalog).expanduser()
 
     # read antennalog
-    fmts = yaml.load(get_data('fmflow', 'fits/data/aste_antennalog.yaml'))
+    fmts = yaml.load(CONF_ANTENNA)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -138,6 +144,8 @@ def read_antennalog(antennalog):
     header['filename'] = str(antennalog)
 
     cols = [fits.Column(n, tforms[i], units[i], array=d[n]) for i, n in enumerate(names)]
+    cols.append(fits.Column('az', 'D', 'deg', array=d['az_real']))
+    cols.append(fits.Column('el', 'D', 'deg', array=d['el_real']))
     cols.append(fits.Column('ra', 'D', 'deg', array=ra_real))
     cols.append(fits.Column('dec', 'D', 'deg', array=dec_real))
     cols.append(fits.Column('ra_error', 'D', 'deg', array=ra_error))
@@ -162,7 +170,7 @@ def check_backend(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_common.yaml'))
+    com = yaml.load(CONF_BACKEND_COM)
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
 
@@ -191,8 +199,8 @@ def read_backendlog_mac(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_common.yaml'))
-    mac = yaml.load(get_data('fmflow', 'fits/data/aste_backendlog_mac.yaml'))
+    com = yaml.load(CONF_BACKEND_COM)
+    mac = yaml.load(CONF_BACKEND_MAC)
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
     obs  = fm.utils.CStructReader(mac['obs'], IGNORED_KEY, byteorder)
@@ -312,14 +320,16 @@ def make_obsinfo_mac(hdus):
     p = fm.utils.DatetimeParser()
     flag = np.array(obsinfo['iary_usefg'], dtype=bool)
 
-    fmts = yaml.load(get_data('fmflow', 'fits/data/obsinfo.yaml'))
+    fmts = yaml.load(CONF_OBSINFO)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
     header = fits.Header()
     header['extname']  = 'OBSINFO'
-    header['fitstype'] = 'FMFITS'
+    header['fitstype'] = 'FMFITSv0'
     header['telescop'] = 'ASTE'
+    header['sitelon']  = LON_ASTE
+    header['sitelat']  = LAT_ASTE
     header['date-obs'] = p(obsinfo['clog_id'])[:-3]
     header['observer'] = obsinfo['cobs_user']
     header['object']   = obsinfo['cobj_name']
@@ -333,15 +343,19 @@ def make_obsinfo_mac(hdus):
     data['sideband']  = np.array(obsinfo['csid_type'])[flag]
     data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
     data['backend']   = np.tile(ctlinfo['cbe_type'], N)
-    data['numchan']   = np.tile(obsinfo['ichanel'], N)
-    data['restchan']  = np.tile(obsinfo['ichanel'], N)/2 - 0.5
-    data['restfreq']  = np.array(obsinfo['dcent_freq'])[flag]
-    data['intmfreq']  = np.array(obsinfo['dflif'])[flag]
+    data['offsetaz']  = np.tile(0.0, N) # not implemented yet
+    data['offsetel']  = np.tile(0.0, N) # not implemented yet
+    data['chtotaln']  = np.tile(obsinfo['ichanel'], N)
+    data['chcenter']  = data['chtotaln']/2 + 0.5
+    data['rfcenter']  = np.array(obsinfo['dcent_freq'])[flag]
+    data['ifcenter']  = np.array(obsinfo['dflif'])[flag]
+    data['ifcenter']  += np.array(obsinfo['dcent_freq'])[flag]
+    data['ifcenter']  -= np.array(obsinfo['dtrk_freq'])[flag]
+    data['chwidth']   = np.array(obsinfo['dbechwid'])[flag]
     data['bandwidth'] = np.array(obsinfo['dbebw'])[flag]
-    data['chanwidth'] = np.array(obsinfo['dbechwid'])[flag]
     data['interval']  = np.tile(obsinfo['diptim'], N)
-    data['integtime'] = np.tile(obsinfo['diptim']*EFF_8257D, N)
-    data['beamsize']  = np.rad2deg(1.2*C/D_ASTE) / data['restfreq']
+    data['integtime'] = data['interval'] * EFF_8257D
+    data['beamsize']  = np.rad2deg(1.2*C/D_ASTE) / data['rfcenter']
 
     cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
     return fits.BinTableHDU.from_columns(cols, header)
