@@ -60,7 +60,7 @@ class Convergence(object):
         self.n_iters += 1
         self.cache, array_old = array_new.copy(), self.cache
 
-        if self.n_iters == 1:
+        if self.n_iters == 1 and self.n_maxiters != 0:
             return self._not_converged()
         elif self.n_iters > self.n_maxiters:
             return self._converged(self.raise_exception)
