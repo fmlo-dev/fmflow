@@ -4,10 +4,12 @@ __version__ = '0.0'
 __author__  = 'snoopython'
 
 from . import utils
-from .array import *
+from .core import *
 from .logging import *
 from . import fits
 from . import models
+del core
+del logging
 
 # default logger
 import logging
