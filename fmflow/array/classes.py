@@ -38,17 +38,17 @@ PTCOORDS = OrderedDict([
 
 
 # classes
-@xr.register_dataarray_accessor('fm')
-class FMAccessor(object):
+@xr.register_dataarray_accessor('fma')
+class FMArrayAccessor(object):
     def __init__(self, array):
-        """Initialize the FM accessor of an array.
+        """Initialize the FM array accessor of an array.
 
         Note:
             This method is only for the internal use.
-            Users can create an array with FM accessor using fm.array.
+            Users can create an array with FM array accessor using fm.array.
 
         Args:
-            array (xarray.DataArray): An array to which FM accessor is added.
+            array (xarray.DataArray): An array to which FM array accessor is added.
 
         """
         self._array = array
@@ -58,7 +58,7 @@ class FMAccessor(object):
 
         This method is only available when the array is modulated.
         It is equivalent to the fm.demodulate function (recommended to use).
-        i.e. array.fm.demodulate(reverse) <=> fm.demodulate(array, reverse)
+        i.e. array.fma.demodulate(reverse) <=> fm.demodulate(array, reverse)
 
         Args:
             reverse (bool, optional): If True, the array is reverse-demodulated
@@ -69,7 +69,7 @@ class FMAccessor(object):
 
         """
         if self.isdemodulated:
-            raise FMError('already demodulated')
+            raise FMArrayError('already demodulated')
 
         fmch = [1, -1][reverse] * self.fmch.values
         newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
@@ -103,14 +103,14 @@ class FMAccessor(object):
 
         This method is only available when the array is demodulated.
         It is equivalent to the fm.modulate function (recommended to use).
-        i.e. array.fm.modulate() <=> fm.modulate(array)
+        i.e. array.fma.modulate() <=> fm.modulate(array)
 
         Returns:
             array (xrray.DataArray): A modulated array.
 
         """
         if self.ismodulated:
-            raise FMError('already modulated')
+            raise FMArrayError('already modulated')
 
         fmch = self.fmch.values.copy()
         lextch = np.max([0, np.min(self.chid.values)])
@@ -186,11 +186,11 @@ class FMAccessor(object):
         self.coords.update(PTCOORDS)
 
     def __getattr__(self, name):
-        """array.fm.name <=> array.name"""
+        """array.fma.name <=> array.name"""
         return getattr(self._array, name)
 
 
-class FMError(Exception):
+class FMArrayError(Exception):
     """Error class of frequency modulation."""
     def __init__(self, message):
         self.message = message

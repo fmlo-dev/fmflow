@@ -17,13 +17,14 @@ from numpy.linalg import norm
 # classes
 class Convergence(object):
     def __init__(self, threshold=0.01, n_maxiters=100,
-            *, reuse_instance=True, raise_exception=False
+            *, reuse_instance=True, raise_exception=False, display_status=True
         ):
         self.params = {
             'threshold': threshold,
             'n_maxiters': n_maxiters,
             'reuse_instance': reuse_instance,
             'raise_exception': raise_exception,
+            'display_status': display_status,
         }
         self._ndigits = round(-log10(threshold)) + 1
         self._threshold = round(Decimal(threshold), self._ndigits)
@@ -33,7 +34,7 @@ class Convergence(object):
     def status(self):
         return {'n_iters': self.n_iters, 'value': self.value}
 
-    def _judge(self, array_new, array_old):
+    def _calc(self, array_new, array_old):
         diff = norm(array_new-array_old) / norm(array_old)
         value = round(Decimal(diff), self._ndigits)
         self.value = str(value)
@@ -68,7 +69,7 @@ class Convergence(object):
             return self._converged()
         elif np.all(array_old==0):
             return self._not_converged()
-        elif self._judge(array_new, array_old) <= self._threshold:
+        elif self._calc(array_new, array_old) <= self._threshold:
             return self._converged()
         else:
             return self._not_converged()
@@ -77,4 +78,7 @@ class Convergence(object):
         return self.params[name]
 
     def __repr__(self):
-        return str(self.status)
+        if self.display_status:
+            return str(self.status)
+        else:
+            return str(self.params)

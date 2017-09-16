@@ -6,9 +6,9 @@ __all__ = [
 ]
 
 # standard library
-import os
 import warnings
 from subprocess import PIPE, run
+from pkgutil import get_data
 
 # dependent packages
 import yaml
@@ -22,14 +22,10 @@ warnings.simplefilter('ignore', OptimizeWarning)
 
 # module constants
 C = constants.c.value
-DATA_DIR = os.path.join(fm.__path__[0], 'models', 'data')
-
-# am settings
 AMCMD = ['am', '-']
-with open(os.path.join(DATA_DIR, 'am.yaml')) as f:
-    am = yaml.load(f)
-    AMCONFIG = am['config']
-    AMLAYERS = am['layers']
+AMDATA = get_data('fmflow', 'models/data/am.yaml')
+AMCONFIG = yaml.load(AMDATA)['config']
+AMLAYERS = yaml.load(AMDATA)['layers']
 
 
 # classes
