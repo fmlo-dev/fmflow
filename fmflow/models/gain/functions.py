@@ -31,4 +31,4 @@ def rgain(Gon):
 
     iGon = fm.models.Gain.to_ilogX(Gon)
     gr = iGon[iGon.fmch==0][0].values
-    return fm.full_like(Gon[0].drop(Gon.fm.tcoords.keys()), gr)
+    return fm.full_like(Gon[0].drop(Gon.fma.tcoords.keys()), gr)
