@@ -28,7 +28,7 @@ def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance
 
     model = fm.models.AtmosLines(snr_threshold, ch_tolerance, logger=logger)
     tb = model.fit(freq, spec, noise, vrad)
-    return fm.full_like(array, tb)
+    return fm.full_like(array, tb, reverse)
 
 
 def computeam(array, reverse=False):
