@@ -93,7 +93,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False
         if scantype == 'ON':
             return array.squeeze()
         else:
-            return array.squeeze().drop(array.fm.tcoords.keys())
+            return array.squeeze().drop(array.fma.tcoords.keys())
 
 
 def makeflags(f, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
