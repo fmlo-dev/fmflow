@@ -23,7 +23,7 @@ warnings.simplefilter('ignore', OptimizeWarning)
 # module constants
 C = constants.c.value
 AMCMD = ['am', '-']
-AMDATA = get_data('fmflow', 'models/data/am.yaml')
+AMDATA = get_data('fmflow', 'data/am.yaml')
 AMCONFIG = yaml.load(AMDATA)['config']
 AMLAYERS = yaml.load(AMDATA)['layers']
 

@@ -27,11 +27,11 @@ LON_ASTE         = coordinates.Angle('-67d42m11.89525s').deg # longitude of the 
 LAT_ASTE         = coordinates.Angle('-22d58m17.69447s').deg # latitude of the ASTE
 EFF_8257D        = 0.92 # exposure / interval time of Agilent 8257D
 IGNORED_KEY      = '^[a-z]dmy([^_]|$)' # cdmy, cdmy2, ..., except for idmy_flag
-CONF_OBSINFO     = get_data('fmflow', 'fits/data/obsinfo.yaml')
-CONF_FMLOLOG     = get_data('fmflow', 'fits/data/aste_fmlolog.yaml')
-CONF_BACKEND_COM = get_data('fmflow', 'fits/data/aste_backendlog_common.yaml')
-CONF_BACKEND_MAC = get_data('fmflow', 'fits/data/aste_backendlog_mac.yaml')
-CONF_ANTENNA     = get_data('fmflow', 'fits/data/aste_antennalog.yaml')
+CONF_OBSINFO     = get_data('fmflow', 'data/obsinfo.yaml')
+CONF_FMLOLOG     = get_data('fmflow', 'data/aste_fmlolog.yaml')
+CONF_BACKEND_COM = get_data('fmflow', 'data/aste_backendlog_common.yaml')
+CONF_BACKEND_MAC = get_data('fmflow', 'data/aste_backendlog_mac.yaml')
+CONF_ANTENNA     = get_data('fmflow', 'data/aste_antennalog.yaml')
 BAR_FORMAT       = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
 
 

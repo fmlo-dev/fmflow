@@ -27,11 +27,11 @@ LON_NRO45m       = coordinates.Angle('+138d28m21.2s').deg # longitude of the NRO
 LAT_NRO45m       = coordinates.Angle('+35d56m40.9s').deg # latitude of the NRO45m
 EFF_8257D        = 0.92 # exposure / interval time of Agilent 8257D
 IGNORED_KEY      = '^reserve' # reserved[1|4|8]
-CONF_OBSINFO     = get_data('fmflow', 'fits/data/obsinfo.yaml')
-CONF_FMLOLOG     = get_data('fmflow', 'fits/data/nro45m_fmlolog.yaml')
-CONF_BACKEND_COM = get_data('fmflow', 'fits/data/nro45m_backendlog_common.yaml')
-CONF_BACKEND_SAM = get_data('fmflow', 'fits/data/nro45m_backendlog_sam45.yaml')
-CONF_ANTENNA     = get_data('fmflow', 'fits/data/nro45m_antennalog.yaml')
+CONF_OBSINFO     = get_data('fmflow', 'data/obsinfo.yaml')
+CONF_FMLOLOG     = get_data('fmflow', 'data/nro45m_fmlolog.yaml')
+CONF_BACKEND_COM = get_data('fmflow', 'data/nro45m_backendlog_common.yaml')
+CONF_BACKEND_SAM = get_data('fmflow', 'data/nro45m_backendlog_sam45.yaml')
+CONF_ANTENNA     = get_data('fmflow', 'data/nro45m_antennalog.yaml')
 BAR_FORMAT       = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
 
 # functions
