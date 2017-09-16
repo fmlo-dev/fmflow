@@ -31,4 +31,4 @@ def astrolines(
     spec  = fm.getspec(array, reverse, weights=weights).values
     noise = fm.getnoise(array, reverse, weights=weights).values
     tb = model.fit(freq, spec, noise)
-    return fm.full_like(array, tb)
+    return fm.full_like(array, tb, reverse)
