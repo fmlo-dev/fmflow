@@ -38,7 +38,7 @@ MAD_TO_STD = (np.sqrt(2) * erfinv(0.5))**-1
 
 # functions
 def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=None):
-    """Create a modulated array as an instance of xarray.DataArray with FM accessor.
+    """Create a modulated array as an instance of xarray.DataArray with FM array accessor.
 
     Args:
         data (numpy.ndarray): A 2D (time x channel) array.
@@ -58,10 +58,10 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
 
     # update coords with input values (if any)
     if tcoords is not None:
-        array.coords.update({key: ('t', tcoords[key]) for key in tcoords})
+        array.coords.update({key: ('t', val) for key, val in tcoords.items()})
 
     if chcoords is not None:
-        array.coords.update({key: ('ch', chcoords[key]) for key in chcoords})
+        array.coords.update({key: ('ch', val) for key, val in chcoords.items()})
 
     if ptcoords is not None:
         array.coords.update(ptcoords)
