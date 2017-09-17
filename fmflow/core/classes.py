@@ -41,14 +41,14 @@ PTCOORDS = OrderedDict([
 @xr.register_dataarray_accessor('fma')
 class FMArrayAccessor(object):
     def __init__(self, array):
-        """Initialize the FM array accessor of an array.
+        """Initialize the FM array accessor.
 
         Note:
             This method is only for the internal use.
-            Users can create an array with FM array accessor using fm.array.
+            User can create an array with this accessor using `fm.array`.
 
         Args:
-            array (xarray.DataArray): An array to which FM array accessor is added.
+            array (xarray.DataArray): An array to which this accessor is added.
 
         """
         self._array = array
@@ -140,6 +140,8 @@ class FMArrayAccessor(object):
         tcoords.update({'fmch': fmch})
         chcoords.update({'fsig': fsig, 'fimg': fimg})
         ptcoords.update({'status': status})
+        chcoords.pop('chid')
+        ptcoords.pop('chno')
 
         return fm.array(data, tcoords, chcoords, ptcoords)
 
@@ -161,17 +163,17 @@ class FMArrayAccessor(object):
     @property
     def tcoords(self):
         """A dictionary of arrays that label time axis."""
-        return {key: getattr(self, key).values for key in TCOORDS()}
+        return {key: val.values for key, val in self.coords.items() if val.dims==('t',)}
 
     @property
     def chcoords(self):
         """A dictionary of arrays that label channel axis."""
-        return {key: getattr(self, key).values for key in CHCOORDS()}
+        return {key: val.values for key, val in self.coords.items() if val.dims==('ch',)}
 
     @property
     def ptcoords(self):
         """A dictionary of values that don't label any axes (point-like)."""
-        return {key: getattr(self, key).item() for key in PTCOORDS}
+        return {key: val.values for key, val in self.coords.items() if val.dims==()}
 
     def _initcoords(self):
         """Initialize coords with default values.
@@ -186,12 +188,12 @@ class FMArrayAccessor(object):
         self.coords.update(PTCOORDS)
 
     def __getattr__(self, name):
-        """array.fma.name <=> array.name"""
+        """array.fma.name <=> array.name for the internal use."""
         return getattr(self._array, name)
 
 
 class FMArrayError(Exception):
-    """Error class of frequency modulation."""
+    """Error class of FM array."""
     def __init__(self, message):
         self.message = message
 
