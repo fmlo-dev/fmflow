@@ -3,8 +3,8 @@
 # public items
 __all__ = [
     'spectrum',
-    'makespectrum',
-    'castspectrum',
+    'tospectrum',
+    'fromspectrum',
 ]
 
 # dependent packages
