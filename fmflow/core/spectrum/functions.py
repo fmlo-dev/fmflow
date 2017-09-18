@@ -42,7 +42,7 @@ def spectrum(data, chcoords=None, ptcoords=None, attrs=None, name=None):
     return spectrum
 
 
-def makespectrum(array, weights=None, reverse=False):
+def tospectrum(array, weights=None, reverse=False):
     """Create a spectrum from an array.
 
     Args:
