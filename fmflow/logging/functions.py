@@ -59,7 +59,7 @@ def setloglevel(level='INFO', *, logger=None):
         level (str or int): A logging level. Default is 'INFO'.
         logger (logging.Logger, optional): A logger. Default is `fm.logger`.
 
-    References
+    References:
         https://docs.python.jp/3/library/logging.html#logging-levels
 
     """
