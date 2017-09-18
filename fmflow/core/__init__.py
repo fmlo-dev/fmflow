@@ -6,3 +6,5 @@ from .functions import *
 del classes
 del decorators
 del functions
+
+from .spectrum import *
