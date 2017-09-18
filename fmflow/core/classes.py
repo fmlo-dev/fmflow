@@ -38,8 +38,48 @@ PTCOORDS = OrderedDict([
 
 
 # classes
+class BaseAccessor(object):
+    def __init__(self, dataarray):
+        """Initialize the base accessor."""
+        self._dataarray = dataarray
+
+    def __getattr__(self, name):
+        """self._dataarray.name <=> self.name."""
+        return getattr(self._dataarray, name)
+
+    @property
+    def isdemodulated(self):
+        """Whether the array is demodulated (regardless of reverse)."""
+        return bool(re.search('^DEMODULATED', str(self.status.values)))
+
+    @property
+    def isdemodulated_r(self):
+        """Whether the array is reverse-demodulated."""
+        return bool(re.search('^DEMODULATED-', str(self.status.values)))
+
+    @property
+    def ismodulated(self):
+        """Whether the array is modulated."""
+        return bool(re.search('^MODULATED', str(self.status.values)))
+
+    @property
+    def tcoords(self):
+        """A dictionary of arrays that label time axis."""
+        return {key: val.values for key, val in self.coords.items() if val.dims==('t',)}
+
+    @property
+    def chcoords(self):
+        """A dictionary of arrays that label channel axis."""
+        return {key: val.values for key, val in self.coords.items() if val.dims==('ch',)}
+
+    @property
+    def ptcoords(self):
+        """A dictionary of values that don't label any axes (point-like)."""
+        return {key: val.values for key, val in self.coords.items() if val.dims==()}
+
+
 @xr.register_dataarray_accessor('fma')
-class FMArrayAccessor(object):
+class FMArrayAccessor(BaseAccessor):
     def __init__(self, array):
         """Initialize the FM array accessor.
 
@@ -51,7 +91,7 @@ class FMArrayAccessor(object):
             array (xarray.DataArray): An array to which this accessor is added.
 
         """
-        self._array = array
+        super().__init__(array)
 
     def demodulate(self, reverse=False):
         """Create a demodulated array from the modulated one.
@@ -145,36 +185,6 @@ class FMArrayAccessor(object):
 
         return fm.array(data, tcoords, chcoords, ptcoords)
 
-    @property
-    def isdemodulated(self):
-        """Whether the array is demodulated (regardless of reverse)."""
-        return bool(re.search('^DEMODULATED', self.status.values.item()))
-
-    @property
-    def isdemodulated_r(self):
-        """Whether the array is reverse-demodulated."""
-        return bool(re.search('^DEMODULATED-', self.status.values.item()))
-
-    @property
-    def ismodulated(self):
-        """Whether the array is modulated."""
-        return bool(re.search('^MODULATED', self.status.values.item()))
-
-    @property
-    def tcoords(self):
-        """A dictionary of arrays that label time axis."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==('t',)}
-
-    @property
-    def chcoords(self):
-        """A dictionary of arrays that label channel axis."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==('ch',)}
-
-    @property
-    def ptcoords(self):
-        """A dictionary of values that don't label any axes (point-like)."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==()}
-
     def _initcoords(self):
         """Initialize coords with default values.
 
@@ -186,10 +196,6 @@ class FMArrayAccessor(object):
         self.coords.update(TCOORDS(self.shape[0]))
         self.coords.update(CHCOORDS(self.shape[1]))
         self.coords.update(PTCOORDS)
-
-    def __getattr__(self, name):
-        """array.fma.name <=> array.name for the internal use."""
-        return getattr(self._array, name)
 
 
 class FMArrayError(Exception):
