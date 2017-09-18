@@ -111,10 +111,14 @@ class FMArrayAccessor(BaseAccessor):
         if self.isdemodulated:
             raise FMArrayError('already demodulated')
 
-        fmch = [1, -1][reverse] * self.fmch.values
+        # demodulate data
+
+        fmch = self.fmch.values.copy()
+        if reverse:
+            fmch *= -1
+
         newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
 
-        # demodulate data
         if np.ptp(fmch) != 0:
             data = np.full(newshape, np.nan)
             data[:,:-np.ptp(fmch)] = self.values
@@ -123,11 +127,15 @@ class FMArrayAccessor(BaseAccessor):
             data = self.values.copy()
 
         # update coords
+        if reverse:
+            status = 'DEMODULATED-'
+        else:
+            status = 'DEMODULATED+'
+
         chno = self.shape[1]
         chid = np.arange(np.min(fmch), np.min(fmch)+newshape[1])
         fsig = interp1d(np.arange(chno), self.fsig, fill_value='extrapolate')(chid)
         fimg = interp1d(np.arange(chno), self.fimg, fill_value='extrapolate')(chid)
-        status = 'DEMODULATED' + ['+', '-'][reverse]
 
         tcoords  = deepcopy(self.tcoords)
         chcoords = deepcopy(self.chcoords)
@@ -152,6 +160,7 @@ class FMArrayAccessor(BaseAccessor):
         if self.ismodulated:
             raise FMArrayError('already modulated')
 
+        # modulate data
         fmch = self.fmch.values.copy()
         lextch = np.max([0, np.min(self.chid.values)])
         rextch = np.max([0, np.min((self.chno-self.chid).values)])
@@ -159,7 +168,6 @@ class FMArrayAccessor(BaseAccessor):
         extchid = np.arange(np.min(self.chid)-lextch, np.max(self.chid)+rextch+1)
         newchid = np.arange(self.chno)
 
-        # modulate data
         if np.ptp(fmch) != 0:
             data = np.full(extshape, np.nan)
             data[:,lextch:extshape[1]-rextch] = self.values
@@ -168,11 +176,13 @@ class FMArrayAccessor(BaseAccessor):
         else:
             data = self.values.copy()
 
+        if self.isdemodulated_r:
+            fmch *= -1
+
         # update coords
-        fmch *= eval('{}1'.format(self.status.item()[-1]))
+        status = 'MODULATED'
         fsig = interp1d(self.chid, self.fsig, fill_value='extrapolate')(newchid)
         fimg = interp1d(self.chid, self.fimg, fill_value='extrapolate')(newchid)
-        status = 'MODULATED'
 
         tcoords  = deepcopy(self.tcoords)
         chcoords = deepcopy(self.chcoords)
