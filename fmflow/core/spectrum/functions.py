@@ -58,7 +58,7 @@ def tospectrum(array, weights=None, reverse=False):
     return array.fms.fromarray(array, weights, reverse)
 
 
-def castspectrum(spectrum, array):
+def fromspectrum(spectrum, array):
     """Create an array filled with the spectrum.
 
     Args:
