@@ -3,11 +3,14 @@
 # public items
 __all__ = [
     'copy_function',
+    'get_filename',
     'one_thread_per_process',
 ]
 
 # standard library
+import tkinter
 from contextlib import contextmanager
+from tkinter.filedialog import askopenfilename
 from types import CodeType, FunctionType
 
 
@@ -52,6 +55,15 @@ def copy_function(func, name=None):
     )
     newfunc.__dict__.update(func.__dict__)
     return newfunc
+
+
+def get_filename():
+    """Get filename by a dialog window."""
+    root = tkinter.Tk()
+    root.withdraw()
+    filename = askopenfilename()
+    root.quit()
+    return filename
 
 
 @contextmanager
