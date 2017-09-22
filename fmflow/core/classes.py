@@ -65,17 +65,17 @@ class BaseAccessor(object):
     @property
     def tcoords(self):
         """A dictionary of arrays that label time axis."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==('t',)}
+        return {k: v.values for k, v in self.coords.items() if v.dims==('t',)}
 
     @property
     def chcoords(self):
         """A dictionary of arrays that label channel axis."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==('ch',)}
+        return {k: v.values for k, v in self.coords.items() if v.dims==('ch',)}
 
     @property
     def ptcoords(self):
         """A dictionary of values that don't label any axes (point-like)."""
-        return {key: val.values for key, val in self.coords.items() if val.dims==()}
+        return {k: v.values for k, v in self.coords.items() if v.dims==()}
 
 
 @xr.register_dataarray_accessor('fma')
