@@ -16,17 +16,17 @@ import xarray as xr
 from scipy.interpolate import interp1d
 
 # module constants
-TCOORDS = lambda size=0: OrderedDict([
-    ('fmch', ('t', np.zeros(size, dtype=int))),
-    ('vrad', ('t', np.zeros(size, dtype=float))),
-    ('time', ('t', np.tile(datetime(2000,1,1), size))),
-    ('x',    ('t', np.zeros(size, dtype=float))),
-    ('y',    ('t', np.zeros(size, dtype=float))),
+TCOORDS = lambda array: OrderedDict([
+    ('fmch', ('t', np.zeros(array.shape[0], dtype=int))),
+    ('vrad', ('t', np.zeros(array.shape[0], dtype=float))),
+    ('x',    ('t', np.zeros(array.shape[0], dtype=float))),
+    ('y',    ('t', np.zeros(array.shape[0], dtype=float))),
+    ('time', ('t', np.full(array.shape[0], datetime(2000,1,1)))),
 ])
 
-CHCOORDS = lambda size=0: OrderedDict([
-    ('fsig', ('ch', np.zeros(size, dtype=float))),
-    ('fimg', ('ch', np.zeros(size, dtype=float))),
+CHCOORDS = lambda array: OrderedDict([
+    ('fsig', ('ch', np.zeros(array.shape[1], dtype=float))),
+    ('fimg', ('ch', np.zeros(array.shape[1], dtype=float))),
 ])
 
 PTCOORDS = OrderedDict([
@@ -203,8 +203,8 @@ class FMArrayAccessor(BaseAccessor):
             This forcibly replaces all vaules of coords with default ones.
 
         """
-        self.coords.update(TCOORDS(self.shape[0]))
-        self.coords.update(CHCOORDS(self.shape[1]))
+        self.coords.update(TCOORDS(self))
+        self.coords.update(CHCOORDS(self))
         self.coords.update(PTCOORDS)
 
 
