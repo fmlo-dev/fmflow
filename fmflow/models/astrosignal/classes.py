@@ -32,6 +32,10 @@ class AstroLines(object):
         self.logger = logger or fm.logger
 
     def fit(self, freq, spec, noise):
+        freq  = np.asarray(freq)
+        spec  = np.asarray(spec)
+        noise =  np.asarray(noise)
+
         # model making
         if self.function == 'none':
             model = spec.copy()
