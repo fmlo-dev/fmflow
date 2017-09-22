@@ -21,14 +21,12 @@ def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug(params)
 
-    freq = fm.getfreq(array, reverse, unit='GHz').values
-    spec = fm.getspec(array, reverse, weights=weights).values
-    noise = fm.getnoise(array, reverse, weights=weights).values
-    vrad = array.vrad.values.mean()
-
     model = fm.models.AtmosLines(snr_threshold, ch_tolerance, logger=logger)
-    tb = model.fit(freq, spec, noise, vrad)
-    return fm.full_like(array, tb, reverse)
+
+    spec = fm.tospectrum(array, weights, reverse)
+    vrad = array.vrad.values.mean()
+    spec[:] = model.fit(1e-9*spec.freq, spec, spec.noise, vrad)
+    return fm.fromspectrum(spec, array)
 
 
 def computeam(array, reverse=False):
@@ -36,7 +34,8 @@ def computeam(array, reverse=False):
     logger = getLogger('fmflow.models.computeam')
     logger.debug(params)
 
-    freq = fm.getfreq(array, reverse, unit='GHz').values
     model = fm.models.AtmosLines(logger=logger)
-    tb = model.generate(freq)
-    return fm.full_like(array, tb)
+
+    spec = fm.tospectrum(array, None, reverse)
+    spec[:] = model.generate(1e-9*spec.freq)
+    return fm.fromspectrum(spec, array)
