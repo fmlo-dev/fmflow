@@ -15,18 +15,18 @@ import xarray as xr
 from ..classes import BaseAccessor
 
 # module constants
-CHCOORDS = lambda size=0: OrderedDict([
-    ('chid', ('ch', np.arange(size, dtype=int))),
-    ('freq', ('ch', np.zeros(size, dtype=float))),
-    ('noise', ('ch', np.zeros(size, dtype=float))),
+CHCOORDS = lambda array: OrderedDict([
+    ('chid',  ('ch', np.zeros(array.shape[0], dtype=int))),
+    ('freq',  ('ch', np.zeros(array.shape[0], dtype=float))),
+    ('noise', ('ch', np.zeros(array.shape[0], dtype=float))),
 ])
 
-PTCOORDS = lambda size=0: OrderedDict([
+PTCOORDS = OrderedDict([
     ('status', 'DEMODULATED+'),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
     ('yref', 0.0),
-    ('chno', size),
+    ('chno', 0]),
 ])
 
 
@@ -124,8 +124,8 @@ class FMSpectrumAccessor(BaseAccessor):
             This forcibly replaces all vaules of coords with default ones.
 
         """
-        self.coords.update(CHCOORDS(self.shape[0]))
-        self.coords.update(PTCOORDS(self.shape[0]))
+        self.coords.update(CHCOORDS(self))
+        self.coords.update(PTCOORDS)
 
 
 class FMSpectrumError(Exception):
