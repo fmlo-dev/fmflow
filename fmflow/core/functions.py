@@ -5,9 +5,9 @@ __all__ = [
     'array',
     'demodulate',
     'modulate',
-    'getfreq',
-    'getspec',
-    'getnoise',
+    # 'getfreq',
+    # 'getspec',
+    # 'getnoise',
     'mad',
     'ones',
     'zeros',
@@ -251,122 +251,6 @@ def modulate(array):
 
     """
     return array.fma.modulate()
-
-
-def getfreq(array, reverse=False, unit='GHz'):
-    """Compute the observed frequency of given unit.
-
-    If the array is reverse-demodulated, or modulated and `reverse=True`,
-    this function returns `fimg` (the observed frequency of image sideband).
-    Otherwise, this function returns `fsig` (that of signal sideband).
-
-    Args:
-        array (xarray.DataArray): An array. If it is modulated, then this function
-            demodulates it with `reverse` option before computing the observed frequency.
-        reverse (bool, optional): If True, and if the array is modulated, then
-            the array is reverse-demodulated (i.e. -1 * fmch is used for demodulation).
-            Default is False.
-        unit (str, optional): An unit of the observed frequency. Default is GHz.
-
-    Returns:
-        freq (xarray.DataArray): An array of the observed frequency in given unit.
-
-    """
-    if array.fma.ismodulated:
-        array = fm.demodulate(array, reverse)
-
-    if array.fma.isdemodulated_r:
-        freq_Hz = array.fimg.values
-    else:
-        freq_Hz = array.fsig.values
-
-    freq = (freq_Hz*u.Hz).to(getattr(u, unit)).value
-    return fm.full_like(array[0].drop(array.fma.tcoords.keys()), freq)
-
-
-def getspec(array, reverse=False, weights=None):
-    """Compute the time-averaged spectrum.
-
-    If the array is reverse-demodulated, or modulated and `reverse=True`,
-    this function computes the spectrum of image sideband.
-    Otherwise, this function computes that of signal sideband.
-
-    Args:
-        array (xarray.DataArray): An array. If it is modulated, then this function
-            demodulates it with `reverse` option before computing the spectrum.
-        reverse (bool, optional): If True, and if the array is modulated, then
-            the array is reverse-demodulated (i.e. -1 * fmch is used for demodulation).
-            Default is False.
-        weights (xarray.DataArray, optional): An array of weights associated with the array.
-            The shape of it must be same as the input array.
-
-    Returns:
-        spec (xarray.DataArray): An array of the time-averaged spectrum.
-
-    """
-    if weights is None:
-        weights = fm.ones_like(array)
-
-    if array.fma.ismodulated:
-        array = fm.demodulate(array, reverse)
-
-    if weights.fma.ismodulated:
-        weights = fm.demodulate(weights, reverse)
-
-    return (weights*array).sum('t') / weights.sum('t')
-
-
-def getnoise(array, reverse=False, weights=None, function='mad'):
-    """Compute the noise level of a spectrum created by `getspec`.
-
-    If the array is reverse-demodulated, or modulated and `reverse=True`,
-    this function computes the noise level of image sideband.
-    Otherwise, this function computes that of signal sideband.
-
-    By default, noise level is computed by MAD (median absolute deviation)
-    which is a robust measure of the variability of data.
-
-    Args:
-        array (xarray.DataArray): An array. If it is modulated, then this function
-            demodulates it with `reverse` option before computing the spectrum.
-        reverse (bool, optional): If True, and if the array is modulated, then
-            the array is reverse-demodulated (i.e. -1 * fmch is used for demodulation).
-            Default is False.
-        weights (xarray.DataArray, optional): An array of weights associated with the array.
-            The shape of it must be same as the input array.
-        function (str, optional): A function name with which the noise level is computed.
-            Default is 'mad' (median absolute deviation).
-            Other options are 'std' (standard deviation) and 'rms' (root mean square).
-
-    Returns:
-        spec (xarray.DataArray): An array of the noise level.
-
-    Warning:
-        At this version, computing with weights (weighted MAD, SD, RMS) is
-        not implemented yet. Thus the `weights` option does not work.
-
-    """
-    if array.fma.ismodulated:
-        ones = fm.ones_like(array)
-        num = fm.demodulate(ones, reverse).sum('t')
-        array = fm.demodulate(array, reverse)
-    else:
-        ones = fm.ones_like(fm.modulate(array))
-        num = fm.demodulate(ones, reverse).sum('t')
-
-    if function == 'mad':
-        noise = MAD_TO_STD * fm.mad(array, 't') / np.sqrt(num)
-    elif function == 'std':
-        noise = array.std('t') / np.sqrt(num)
-    elif function == 'rms':
-        noise = np.sqrt((array**2).mean('t')) / np.sqrt(num)
-    else:
-        raise ValueError(function)
-
-    # edge treatments
-    noise[noise==0] = np.inf
-
-    return noise
 
 
 def mad(array, dim=None, axis=None):
