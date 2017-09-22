@@ -76,7 +76,7 @@ class FMSpectrumAccessor(BaseAccessor):
         noise /= np.sqrt((~np.isnan(array)).sum('t'))
 
         # freq
-        if reverse:
+        if array.fma.isdemodulated_r:
             freq = array.fimg
         else:
             freq = array.fsig
