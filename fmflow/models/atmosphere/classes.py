@@ -45,6 +45,10 @@ class AtmosLines(object):
         self.logger = logger or fm.logger
 
     def fit(self, freq, spec, noise, vrad=0.0):
+        freq  = np.asarray(freq)
+        spec  = np.asarray(spec)
+        noise =  np.asarray(noise)
+
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
 
@@ -61,6 +65,8 @@ class AtmosLines(object):
             return tb
 
     def generate(self, freq, vrad=0.0):
+        freq  = np.asarray(freq)
+
         frad = np.median(freq) * vrad/C
         return self._generate(freq-frad, logger=self.logger)
 
