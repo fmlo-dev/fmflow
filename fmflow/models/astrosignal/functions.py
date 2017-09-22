@@ -27,8 +27,6 @@ def astrolines(
         function, despiking, snr_threshold, subtraction_gain, logger=logger
     )
 
-    freq  = fm.getfreq(array, reverse, unit='GHz').values
-    spec  = fm.getspec(array, reverse, weights=weights).values
-    noise = fm.getnoise(array, reverse, weights=weights).values
-    tb = model.fit(freq, spec, noise)
-    return fm.full_like(array, tb, reverse)
+    spec = fm.tospectrum(array, weights, reverse)
+    spec[:] = model.fit(1e-9*spec.freq, spec, spec.noise)
+    return fm.fromspectrum(spec, array)
