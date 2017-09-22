@@ -77,9 +77,9 @@ class FMSpectrumAccessor(BaseAccessor):
 
         # freq
         if reverse:
-            freq = array.fsig
-        else:
             freq = array.fimg
+        else:
+            freq = array.fsig
 
         # coords
         chcoords = deepcopy(array.fma.chcoords)
