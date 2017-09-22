@@ -175,17 +175,13 @@ def ones_like(array, dtype=None, keepmeta=True):
         return fm.ones(array.shape, dtype)
 
 
-def full_like(array, fill_value, reverse=False, dtype=None, keepmeta=True):
+def full_like(array, fill_value, dtype=None, keepmeta=True):
     """Create an array of `fill_value` with the same shape and type as the input array.
 
     Args:
         array (xarray.DataArray): The shape and data-type of it define
             these same attributes of the output array.
-        fill_value (scalar or numpy.ndarray): Fill value or array. If broadcast
-            is failed, then try to compute this function in demodulated space.
-        reverse (bool, optional): If True, and if the array is modulated, then
-            the array is reverse-demodulated in the case of computing this
-            function in demodulated space. Default is False.
+        fill_value (scalar or numpy.ndarray or xarray.DataArray): Fill value or array.
         dtype (data-type, optional): If spacified, this function overrides
             the data-type of the output array.
         keepmeta (bool, optional): Whether *coords, attrs, and name of the input
@@ -196,14 +192,7 @@ def full_like(array, fill_value, reverse=False, dtype=None, keepmeta=True):
 
     """
     if keepmeta:
-        try:
-            return (fm.zeros_like(array) + fill_value).astype(dtype)
-        except ValueError as err:
-            if array.fma.isdemodulated:
-                raise ValueError(err)
-
-            array_ = fm.demodulate(array, reverse)
-            return fm.modulate(fm.zeros_like(array_) + fill_value).astype(dtype)
+        return (fm.zeros_like(array) + fill_value).astype(dtype)
     else:
         return fm.full(array.shape, fill_value, dtype)
 
