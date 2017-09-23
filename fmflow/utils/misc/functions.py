@@ -4,6 +4,7 @@
 __all__ = [
     'copy_function',
     'get_filename',
+    'ignore_numpy_errors',
     'one_thread_per_process',
 ]
 
@@ -12,6 +13,9 @@ import tkinter
 from contextlib import contextmanager
 from tkinter.filedialog import askopenfilename
 from types import CodeType, FunctionType
+
+# dependent packages
+import numpy as np
 
 
 # function
@@ -67,6 +71,26 @@ def get_filename():
 
 
 @contextmanager
+def ignore_numpy_errors():
+    """Return a context manager where all numpy errors are ignored.
+
+    This function is intended to be used as a with statement like::
+
+        >>> with ignore_numpy_errors():
+        ...     np.arange(10) / 0 # no errors are displayed
+
+    """
+    old_settings = np.seterr(all='ignore')
+
+    try:
+        # execute nested block in the with statement
+        yield
+    finally:
+        # revert to the original value
+        np.seterr(**old_settings)
+
+
+@contextmanager
 def one_thread_per_process():
     """Return a context manager where only one thread is allocated to a process.
 
@@ -91,7 +115,7 @@ def one_thread_per_process():
         n_threads = mkl.get_max_threads()
         mkl.set_num_threads(1)
         try:
-            # block nested in the with statement
+            # execute nested block in the with statement
             yield
         finally:
             # revert to the original value
