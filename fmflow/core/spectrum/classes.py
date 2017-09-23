@@ -26,7 +26,7 @@ PTCOORDS = OrderedDict([
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
     ('yref', 0.0),
-    ('chno', 0]),
+    ('chno', 0),
 ])
 
 
