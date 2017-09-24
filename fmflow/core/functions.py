@@ -335,7 +335,7 @@ def chbinning(array, size=2):
         raise ValueError('ch shape cannot be divided by size')
 
     binshape = shape[0], int(shape[1]/size)
-    binarray = fm.zeros(binshape)
+    binarray = fm.zeros(binshape, tcoords=array.fma.tcoords, ptcoords=array.fma.ptcoords)
 
     # binning of data
     binarray.values = array.values.reshape([*binshape, size]).mean(2)
