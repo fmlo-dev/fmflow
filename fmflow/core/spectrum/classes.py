@@ -68,12 +68,12 @@ class FMSpectrumAccessor(BaseAccessor):
         if weights.fma.ismodulated:
             weights = fm.demodulate(weights, reverse)
 
-        # data (spectrum by weighted mean)
-        data = (weights*array).sum('t') / weights.sum('t')
+        # weighted mean and square mean
+        mean1 = (weights*array).sum('t') / weights.sum('t')
+        mean2 = (weights*array**2).sum('t') / weights.sum('t')
 
-        # noise (by weighted rms)
-        noise = np.sqrt((weights*array**2).sum('t') / weights.sum('t'))
-        noise /= np.sqrt((~np.isnan(array)).sum('t'))
+        # noise (weighted std)
+        noise = ((mean2-mean1**2) / (~np.isnan(array)).sum('t'))**0.5
 
         # freq
         if array.fma.isdemodulated_r:
@@ -86,7 +86,7 @@ class FMSpectrumAccessor(BaseAccessor):
         ptcoords = deepcopy(array.fma.ptcoords)
         chcoords.update({'freq': freq.values, 'noise': noise.values})
 
-        return fm.spectrum(data.values, chcoords, ptcoords)
+        return fm.spectrum(mean1.values, chcoords, ptcoords)
 
     def toarray(self, array):
         """Create an array filled with the spectrum.
