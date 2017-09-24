@@ -308,9 +308,11 @@ def load(filename, copy=True):
     if dataarray.name is None:
         dataarray.name = filename.rstrip('.nc')
 
-    for coord in dataarray.coords:
-        if dataarray[coord].dtype.kind == 'S':
-            dataarray[coord] = dataarray[coord].astype('U')
+    for key, val in dataarray.coords.items():
+        if val.dtype.kind == 'S':
+            dataarray[key] = val.astype('U')
+        elif val.dtype == np.int32:
+            dataarray[key] = val.astyoe('i8')
 
     return dataarray
 
