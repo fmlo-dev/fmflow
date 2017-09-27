@@ -3,7 +3,6 @@
 # public items
 __all__ = [
     'ongain',
-    'rgain',
 ]
 
 # standard library
@@ -21,12 +20,3 @@ def ongain(Pon, polyorders=[1,2,3], convergence=0.001, n_maxiters=100):
 
     model = fm.models.ONGain(polyorders, convergence, n_maxiters, logger=logger)
     return model.fit(Pon)
-
-def rgain(Gon):
-    params = locals()
-    logger = getLogger('fmflow.models.rgain')
-    logger.debug(params)
-
-    iGon = fm.models.Gain.to_ilogX(Gon)
-    gr = iGon[iGon.fmch==0][0].values
-    return fm.full_like(Gon[0].drop(Gon.fma.tcoords.keys()), gr)
