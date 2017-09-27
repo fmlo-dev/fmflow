@@ -8,36 +8,32 @@ __all__ = [
 # dependent packages
 import fmflow as fm
 import numpy as np
+from numpy.polynomial.polynomial import polyfit, polyval
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
+savgol_filter = fm.numpyfunc(savgol_filter)
 
 
 # classes
 class Gain(object):
-    def __init__(
-            self, include=['RF', 'LO'], ch_smooth=None,
-            convergence=0.01, n_maxiters=100, *, logger=None
-        ):
-        if not set(include) <= {'RF', 'LO', 'IF'}:
-            raise ValueError(include)
-
+    def __init__(self, polyorders=[1,2,3], convergence=0.001, n_maxiters=100, logger=None):
         self.params = {
-            'include': include,
-            'ch_smooth': ch_smooth,
+            'polyorders': polyorders,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
-
+        self.outputs = {}
         self.logger = logger or fm.logger
 
-    def fit(self, X):
-        logX = np.log10(X)
-        ilogX = self.to_ilogX(logX)
+    def fit(self, Pon):
+        logG = np.log10(Pon)
+        ilogG = self.to_ilogG(logG)
 
         # initial arrays
-        ilogGif = fm.zeros_like(ilogX[0])
-        ilogGlo = fm.zeros_like(ilogX[:,0])
-        ilogGrf = fm.zeros_like(ilogX)
+        ilogGif = ilogG[ilogG.fmch==0].mean('t')
+        ilogGlo_offset = fm.zeros_like(ilogG)
+        ilogGlo_slopes = fm.zeros_like(ilogG)
+        ilogGlo = ilogGlo_offset + ilogGlo_slopes
 
         # convergence
         cv = fm.utils.Convergence(
@@ -46,59 +42,51 @@ class Gain(object):
 
         # algorithm
         try:
-            while not cv(ilogX-ilogGif-ilogGlo-ilogGrf):
+            while not cv(ilogGlo):
                 self.logger.debug(cv)
-                ilogGif = self._estimate_ilogGif(ilogX-ilogGrf-ilogGlo)
-                ilogGlo = self._estimate_ilogGlo(ilogX-ilogGrf-ilogGif)
-                ilogGrf = self._estimate_ilogGrf(ilogX-ilogGif-ilogGlo)
+                ilogGlo_offset = self.estimate_offset(ilogG-ilogGif-ilogGlo_slopes)
+                ilogGlo_slopes = self.estimate_slopes(ilogG-ilogGif-ilogGlo_offset)
+                ilogGlo = ilogGlo_offset + ilogGlo_slopes
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
-        # return result
-        ilogG = fm.zeros_like(ilogX)
+        # save outputs
+        self.outputs['ilogG'] = ilogG
+        self.outputs['ilogGif'] = ilogGif
+        self.outputs['ilogGlo_offset'] = ilogGlo_offset
+        self.outputs['ilogGlo_slopes'] = ilogGlo_slopes
+        self.outputs['ilogG_residual'] = ilogG - ilogGif - ilogGlo
 
-        if 'RF' in self.include:
-            ilogG += ilogGrf
+        return fm.full_like(logG, 10**self.to_logG(ilogGlo))
 
-        if 'LO' in self.include:
-            ilogG += ilogGlo
+    def estimate_offset(self, logG):
+        fmch = logG.fmch.values
+        offset = logG.mean('ch')
+        offset -= offset[fmch==0].values
+        return offset
 
-        if 'IF' in self.include:
-            ilogG += ilogGif
-
-        logG = self.to_logX(ilogG)
-        return fm.full_like(logX, 10**(logG.values))
+    def estimate_slopes(self, logG):
+        fmch = logG.fmch.values
+        popt = polyfit(fmch, logG, self.polyorders)
+        slopes = fm.full_like(logG, polyval(fmch, popt).T)
+        return slopes
 
     @staticmethod
-    def to_ilogX(logX):
-        bfmch = logX.fmch.values.tobytes()
-        ifmch = np.arange(logX.fmch.min(), logX.fmch.max()+1)
+    def to_ilogG(logG):
+        bfmch = logG.fmch.values.tobytes()
+        ifmch = np.arange(logG.fmch.min(), logG.fmch.max()+1)
 
-        glogX = logX.groupby('fmch').mean('t')
-        interp = interp1d(glogX.fmch, glogX, axis=0)
+        glogG = logG.groupby('fmch').mean('t')
+        interp = interp1d(glogG.fmch, glogG, axis=0)
         return fm.array(interp(ifmch), {'fmch': ifmch}, {}, {'bfmch': bfmch})
 
     @staticmethod
-    def to_logX(ilogX):
-        ifmch = ilogX.fmch.values
-        fmch = np.fromstring(ilogX.bfmch.values, int)
+    def to_logG(ilogG):
+        ifmch = ilogG.fmch.values
+        fmch = np.fromstring(ilogG.bfmch.values, int)
 
-        interp = interp1d(ifmch, ilogX, axis=0)
+        interp = interp1d(ifmch, ilogG, axis=0)
         return fm.array(interp(fmch), {'fmch': fmch})
-
-    def _estimate_ilogGif(self, ilogX):
-        return ilogX.mean('t')
-
-    def _estimate_ilogGlo(self, ilogX):
-        ilogGlo = ilogX.mean('ch')
-        return ilogGlo-ilogGlo.mean()
-
-    def _estimate_ilogGrf(self, ilogX):
-        ilogGrf = fm.getspec(ilogX)
-        if (self.ch_smooth is not None) and self.ch_smooth:
-            ilogGrf = savgol_filter(ilogGrf, self.ch_smooth, polyorder=3)
-
-        return fm.full_like(ilogX, ilogGrf-ilogGrf.mean())
 
     def __getattr__(self, name):
         return self.params[name]
