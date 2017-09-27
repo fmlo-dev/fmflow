@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'Gain',
+    'ONGain',
 ]
 
 # dependent packages
@@ -15,7 +15,7 @@ savgol_filter = fm.numpyfunc(savgol_filter)
 
 
 # classes
-class Gain(object):
+class ONGain(object):
     def __init__(self, polyorders=[1,2,3], convergence=0.001, n_maxiters=100, logger=None):
         self.params = {
             'polyorders': polyorders,
