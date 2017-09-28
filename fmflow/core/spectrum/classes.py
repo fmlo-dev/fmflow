@@ -72,9 +72,11 @@ class FMSpectrumAccessor(BaseAccessor):
         # weighted mean and square mean
         mean1 = (weights*array).sum('t') / weights.sum('t')
         mean2 = (weights*array**2).sum('t') / weights.sum('t')
+        num   = (~np.isnan(array)).sum('t')
 
         # noise (weighted std)
-        noise = ((mean2-mean1**2) / (~np.isnan(array)).sum('t'))**0.5
+        noise = ((mean2-mean1**2) / num)**0.5
+        noise[num<=2] = np.inf # edge treatment
 
         # freq
         if array.fma.isdemodulated_r:
