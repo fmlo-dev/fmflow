@@ -312,7 +312,7 @@ def load(filename, copy=True):
         if val.dtype.kind == 'S':
             dataarray[key] = val.astype('U')
         elif val.dtype == np.int32:
-            dataarray[key] = val.astyoe('i8')
+            dataarray[key] = val.astype('i8')
 
     return dataarray
 
