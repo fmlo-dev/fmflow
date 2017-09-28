@@ -17,9 +17,8 @@ import numpy as np
 # functions
 @fm.chunk('array', 'weights')
 def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance=5):
-    params = locals()
     logger = getLogger('fmflow.models.atmoslines')
-    logger.debug(params)
+    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     model = fm.models.AtmosLines(snr_threshold, ch_tolerance, logger=logger)
 
@@ -30,9 +29,8 @@ def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance
 
 
 def computeam(array, reverse=False):
-    params = locals()
     logger = getLogger('fmflow.models.computeam')
-    logger.debug(params)
+    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     model = fm.models.AtmosLines(logger=logger)
 
