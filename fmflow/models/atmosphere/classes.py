@@ -32,9 +32,9 @@ AMLAYERS = yaml.load(AMDATA)['layers']
 class AtmosLines(object):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
-    freq = None
-    taus = None
-    tbs = None
+    amfreqs = []
+    amtaus = []
+    amtbs = []
 
     def __init__(self, snr_threshold=5, ch_tolerance=5, *, logger=None):
         self.params = {
@@ -72,29 +72,39 @@ class AtmosLines(object):
 
     @classmethod
     def _fit(cls, freq, spec, *, logger=None):
-        try:
-            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
-        except:
+        for amfreq, amtb in zip(cls.amfreqs, cls.amtbs):
+            try:
+                tb = interp1d(amfreq, amtb, axis=1)(freq)
+                break
+            except:
+                continue
+        else:
             cls._compute(freq, logger=logger)
-            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+            amfreq, amtb = cls.amfreqs[-1], cls.amtbs[-1]
+            tb = interp1d(amfreq, amtb, axis=1)(freq)
 
         def func(freq, *coeffs):
             coeffs = np.asarray(coeffs)
-            return (coeffs[:, np.newaxis]*tbs).sum(0)
+            return (coeffs[:, np.newaxis]*tb).sum(0)
 
-        p0, bounds = np.full(len(tbs), 0.5), (0.0, 1.0)
+        p0, bounds = np.full(len(tb), 0.5), (0.0, 1.0)
         coeffs = curve_fit(func, freq, spec, p0, bounds=bounds)
         return func(freq, *coeffs[0])
 
     @classmethod
     def _generate(cls, freq, *, logger=None):
-        try:
-            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
-        except:
+        for amfreq, amtb in zip(cls.amfreqs, cls.amtbs):
+            try:
+                tb = interp1d(amfreq, amtb, axis=1)(freq)
+                break
+            except:
+                continue
+        else:
             cls._compute(freq, logger=logger)
-            tbs = interp1d(cls.freq, cls.tbs, axis=1)(freq)
+            amfreq, amtb = cls.amfreqs[-1], cls.amtbs[-1]
+            tb = interp1d(amfreq, amtb, axis=1)(freq)
 
-        return tbs.sum(0)
+        return tb.sum(0)
 
     @classmethod
     def _compute(cls, freq, *, logger=None):
@@ -108,7 +118,7 @@ class AtmosLines(object):
         logger.info('this may take several minutes')
         logger.debug(params)
 
-        amtaus, amtbs = [], []
+        amtau, amtb = [], []
         n_layers = len(cls.amlayers)
         for n in range(n_layers):
             logger.debug('computing am layer {0}/{1}'.format(n+1, n_layers))
@@ -119,12 +129,12 @@ class AtmosLines(object):
 
             stdout = cp.stdout.decode('utf-8')
             output = np.loadtxt(stdout.split('\n'))
-            amtaus.append(output[:, 1])
-            amtbs.append(output[:, 2])
+            amtau.append(output[:, 1])
+            amtb.append(output[:, 2])
 
-        cls.freq = output[:, 0]
-        cls.taus = np.array(amtaus)
-        cls.tbs = np.array(amtbs) - 2.7
+        cls.amfreqs.append(output[:, 0])
+        cls.amtaus.append(np.array(amtau))
+        cls.amtbs.append(np.array(amtb)-2.7)
         logger.info('computing finished')
 
     def __getattr__(self, name):
