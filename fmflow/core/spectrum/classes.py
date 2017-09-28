@@ -46,11 +46,10 @@ class FMSpectrumAccessor(BaseAccessor):
         """
         super().__init__(spectrum)
 
-    def fromarray(self, array, weights=None, reverse=False):
-        """Create a spectrum from an array.
+    def fromarray(self, weights=None, reverse=False):
+        """Create a spectrum from the array.
 
         Args:
-            array (xarray.DataArray): An array.
             weights (xarray.DataArray, optional): A weight array.
             reverse (bool, optional): If True, the array is reverse-demodulated
                 (i.e. -1 * fmch is used for demodulation). Default is False.
@@ -59,6 +58,8 @@ class FMSpectrumAccessor(BaseAccessor):
             spectrum (xarray.DataArray): A spectrum.
 
         """
+        array = self._dataarray.copy()
+
         if weights is None:
             weights = fm.ones_like(array)
 
