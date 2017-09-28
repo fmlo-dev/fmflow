@@ -47,6 +47,14 @@ class BaseAccessor(object):
         """self._dataarray.name <=> self.name."""
         return getattr(self._dataarray, name)
 
+    def __setstate__(self, state):
+        """A method used for pickling."""
+        self.__dict__ = state
+
+    def __getstate__(self):
+        """A method used for unpickling."""
+        return self.__dict__
+
     @property
     def isdemodulated(self):
         """Whether the array is demodulated (regardless of reverse)."""
