@@ -16,8 +16,8 @@ import numpy as np
 # functions
 @fm.chunk('array', 'weights')
 def astrolines(
-        array, reverse=False, weights=None, function='cutoff',
-        despiking=True, snr_threshold=5, subtraction_gain=0.5
+        array, weights=None, reverse=False, function='gaussian',
+        despiking=False, snr_threshold=5, subtraction_gain=0.5
     ):
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug({k:v for k,v in locals().items() if k!='logger'})
