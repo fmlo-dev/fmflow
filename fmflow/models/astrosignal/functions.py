@@ -19,9 +19,8 @@ def astrolines(
         array, reverse=False, weights=None, function='cutoff',
         despiking=True, snr_threshold=5, subtraction_gain=0.5
     ):
-    params = locals()
     logger = getLogger('fmflow.models.atmoslines')
-    logger.debug(params)
+    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     model = fm.models.AstroLines(
         function, despiking, snr_threshold, subtraction_gain, logger=logger
