@@ -52,9 +52,8 @@ def empca(
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    params = locals()
     logger = getLogger('fmflow.models.empca')
-    logger.debug(params)
+    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     model = fm.models.EMPCA(
         n_components, initialize, random_seed,
