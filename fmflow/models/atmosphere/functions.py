@@ -34,6 +34,15 @@ def computeam(array, reverse=False):
 
     model = fm.models.AtmosLines(logger=logger)
 
-    spec = fm.tospectrum(array, None, reverse)
-    spec[:] = model.generate(1e-9*spec.freq)
-    return fm.fromspectrum(spec, array)
+    # signal sideband
+    spec_s = fm.tospectrum(array, None, reverse=False)
+    spec_s[:] = model.generate(1e-9*spec_s.freq)
+
+    # image sideband
+    spec_i = fm.tospectrum(array, None, reverse=True)
+    spec_i[:] = model.generate(1e-9*spec_i.freq)
+
+    if reverse:
+        return fm.fromspectrum(spec_i, array)
+    else:
+        return fm.fromspectrum(spec_s, array)
