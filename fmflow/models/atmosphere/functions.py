@@ -16,7 +16,7 @@ import numpy as np
 
 # functions
 @fm.chunk('array', 'weights')
-def atmoslines(array, reverse=False, weights=None, snr_threshold=5, ch_tolerance=5):
+def atmoslines(array, weights=None, reverse=False, snr_threshold=5, ch_tolerance=5):
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
@@ -35,11 +35,11 @@ def computeam(array, reverse=False):
     model = fm.models.AtmosLines(logger=logger)
 
     # signal sideband
-    spec_s = fm.tospectrum(array, None, reverse=False)
+    spec_s = fm.tospectrum(array, reverse=False)
     spec_s[:] = model.generate(1e-9*spec_s.freq)
 
     # image sideband
-    spec_i = fm.tospectrum(array, None, reverse=True)
+    spec_i = fm.tospectrum(array, reverse=True)
     spec_i[:] = model.generate(1e-9*spec_i.freq)
 
     if reverse:
