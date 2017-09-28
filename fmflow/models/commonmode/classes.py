@@ -17,7 +17,7 @@ from scipy.signal import savgol_filter
 class EMPCA(object):
     def __init__(
             self, n_components=20, initialize='random', random_seed=None,
-            ch_smooth=None, convergence=1e-3, n_maxiters=100, *, logger=None):
+            ch_smooth=None, convergence=1e-4, n_maxiters=100, *, logger=None):
         self.params = {
             'n_components': n_components,
             'initialize': initialize,
