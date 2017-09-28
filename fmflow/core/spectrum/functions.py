@@ -55,7 +55,7 @@ def tospectrum(array, weights=None, reverse=False):
         spectrum (xarray.DataArray): A spectrum.
 
     """
-    return array.fms.fromarray(array, weights, reverse)
+    return array.fms.fromarray(weights, reverse)
 
 
 def fromspectrum(spectrum, array):
