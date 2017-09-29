@@ -7,7 +7,7 @@ __all__ = [
 ]
 
 # standard library
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor as Pool
 from functools import wraps
 from inspect import Parameter, signature, stack
 from multiprocessing import cpu_count
@@ -26,7 +26,7 @@ except:
     MAX_WORKERS = 1
 
 
-# decorators and helper functions
+# decorators
 def numpyfunc(func):
     """Make a function compatible with xarray.DataArray.
 
@@ -86,9 +86,10 @@ def chunk(*argnames, concatfunc=None):
         depth = [s.function for s in stack()].index('<module>')
         f_globals = getframe(depth).f_globals
 
-        # global workspace
-        workspace = '_workspace_' + func.__name__
-        f_globals[workspace] = {'func': fm.utils.copy_function(func)}
+        # original (unwrapped) function
+        orgname = '_original_' + func.__name__
+        orgfunc = fm.utils.copy_function(func, orgname)
+        f_globals[orgname] = orgfunc
 
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -112,13 +113,13 @@ def chunk(*argnames, concatfunc=None):
             elif 'numchunk' in kwargs:
                 n_chunks = kwargs.pop('numchunk')
             elif 'timechunk' in kwargs:
-                length   = len(kwargs[argnames[0]])
+                length = len(kwargs[argnames[0]])
                 n_chunks = round(length / kwargs.pop('timechunk'))
             elif 'numchunk' in f_globals:
                 n_chunks = f_globals['numchunk']
             elif 'timechunk' in f_globals:
-                length   = len(kwargs[argnames[0]])
-                n_chunks = round(length / kwargs.pop('timechunk'))
+                length = len(kwargs[argnames[0]])
+                n_chunks = round(length / f_globals['timechunk'])
             else:
                 n_chunks = 1
 
@@ -129,8 +130,8 @@ def chunk(*argnames, concatfunc=None):
             else:
                 n_processes = MAX_WORKERS
 
-            # make chunk kwargs
-            chunk_kwargs = {}
+            # make chunked args
+            chunks = {}
             for name in argnames:
                 arg = kwargs.pop(name)
                 try:
@@ -138,21 +139,16 @@ def chunk(*argnames, concatfunc=None):
                 except TypeError:
                     nargs = np.tile(arg, n_chunks)
 
-                chunk_kwargs.update({name: nargs})
-
-            # save chunk/kwargs into the global workspace
-            f_globals[workspace].update({'kwargs': kwargs})
-            f_globals[workspace].update({'chunk_kwargs': chunk_kwargs})
+                chunks.update({name: nargs})
 
             # run the function
-            with fm.utils.one_thread_per_process():
-                with ProcessPoolExecutor(n_processes) as p:
-                    args = [(workspace, i) for i in range(n_chunks)]
-                    results = list(p.map(workfunc, args))
+            with fm.utils.one_thread_per_process(), Pool(n_processes) as p:
+                futures = []
+                for i in range(n_chunks):
+                    chunk = {k:v[i] for k,v in chunks.items()}
+                    futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
 
-            # clean the global workspace
-            f_globals[workspace]['kwargs'].clear()
-            f_globals[workspace]['chunk_kwargs'].clear()
+            results = [future.result() for future in futures]
 
             # make an output
             if concatfunc is not None:
@@ -166,24 +162,3 @@ def chunk(*argnames, concatfunc=None):
         return wrapper
 
     return _chunk
-
-
-def workfunc(workspace_index):
-    """A helper function inside the chunk decorator.
-
-    Args:
-        workspace_index (tuple): A tuple of workspace name (str) and index (int).
-
-    Returns:
-        result (object): A returned object of the function.
-
-    """
-    depth = [s.function for s in stack()].index('<module>')
-    f_globals = getframe(depth).f_globals
-
-    workspace, i = workspace_index
-    func = f_globals[workspace]['func']
-    kwargs = f_globals[workspace]['kwargs']
-    chunk_kwargs = f_globals[workspace]['chunk_kwargs']
-
-    return func(**{**kwargs, **{k:v[i] for k,v in chunk_kwargs.items()}})
