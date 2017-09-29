@@ -28,10 +28,9 @@ class Convergence(object):
         }
 
         # threshold list
-        try:
-            len(threshold)
+        if hasattr(threshold, '__len__'):
             self._thresholds = list(threshold)
-        except TypeError:
+        else:
             self._thresholds = [threshold]
 
         self._set_threshold()
