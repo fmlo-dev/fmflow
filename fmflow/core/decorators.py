@@ -26,7 +26,7 @@ except:
     MAX_WORKERS = 1
 
 
-# decorators
+# decorators and helper functions
 def numpyfunc(func):
     """Make a function compatible with xarray.DataArray.
 
@@ -86,10 +86,9 @@ def chunk(*argnames, concatfunc=None):
         depth = [s.function for s in stack()].index('<module>')
         f_globals = getframe(depth).f_globals
 
-        # original (unwrapped) function
-        orgname = '_original_' + func.__name__
-        orgfunc = fm.utils.copy_function(func, orgname)
-        f_globals[orgname] = orgfunc
+        # global workspace
+        workspace = '_workspace_' + func.__name__
+        f_globals[workspace] = {'func': fm.utils.copy_function(func)}
 
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -108,18 +107,18 @@ def chunk(*argnames, concatfunc=None):
                     kwargs.setdefault(key, val.default)
 
             # n_chunks and n_processes
-            if 'numchunk' in kwargs:
+            if not argnames:
+                n_chunks = 1
+            elif 'numchunk' in kwargs:
                 n_chunks = kwargs.pop('numchunk')
             elif 'timechunk' in kwargs:
-                length = len(kwargs[argnames[0]])
-                tchunk = kwargs.pop('timechunk')
-                n_chunks = round(length / tchunk)
+                length   = len(kwargs[argnames[0]])
+                n_chunks = round(length / kwargs.pop('timechunk'))
             elif 'numchunk' in f_globals:
                 n_chunks = f_globals['numchunk']
             elif 'timechunk' in f_globals:
-                length = len(kwargs[argnames[0]])
-                tchunk = f_globals['timechunk']
-                n_chunks = round(length / tchunk)
+                length   = len(kwargs[argnames[0]])
+                n_chunks = round(length / kwargs.pop('timechunk'))
             else:
                 n_chunks = 1
 
@@ -130,8 +129,8 @@ def chunk(*argnames, concatfunc=None):
             else:
                 n_processes = MAX_WORKERS
 
-            # make chunked args
-            chunks = {}
+            # make chunk kwargs
+            chunk_kwargs = {}
             for name in argnames:
                 arg = kwargs.pop(name)
                 try:
@@ -139,17 +138,21 @@ def chunk(*argnames, concatfunc=None):
                 except TypeError:
                     nargs = np.tile(arg, n_chunks)
 
-                chunks.update({name: nargs})
+                chunk_kwargs.update({name: nargs})
+
+            # save chunk/kwargs into the global workspace
+            f_globals[workspace].update({'kwargs': kwargs})
+            f_globals[workspace].update({'chunk_kwargs': chunk_kwargs})
 
             # run the function
-            with fm.utils.one_thread_per_process(), \
-                    ProcessPoolExecutor(n_processes) as e:
-                futures = []
-                for i in range(n_chunks):
-                    chunk = {key: val[i] for key, val in chunks.items()}
-                    futures.append(e.submit(orgfunc, **{**chunk, **kwargs}))
+            with fm.utils.one_thread_per_process():
+                with ProcessPoolExecutor(n_processes) as p:
+                    args = [(workspace, i) for i in range(n_chunks)]
+                    results = list(p.map(workfunc, args))
 
-                results = [future.result() for future in futures]
+            # clean the global workspace
+            f_globals[workspace]['kwargs'].clear()
+            f_globals[workspace]['chunk_kwargs'].clear()
 
             # make an output
             if concatfunc is not None:
