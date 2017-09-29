@@ -166,3 +166,24 @@ def chunk(*argnames, concatfunc=None):
         return wrapper
 
     return _chunk
+
+
+def workfunc(workspace_index):
+    """A helper function inside the chunk decorator.
+
+    Args:
+        workspace_index (tuple): A tuple of workspace name (str) and index (int).
+
+    Returns:
+        result (object): A returned object of the function.
+
+    """
+    depth = [s.function for s in stack()].index('<module>')
+    f_globals = getframe(depth).f_globals
+
+    workspace, i = workspace_index
+    func = f_globals[workspace]['func']
+    kwargs = f_globals[workspace]['kwargs']
+    chunk_kwargs = f_globals[workspace]['chunk_kwargs']
+
+    return func(**{**kwargs, **{k:v[i] for k,v in chunk_kwargs.items()}})
