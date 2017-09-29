@@ -26,8 +26,15 @@ class Convergence(object):
             'raise_exception': raise_exception,
             'display_status': display_status,
         }
-        self._ndigits = round(-log10(threshold)) + 1
-        self._threshold = round(Decimal(threshold), self._ndigits)
+
+        # threshold list
+        try:
+            len(threshold)
+            self._thresholds = list(threshold)
+        except TypeError:
+            self._thresholds = [threshold]
+
+        self._set_threshold()
         self._reset_status()
 
     @property
@@ -42,6 +49,7 @@ class Convergence(object):
 
     def _converged(self, raise_exception=False):
         if self.reuse_instance:
+            self._set_threshold()
             self._reset_status()
 
         if raise_exception:
@@ -51,6 +59,14 @@ class Convergence(object):
 
     def _not_converged(self):
         return False
+
+    def _set_threshold(self):
+        try:
+            threshold = self._thresholds.pop(0)
+            self._ndigits = round(-log10(threshold)) + 1
+            self._threshold = round(Decimal(threshold), self._ndigits)
+        except IndexError:
+            pass
 
     def _reset_status(self):
         self.n_iters = 0
