@@ -148,7 +148,7 @@ def chunk(*argnames, concatfunc=None):
                     chunk = {k:v[i] for k,v in chunks.items()}
                     futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
 
-            results = [future.result() for future in futures]
+                results = [future.result() for future in futures]
 
             # make an output
             if concatfunc is not None:
