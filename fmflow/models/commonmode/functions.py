@@ -25,8 +25,9 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 @fm.numpyfunc
 @fm.chunk('array', 'weights')
 def empca(
-        array, weights=None, n_components=20, initialize='random', random_seed=None,
-        ch_smooth=None, centering=True, convergence=1e-4, n_maxiters=100, **kwargs
+        array, weights=None, n_components=20, ch_smooth=None, optimize_n=True,
+        initialize='random', random_seed=None, centering=True,
+        convergence=1e-4, n_maxiters=100, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
@@ -34,12 +35,14 @@ def empca(
         array (xarray.DataArray): An input array to be decomposed.
         weights (xarray.DataArray): A weight array. The shape must be same as `array`.
         n_components (int): A number of components to keep.
+        ch_smooth (int): A length of the filter window for smoothing eigenvectors.
+            It must be a positive odd integer.
+        optimize_n (bool): If True, `n_components` used for reconstruction is
+            optimized by an exponential fitting of eigen values of EMPCA.
         initialize (string): A method of initializing eigenvectors.
             Options are `random` (random orthogonal matrix) and `svd`
             (orthogonal matrix from singular value decomposition).
         random_seed (int): random seed values used for the initial state.
-        ch_smooth (int): A length of the filter window for smoothing eigenvectors.
-            It must be a positive odd integer.
         centering (bool): If True, mean vector along time axis is subtracted from
             `array` before computing EMPCA and then added to the reconstructed one.
         convergence (float): A convergence threshold.
@@ -56,8 +59,8 @@ def empca(
     logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     model = fm.models.EMPCA(
-        n_components, initialize, random_seed,
-        ch_smooth, convergence, n_maxiters, logger=logger
+        n_components, ch_smooth, optimize_n, initialize, random_seed,
+        convergence, n_maxiters, logger=logger
     )
 
     mean = np.mean(array, 0) if centering else 0
