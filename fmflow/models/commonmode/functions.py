@@ -95,9 +95,8 @@ def decomposition(
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    params = locals()
     logger = getLogger('fmflow.models.decomposition')
-    logger.debug(params)
+    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
