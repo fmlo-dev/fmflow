@@ -5,24 +5,31 @@ __all__ = [
     'EMPCA',
 ]
 
+# standard library
+from copy import deepcopy
+
 # dependent packages
 import fmflow as fm
 import numpy as np
 from numba import jit
 from sklearn import decomposition
+from scipy.optimize import curve_fit
 from scipy.signal import savgol_filter
 
 
 # classes
 class EMPCA(object):
     def __init__(
-            self, n_components=20, initialize='random', random_seed=None,
-            ch_smooth=None, convergence=1e-4, n_maxiters=100, *, logger=None):
+            self, n_components=20, ch_smooth=None, optimize_n=True,
+            initialize='random', random_seed=None, convergence=1e-4,
+            n_maxiters=100, *, logger=None
+        ):
         self.params = {
             'n_components': n_components,
+            'ch_smooth': ch_smooth,
+            'optimize_n': optimize_n,
             'initialize': initialize,
             'random_seed': random_seed,
-            'ch_smooth': ch_smooth,
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
@@ -30,17 +37,28 @@ class EMPCA(object):
         self.logger = logger or fm.logger
 
     def fit_transform(self, X, W=None):
+        X = np.asarray(X)
+
         # check array and weights
         if W is None:
             W = np.ones_like(X)
+        else:
+            W = np.asarray(W)
 
         if not X.shape == W.shape:
             raise ValueError('X and W must have same shapes')
 
         # shapes of matrices (for convergence)
-        N, D, K = *X.shape, self.n_components
+        N, D, K = *X.shape, deepcopy(self.n_components)
+
+        if self.optimize_n:
+            model = decomposition.TruncatedSVD(K)
+            K_opt = 2 * self._optimize_K(model.fit_transform(X))
+            K = K_opt if K_opt < K else K
 
         # initial arrays
+        np.random.seed(self.random_seed)
+
         C = np.zeros([N, K])
         if self.initialize == 'random':
             P = self._orthogonal_from_random(K, D)
@@ -62,17 +80,26 @@ class EMPCA(object):
                 self.logger.debug(cv)
                 C = self._update_coefficients(C, P, WX, W)
                 P = self._update_eigenvectors(C, P, WX, W)
-                if (self.ch_smooth is not None) and self.ch_smooth:
+                if (self.ch_smooth is not None) and (self.ch_smooth > 0):
                     P = self._smooth_eigenvectors(P, self.ch_smooth)
         except StopIteration:
             self.logger.warning('reached maximum iteration')
 
         # finally
+        if self.optimize_n:
+            K_opt = self._optimize_K(C)
+            if K_opt < self.n_components:
+                self.logger.info('optimized n_components: {}'.format(K_opt))
+                C, P = C[:,:K_opt], P[:K_opt]
+            else:
+                self.logger.warning('optimized n_components exceeds the original')
+                self.logger.warning('the original is used for reconstruction')
+
         self.components_ = P
         return C
 
-    def _orthogonal_from_random(self, *shape):
-        np.random.seed(self.random_seed)
+    @staticmethod
+    def _orthogonal_from_random(*shape):
         A = np.random.randn(*shape)
         for i in range(A.shape[0]):
             for j in range(i):
@@ -82,13 +109,26 @@ class EMPCA(object):
 
         return A
 
-    def _orthogonal_from_svd(self, X, K):
+    @staticmethod
+    def _orthogonal_from_svd(X, K):
         svd = decomposition.TruncatedSVD(K)
         svd.fit(X)
         return svd.components_
 
-    def _smooth_eigenvectors(self, P, ch_smooth):
+    @staticmethod
+    def _smooth_eigenvectors(P, ch_smooth):
         return savgol_filter(P, ch_smooth, polyorder=3, axis=1)
+
+    @staticmethod
+    def _optimize_K(C):
+        npc = np.arange(C.shape[1])
+        lmd = np.log10(C.var(0)) # log eigen values
+
+        def func(x, a, b, c):
+            return a * 2**(-b*x) + c
+
+        popt, pcov = curve_fit(func, npc, lmd)
+        return int(7/popt[1]) + 1
 
     @staticmethod
     @jit(nopython=True, cache=True)
