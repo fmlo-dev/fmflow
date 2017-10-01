@@ -7,9 +7,11 @@ __all__ = [
 ]
 
 # standard library
+from concurrent.futures import as_completed
 from concurrent.futures import ProcessPoolExecutor as Pool
 from functools import wraps
 from inspect import Parameter, signature, stack
+from inspect.Parameter import POSITIONAL_OR_KEYWORD
 from multiprocessing import cpu_count
 from sys import _getframe as getframe
 
@@ -19,7 +21,7 @@ import numpy as np
 import xarray as xr
 
 # module constants
-POS_OR_KWD = Parameter.POSITIONAL_OR_KEYWORD
+DEFAULT_N_CHUNKS = 1
 try:
     MAX_WORKERS = cpu_count() - 1
 except:
@@ -99,7 +101,7 @@ def chunk(*argnames, concatfunc=None):
             # parse args and kwargs
             params = signature(func).parameters
             for i, (key, val) in enumerate(params.items()):
-                if not val.kind == POS_OR_KWD:
+                if not val.kind == POSITIONAL_OR_KEYWORD:
                     break
 
                 try:
@@ -108,47 +110,45 @@ def chunk(*argnames, concatfunc=None):
                     kwargs.setdefault(key, val.default)
 
             # n_chunks and n_processes
-            if not argnames:
-                n_chunks = 1
-            elif 'numchunk' in kwargs:
-                n_chunks = kwargs.pop('numchunk')
-            elif 'timechunk' in kwargs:
-                length = len(kwargs[argnames[0]])
-                n_chunks = round(length / kwargs.pop('timechunk'))
-            elif 'numchunk' in f_globals:
-                n_chunks = f_globals['numchunk']
-            elif 'timechunk' in f_globals:
-                length = len(kwargs[argnames[0]])
-                n_chunks = round(length / f_globals['timechunk'])
-            else:
-                n_chunks = 1
+            n_chunks = DEFAULT_N_CHUNKS
+            n_processes = MAX_WORKERS
 
-            if 'n_processes' in kwargs:
-                n_processes = kwargs.pop('n_processes')
-            elif 'n_processes' in f_globals:
-                n_processes = f_globals['n_processes']
-            else:
-                n_processes = MAX_WORKERS
+            if argnames:
+                length = len(kwargs[argnames[0]])
+
+                if 'numchunk' in kwargs:
+                    n_chunks = kwargs.pop('numchunk')
+                elif 'timechunk' in kwargs:
+                    n_chunks = round(length / kwargs.pop('timechunk'))
+                elif 'numchunk' in f_globals:
+                    n_chunks = f_globals['numchunk']
+                elif 'timechunk' in f_globals:
+                    n_chunks = round(length / f_globals['timechunk'])
+
+                if 'n_processes' in kwargs:
+                    n_processes = kwargs.pop('n_processes')
+                elif 'n_processes' in f_globals:
+                    n_processes = f_globals['n_processes']
 
             # make chunked args
             chunks = {}
             for name in argnames:
                 arg = kwargs.pop(name)
                 try:
-                    nargs = np.array_split(arg, n_chunks)
+                    chunks.update({name: np.array_split(arg, n_chunks)})
                 except TypeError:
-                    nargs = np.tile(arg, n_chunks)
-
-                chunks.update({name: nargs})
+                    chunks.update({name: np.tile(arg, n_chunks)})
 
             # run the function
+            futures = []
+            results = []
             with fm.utils.one_thread_per_process(), Pool(n_processes) as p:
-                futures = []
                 for i in range(n_chunks):
-                    chunk = {k:v[i] for k,v in chunks.items()}
+                    chunk = {key: val[i] for key, val in chunks.items()}
                     futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
 
-                results = [future.result() for future in futures]
+                for future in as_completed(futures):
+                    results.append(future.result())
 
             # make an output
             if concatfunc is not None:
