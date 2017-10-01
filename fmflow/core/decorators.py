@@ -11,7 +11,6 @@ from concurrent.futures import as_completed
 from concurrent.futures import ProcessPoolExecutor as Pool
 from functools import wraps
 from inspect import Parameter, signature, stack
-from inspect.Parameter import POSITIONAL_OR_KEYWORD
 from multiprocessing import cpu_count
 from sys import _getframe as getframe
 
@@ -101,7 +100,7 @@ def chunk(*argnames, concatfunc=None):
             # parse args and kwargs
             params = signature(func).parameters
             for i, (key, val) in enumerate(params.items()):
-                if not val.kind == POSITIONAL_OR_KEYWORD:
+                if not val.kind == Parameter.POSITIONAL_OR_KEYWORD:
                     break
 
                 try:
