@@ -7,7 +7,6 @@ __all__ = [
 ]
 
 # standard library
-from concurrent.futures import as_completed
 from concurrent.futures import ProcessPoolExecutor as Pool
 from functools import wraps
 from inspect import Parameter, signature, stack
@@ -146,7 +145,7 @@ def chunk(*argnames, concatfunc=None):
                     chunk = {key: val[i] for key, val in chunks.items()}
                     futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
 
-                for future in as_completed(futures):
+                for future in futures:
                     results.append(future.result())
 
             # make an output
