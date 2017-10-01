@@ -10,8 +10,6 @@ import fmflow as fm
 import numpy as np
 from numpy.polynomial.polynomial import polyfit, polyval
 from scipy.interpolate import interp1d
-from scipy.signal import savgol_filter
-savgol_filter = fm.numpyfunc(savgol_filter)
 
 
 # classes
