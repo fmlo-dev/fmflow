@@ -21,7 +21,7 @@ CHCOORDS = lambda array: OrderedDict([
     ('noise', ('ch', np.zeros(array.shape[0], dtype=float))),
 ])
 
-PTCOORDS = OrderedDict([
+SCALARCOORDS = OrderedDict([
     ('status', 'DEMODULATED+'),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
@@ -86,10 +86,10 @@ class FMSpectrumAccessor(BaseAccessor):
 
         # coords
         chcoords = deepcopy(array.fma.chcoords)
-        ptcoords = deepcopy(array.fma.ptcoords)
+        scalarcoords = deepcopy(array.fma.scalarcoords)
         chcoords.update({'freq': freq.values, 'noise': noise.values})
 
-        return fm.spectrum(mean1.values, chcoords, ptcoords)
+        return fm.spectrum(mean1.values, chcoords, scalarcoords)
 
     def toarray(self, array):
         """Create an array filled with the spectrum.
@@ -128,7 +128,7 @@ class FMSpectrumAccessor(BaseAccessor):
 
         """
         self.coords.update(CHCOORDS(self))
-        self.coords.update(PTCOORDS)
+        self.coords.update(SCALARCOORDS)
 
 
 class FMSpectrumError(Exception):

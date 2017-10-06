@@ -34,14 +34,14 @@ MAD_TO_STD = (np.sqrt(2) * erfinv(0.5))**-1
 
 
 # functions
-def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=None):
+def array(data, tcoords=None, chcoords=None, scalarcoords=None, attrs=None, name=None):
     """Create a modulated array as an instance of xarray.DataArray with FM array accessor.
 
     Args:
         data (numpy.ndarray): A 2D (time x channel) array.
         tcoords (dict, optional): A dictionary of arrays that label time axis.
         chcoords (dict, optional): A dictionary of arrays that label channel axis.
-        ptcoords (dict, optional): A dictionary of values that don't label any axes (point-like).
+        scalarcoords (dict, optional): A dictionary of values that don't label any axes.
         attrs (dict, optional): A dictionary of attributes to add to the instance.
         name (str, optional): A string that names the instance.
 
@@ -60,8 +60,8 @@ def array(data, tcoords=None, chcoords=None, ptcoords=None, attrs=None, name=Non
     if chcoords is not None:
         array.coords.update({key: ('ch', val) for key, val in chcoords.items()})
 
-    if ptcoords is not None:
-        array.coords.update(ptcoords)
+    if scalarcoords is not None:
+        array.coords.update(scalarcoords)
 
     return array
 
@@ -212,7 +212,7 @@ def empty_like(array, dtype=None, keepmeta=True):
     if keepmeta:
         return fm.empty(array.shape, dtype,
             tcoords=array.fma.tcoords, chcoords=array.fma.chcoords,
-            ptcoords=array.fma.ptcoords, attrs=array.attrs, name=array.name
+            scalarcoords=array.fma.scalarcoords, attrs=array.attrs, name=array.name
         )
     else:
         return fm.empty(array.shape, dtype)
@@ -337,7 +337,7 @@ def chbinning(array, size=2):
         raise ValueError('ch shape cannot be divided by size')
 
     binshape = shape[0], int(shape[1]/size)
-    binarray = fm.zeros(binshape, tcoords=array.fma.tcoords, ptcoords=array.fma.ptcoords)
+    binarray = fm.zeros(binshape, tcoords=array.fma.tcoords, scalarcoords=array.fma.scalarcoords)
 
     # binning of data
     binarray.values = array.values.reshape([*binshape, size]).mean(2)

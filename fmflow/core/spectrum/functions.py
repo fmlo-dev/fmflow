@@ -14,13 +14,13 @@ import xarray as xr
 
 
 # functions
-def spectrum(data, chcoords=None, ptcoords=None, attrs=None, name=None):
-    """Create a spectrum as an instance of xarray.DataArray with FM accessor.
+def spectrum(data, chcoords=None, scalarcoords=None, attrs=None, name=None):
+    """Create a spectrum as an instance of xarray.DataArray with FM spectrum accessor.
 
     Args:
         data (numpy.ndarray): A 1D (channel) array.
         chcoords (dict, optional): A dictionary of arrays that label channel axis.
-        ptcoords (dict, optional): A dictionary of values that don't label any axes (point-like).
+        scalarcoords (dict, optional): A dictionary of values that don't label any axes.
         attrs (dict, optional): A dictionary of attributes to add to the instance.
         name (str, optional): A string that names the instance.
 
@@ -36,8 +36,8 @@ def spectrum(data, chcoords=None, ptcoords=None, attrs=None, name=None):
     if chcoords is not None:
         spectrum.coords.update({key: ('ch', val) for key, val in chcoords.items()})
 
-    if ptcoords is not None:
-        spectrum.coords.update(ptcoords)
+    if scalarcoords is not None:
+        spectrum.coords.update(scalarcoords)
 
     return spectrum
 

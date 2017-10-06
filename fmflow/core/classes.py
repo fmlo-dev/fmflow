@@ -29,7 +29,7 @@ CHCOORDS = lambda array: OrderedDict([
     ('fimg', ('ch', np.zeros(array.shape[1], dtype=float))),
 ])
 
-PTCOORDS = OrderedDict([
+SCALARCOORDS = OrderedDict([
     ('status', 'MODULATED'),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
@@ -81,9 +81,24 @@ class BaseAccessor(object):
         return {k: v.values for k, v in self.coords.items() if v.dims==('ch',)}
 
     @property
-    def ptcoords(self):
-        """A dictionary of values that don't label any axes (point-like)."""
+    def xcoords(self):
+        """A dictionary of arrays that label x axis."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==('x',)}
+
+    @property
+    def ycoords(self):
+        """A dictionary of arrays that label y axis."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==('y',)}
+
+    @property
+    def scalarcoords(self):
+        """A dictionary of values that don't label any axes."""
         return {k: v.values for k, v in self.coords.items() if v.dims==()}
+
+    @property
+    def datacoords(self):
+        """A dictionary of arrays that label full axes of the data."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==self.dims}
 
 
 @xr.register_dataarray_accessor('fma')
@@ -147,12 +162,12 @@ class FMArrayAccessor(BaseAccessor):
 
         tcoords  = deepcopy(self.tcoords)
         chcoords = deepcopy(self.chcoords)
-        ptcoords = deepcopy(self.ptcoords)
+        scalarcoords = deepcopy(self.scalarcoords)
         tcoords.update({'fmch': fmch})
         chcoords.update({'fsig': fsig, 'fimg': fimg, 'chid': chid})
-        ptcoords.update({'status': status, 'chno': chno})
+        scalarcoords.update({'status': status, 'chno': chno})
 
-        return fm.array(data, tcoords, chcoords, ptcoords)
+        return fm.array(data, tcoords, chcoords, scalarcoords)
 
     def modulate(self):
         """Create a modulated array from the demodulated one.
@@ -194,14 +209,14 @@ class FMArrayAccessor(BaseAccessor):
 
         tcoords  = deepcopy(self.tcoords)
         chcoords = deepcopy(self.chcoords)
-        ptcoords = deepcopy(self.ptcoords)
+        scalarcoords = deepcopy(self.scalarcoords)
         tcoords.update({'fmch': fmch})
         chcoords.update({'fsig': fsig, 'fimg': fimg})
-        ptcoords.update({'status': status})
+        scalarcoords.update({'status': status})
         chcoords.pop('chid')
-        ptcoords.pop('chno')
+        scalarcoords.pop('chno')
 
-        return fm.array(data, tcoords, chcoords, ptcoords)
+        return fm.array(data, tcoords, chcoords, scalarcoords)
 
     def _initcoords(self):
         """Initialize coords with default values.
@@ -213,7 +228,7 @@ class FMArrayAccessor(BaseAccessor):
         """
         self.coords.update(TCOORDS(self))
         self.coords.update(CHCOORDS(self))
-        self.coords.update(PTCOORDS)
+        self.coords.update(SCALARCOORDS)
 
 
 class FMArrayError(Exception):
