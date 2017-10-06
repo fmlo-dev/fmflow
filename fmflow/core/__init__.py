@@ -7,5 +7,9 @@ del classes
 del decorators
 del functions
 
-from .cube import *
-from .spectrum import *
+from .cube.classes import *
+from .cube.functions import *
+from .spectrum.classes import *
+from .spectrum.functions import *
+del cube
+del spectrum

@@ -3,7 +3,7 @@
 from .functions import *
 del functions
 
-from .aste import *
-from .nro45m import *
+from .aste.functions import *
+from .nro45m.functions import *
 del aste
 del nro45m

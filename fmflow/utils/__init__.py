@@ -1,11 +1,11 @@
 # coding: utf-8
 
-from .binary import *
-from .convergence import *
-from .datetime import *
-from .fits import *
-from .misc import *
-from .ndarray import *
+from .binary.classes import *
+from .convergence.classes import *
+from .datetime.classes import *
+from .fits.functions import *
+from .misc.functions import *
+from .ndarray.functions import *
 del binary
 del convergence
 del datetime
