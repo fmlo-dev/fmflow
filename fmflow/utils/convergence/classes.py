@@ -12,6 +12,7 @@ from math import log10
 # dependent packages
 import numpy as np
 from numpy.linalg import norm
+from scipy.stats import gmean
 
 
 # classes
@@ -38,13 +39,34 @@ class Convergence(object):
 
     @property
     def status(self):
-        return {'n_iters': self.n_iters, 'value': self.value}
+        try:
+            var_data = str(self.vars_data[-1])
+        except IndexError:
+            var_data = None
 
-    def _calc(self, array_new, array_old):
-        diff = norm(array_new-array_old) / norm(array_old)
-        value = round(Decimal(diff), self._ndigits)
-        self.value = str(value)
-        return value
+        try:
+            var_vars = str(self.vars_vars[-1])
+        except IndexError:
+            var_vars = None
+
+        return {'n_iters': self.n_iters, 'var_data': var_data, 'var_vars': var_vars}
+
+    def _variation_data(self):
+        var_data = norm(self.data_new-self.data_old) / norm(self.data_old)
+        var_data = round(Decimal(var_data), self._ndigits)
+        self.vars_data.append(var_data)
+        return var_data
+
+    def _variation_vars(self, n_samples=5):
+        if len(self.vars_data) < n_samples+1:
+            return np.inf
+
+        var_new  = float(self.vars_data[-1])
+        vars_old = np.array(self.vars_data[-n_samples-1:-1], dtype=float)
+        var_vars = np.abs(var_new/(gmean(1+vars_old)-1) - 1)
+        var_vars = round(Decimal(var_vars), 2)
+        self.vars_vars.append(var_vars)
+        return var_vars
 
     def _converged(self, raise_exception=False):
         if self.reuse_instance:
@@ -69,22 +91,23 @@ class Convergence(object):
 
     def _reset_status(self):
         self.n_iters = 0
-        self.value = None
-        self.cache = None
+        self.data_new = None
+        self.vars_data = []
+        self.vars_vars = []
 
-    def __call__(self, array_new):
+    def __call__(self, data_new):
         self.n_iters += 1
-        self.cache, array_old = array_new.copy(), self.cache
+        self.data_new, self.data_old = data_new, self.data_new
 
         if self.n_iters == 1 and self.n_maxiters != 0:
             return self._not_converged()
         elif self.n_iters > self.n_maxiters:
             return self._converged(self.raise_exception)
-        elif np.all((array_new-array_old)==0):
-            return self._converged()
-        elif np.all(array_old==0):
+        elif np.all(self.data_old==0):
             return self._not_converged()
-        elif self._calc(array_new, array_old) <= self._threshold:
+        elif self._variation_data() <= self._threshold:
+            return self._converged()
+        elif self._variation_vars() <= 0.1:
             return self._converged()
         else:
             return self._not_converged()
