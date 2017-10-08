@@ -107,7 +107,7 @@ class Convergence(object):
             return self._not_converged()
         elif self._variation_data() <= self._threshold:
             return self._converged()
-        elif self._variation_vars() <= 0.1:
+        elif self._variation_vars() <= 0.05:
             return self._converged()
         else:
             return self._not_converged()
