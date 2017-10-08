@@ -11,25 +11,25 @@ import warnings
 # dependent packages
 import fmflow as fm
 import numpy as np
+from .. import BaseModel
 from scipy.ndimage import gaussian_filter
 from scipy.optimize import curve_fit, OptimizeWarning
 warnings.simplefilter('ignore', OptimizeWarning)
 
 
 # classes
-class AstroLines(object):
+class AstroLines(BaseModel):
     def __init__(
             self, function='cutoff', despiking=True,
             snr_threshold=5, subtraction_gain=0.5, *, logger=None
         ):
+        super().__init__(logger)
         self.params = {
             'function': function,
             'despiking': despiking,
             'snr_threshold': snr_threshold,
             'subtraction_gain': subtraction_gain,
         }
-
-        self.logger = logger or fm.logger
 
     def fit(self, freq, spec, noise):
         freq  = np.asarray(freq)
@@ -81,9 +81,3 @@ class AstroLines(object):
         spec = np.hstack([model[1:],0]) + np.hstack([0,model[:-1]])
         model[spec/noise<0.5*self.snr_threshold] = 0.0
         return model
-
-    def __getattr__(self, name):
-        return self.params[name]
-
-    def __repr__(self):
-        return 'AstroLines({0})'.format(self.params)
