@@ -1,5 +1,22 @@
 # coding: utf-8
 
+# base model
+class BaseModel(object):
+    def __init__(self, logger=None):
+        import fmflow as fm
+        self.logger = logger or fm.logger
+        self.params = {}
+
+    def __getattr__(self, name):
+        return self.params[name]
+
+    def __repr__(self):
+        cname = self.__class__.__name__
+        params = self.params
+        return '{0}({1})'.format(cname, params)
+
+
+# submodules
 from .astrosignal.classes import *
 from .astrosignal.functions import *
 from .atmosphere.classes import *
