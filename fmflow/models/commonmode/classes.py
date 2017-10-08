@@ -11,6 +11,7 @@ from copy import deepcopy
 # dependent packages
 import fmflow as fm
 import numpy as np
+from .. import BaseModel
 from numba import jit
 from sklearn import decomposition
 from scipy.optimize import curve_fit
@@ -18,12 +19,13 @@ from scipy.signal import savgol_filter
 
 
 # classes
-class EMPCA(object):
+class EMPCA(BaseModel):
     def __init__(
             self, n_components=20, ch_smooth=None, optimize_n=True,
             initialize='random', random_seed=None, convergence=1e-4,
             n_maxiters=100, *, logger=None
         ):
+        super().__init__(logger)
         self.params = {
             'n_components': n_components,
             'ch_smooth': ch_smooth,
@@ -33,8 +35,6 @@ class EMPCA(object):
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
-
-        self.logger = logger or fm.logger
 
     def fit_transform(self, X, W=None):
         X = np.asarray(X)
@@ -167,9 +167,3 @@ class EMPCA(object):
             P[k] /= np.linalg.norm(P[k])
 
         return P
-
-    def __getattr__(self, name):
-        return self.params[name]
-
-    def __repr__(self):
-        return 'EMPCA({0})'.format(self.params)
