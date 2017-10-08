@@ -14,6 +14,7 @@ from pkgutil import get_data
 import yaml
 import fmflow as fm
 import numpy as np
+from .. import BaseModel
 from astropy import constants
 from astropy import units as u
 from scipy.interpolate import interp1d
@@ -29,7 +30,7 @@ AMLAYERS = yaml.load(AMDATA)['layers']
 
 
 # classes
-class AtmosLines(object):
+class AtmosLines(BaseModel):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
     amfreqs = []
@@ -37,12 +38,12 @@ class AtmosLines(object):
     amtbs = []
 
     def __init__(self, snr_threshold=5, ch_tolerance=5, *, logger=None):
+        super().__init__(logger)
         self.params = {
             'snr_threshold': snr_threshold,
             'ch_tolerance': ch_tolerance,
         }
 
-        self.logger = logger or fm.logger
 
     def fit(self, freq, spec, noise, vrad=0.0):
         freq  = np.asarray(freq)
@@ -136,9 +137,3 @@ class AtmosLines(object):
         cls.amtaus.append(np.array(amtau))
         cls.amtbs.append(np.array(amtb)-2.7)
         logger.info('computing finished')
-
-    def __getattr__(self, name):
-        return self.params[name]
-
-    def __repr__(self):
-        return 'AtmosLines({0})'.format(self.params)
