@@ -14,10 +14,10 @@ from itertools import product
 import fmflow as fm
 import numpy as np
 import xarray as xr
+from .. import BaseAccessor
 from scipy.interpolate import interp1d
 from scipy.ndimage.interpolation import map_coordinates
 from scipy.special import j1
-from ..classes import BaseAccessor
 
 # module constants
 XCOORDS = lambda array: OrderedDict([

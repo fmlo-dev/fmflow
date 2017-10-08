@@ -12,7 +12,7 @@ from copy import deepcopy
 import fmflow as fm
 import numpy as np
 import xarray as xr
-from ..classes import BaseAccessor
+from .. import BaseAccessor
 
 # module constants
 CHCOORDS = lambda array: OrderedDict([
