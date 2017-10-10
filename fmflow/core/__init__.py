@@ -1,7 +1,14 @@
 # coding: utf-8
 
+# standard library
+import re as _re
+
 # base accessor
 class BaseAccessor(object):
+    MODULATED     = 'MODULATED'
+    DEMODULATED   = 'DEMODULATED'
+    DEMODULATED_R = 'DEMODULATED_R'
+
     def __init__(self, dataarray):
         """Initialize the base accessor."""
         self._dataarray = dataarray
@@ -23,22 +30,21 @@ class BaseAccessor(object):
     @property
     def isdemodulated(self):
         """Whether the array is demodulated (regardless of reverse)."""
-        return bool(re.search('^DEMODULATED', str(self.status.values)))
+        return bool(_re.search('^'+self.DEMODULATED, str(self.status.values)))
 
     @property
     def isdemodulated_r(self):
         """Whether the array is reverse-demodulated."""
-        return bool(re.search('^DEMODULATED-', str(self.status.values)))
+        return bool(_re.search('^'+self.DEMODULATED_R, str(self.status.values)))
 
     @property
     def ismodulated(self):
         """Whether the array is modulated."""
-        return bool(re.search('^MODULATED', str(self.status.values)))
+        return bool(_re.search('^'+self.MODULATED, str(self.status.values)))
 
     def __getattr__(self, name):
         """Return self.`dim`coords or convert self.name to self._dataarray.name."""
-        import re
-        if re.search('.+coords$', name):
+        if _re.search('.+coords$', name):
             return self.dimcoords(name.rstrip('coords'))
         else:
             return getattr(self._dataarray, name)
