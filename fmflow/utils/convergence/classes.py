@@ -17,12 +17,13 @@ from scipy.stats import gmean
 
 # classes
 class Convergence(object):
-    def __init__(self, threshold=0.01, n_maxiters=100,
+    def __init__(self, threshold=0.01, n_maxiters=100, n_miniters=2,
             *, reuse_instance=True, raise_exception=False, display_status=True
         ):
         self.params = {
             'threshold': threshold,
             'n_maxiters': n_maxiters,
+            'n_miniters': n_miniters,
             'reuse_instance': reuse_instance,
             'raise_exception': raise_exception,
             'display_status': display_status,
@@ -99,11 +100,13 @@ class Convergence(object):
         self.n_iters += 1
         self.data_new, self.data_old = data_new, self.data_new
 
-        if self.n_iters == 1 and self.n_maxiters != 0:
+        if self.n_iters <= self.n_miniters and self.n_maxiters:
             return self._not_converged()
         elif self.n_iters > self.n_maxiters:
             return self._converged(self.raise_exception)
-        elif np.all(self.data_old==0):
+        elif not np.any(self.data_new-self.data_old):
+            return self._converged()
+        elif not np.any(self.data_old):
             return self._not_converged()
         elif self._variation_data() <= self._threshold:
             return self._converged()
