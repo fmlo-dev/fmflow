@@ -4,7 +4,6 @@
 __all__ = []
 
 # standard library
-import re
 from collections import OrderedDict
 from copy import deepcopy
 from datetime import datetime
@@ -13,7 +12,7 @@ from datetime import datetime
 import fmflow as fm
 import numpy as np
 import xarray as xr
-from . import BaseAccessor
+from .. import BaseAccessor
 from scipy.interpolate import interp1d
 
 # module constants

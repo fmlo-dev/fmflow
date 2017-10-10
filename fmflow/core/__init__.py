@@ -53,13 +53,10 @@ class BaseAccessor(object):
 
 
 # submodules
-from .classes import *
-from .decorators import *
-from .functions import *
+from .array.classes import *
+from .array.decorators import *
+from .array.functions import *
 from .cube.classes import *
 from .cube.functions import *
 from .spectrum.classes import *
 from .spectrum.functions import *
-del classes
-del decorators
-del functions
