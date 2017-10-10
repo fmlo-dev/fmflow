@@ -12,10 +12,11 @@ from logging import getLogger
 import fmflow as fm
 import numpy as np
 
-@fm.chunk('Pon')
-def ongain(Pon, polyorders=[1,2,3], convergence=0.001, n_maxiters=100):
-    logger = getLogger('fmflow.models.ongain')
-    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
-    model = fm.models.ONGain(polyorders, convergence, n_maxiters, logger=logger)
+# functions
+@fm.chunk('Pon')
+def ongain(Pon, window_length=51, polyorder=3):
+    logger = getLogger('fmflow.models.ongain')
+    model  = fm.models.ONGain(window_length, polyorder, logger=logger)
+    logger.debug(model)
     return model.fit(Pon)
