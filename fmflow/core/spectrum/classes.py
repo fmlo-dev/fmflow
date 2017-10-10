@@ -4,7 +4,6 @@
 __all__ = []
 
 # standard library
-import re
 from collections import OrderedDict
 from copy import deepcopy
 
