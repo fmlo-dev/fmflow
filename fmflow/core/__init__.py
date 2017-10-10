@@ -6,17 +6,19 @@ class BaseAccessor(object):
         """Initialize the base accessor."""
         self._dataarray = dataarray
 
-    def __getattr__(self, name):
-        """self._dataarray.name <=> self.name."""
-        return getattr(self._dataarray, name)
+    def dimcoords(self, dim):
+        """A dictionary of values that label `dim` axis."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==(dim,)}
 
-    def __setstate__(self, state):
-        """A method used for pickling."""
-        self.__dict__ = state
+    @property
+    def scalarcoords(self):
+        """A dictionary of values that don't label any axes."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==()}
 
-    def __getstate__(self):
-        """A method used for unpickling."""
-        return self.__dict__
+    @property
+    def datacoords(self):
+        """A dictionary of arrays that label full axes of the data."""
+        return {k: v.values for k, v in self.coords.items() if v.dims==self.dims}
 
     @property
     def isdemodulated(self):
@@ -33,35 +35,21 @@ class BaseAccessor(object):
         """Whether the array is modulated."""
         return bool(re.search('^MODULATED', str(self.status.values)))
 
-    @property
-    def tcoords(self):
-        """A dictionary of arrays that label time axis."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==('t',)}
+    def __getattr__(self, name):
+        """Return self.`dim`coords or convert self.name to self._dataarray.name."""
+        import re
+        if re.search('.+coords$', name):
+            return self.dimcoords(name.rstrip('coords'))
+        else:
+            return getattr(self._dataarray, name)
 
-    @property
-    def chcoords(self):
-        """A dictionary of arrays that label channel axis."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==('ch',)}
+    def __setstate__(self, state):
+        """A method used for pickling."""
+        self.__dict__ = state
 
-    @property
-    def xcoords(self):
-        """A dictionary of arrays that label x axis."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==('x',)}
-
-    @property
-    def ycoords(self):
-        """A dictionary of arrays that label y axis."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==('y',)}
-
-    @property
-    def scalarcoords(self):
-        """A dictionary of values that don't label any axes."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==()}
-
-    @property
-    def datacoords(self):
-        """A dictionary of arrays that label full axes of the data."""
-        return {k: v.values for k, v in self.coords.items() if v.dims==self.dims}
+    def __getstate__(self):
+        """A method used for unpickling."""
+        return self.__dict__
 
 
 # submodules
