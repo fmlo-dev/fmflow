@@ -5,7 +5,6 @@ __all__ = []
 
 # standard library
 import os
-import re
 from collections import OrderedDict
 from copy import deepcopy
 from itertools import product
