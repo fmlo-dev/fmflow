@@ -72,14 +72,11 @@ class FMArrayAccessor(BaseAccessor):
             raise FMArrayError('already demodulated')
 
         # demodulate data
-
         fmch = self.fmch.values.copy()
-        if reverse:
-            fmch *= -1
-
+        fmch = -fmch if reverse else fmch
         newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
 
-        if np.ptp(fmch) != 0:
+        if not np.ptp(fmch):
             data = np.full(newshape, np.nan)
             data[:,:-np.ptp(fmch)] = self.values
             data = fm.utils.rollrows(data, fmch-np.min(fmch))
@@ -87,21 +84,19 @@ class FMArrayAccessor(BaseAccessor):
             data = self.values.copy()
 
         # update coords
-        if reverse:
-            status = 'DEMODULATED-'
-        else:
-            status = 'DEMODULATED+'
-
         chno = self.shape[1]
         chid = np.arange(np.min(fmch), np.min(fmch)+newshape[1])
         fsig = interp1d(np.arange(chno), self.fsig, fill_value='extrapolate')(chid)
         fimg = interp1d(np.arange(chno), self.fimg, fill_value='extrapolate')(chid)
+        status = self.DEMODULATED_R if reverse else self.DEMODULATED
 
-        tcoords  = deepcopy(self.tcoords)
-        chcoords = deepcopy(self.chcoords)
-        scalarcoords = deepcopy(self.scalarcoords)
+        tcoords = deepcopy(self.tcoords)
         tcoords.update({'fmch': fmch})
+
+        chcoords = deepcopy(self.chcoords)
         chcoords.update({'fsig': fsig, 'fimg': fimg, 'chid': chid})
+
+        scalarcoords = deepcopy(self.scalarcoords)
         scalarcoords.update({'status': status, 'chno': chno})
 
         return fm.array(data, tcoords, chcoords, scalarcoords)
@@ -128,7 +123,7 @@ class FMArrayAccessor(BaseAccessor):
         extchid = np.arange(np.min(self.chid)-lextch, np.max(self.chid)+rextch+1)
         newchid = np.arange(self.chno)
 
-        if np.ptp(fmch) != 0:
+        if not np.ptp(fmch):
             data = np.full(extshape, np.nan)
             data[:,lextch:extshape[1]-rextch] = self.values
             data = fm.utils.rollrows(data, -fmch)
@@ -136,21 +131,20 @@ class FMArrayAccessor(BaseAccessor):
         else:
             data = self.values.copy()
 
-        if self.isdemodulated_r:
-            fmch *= -1
-
         # update coords
-        status = 'MODULATED'
+        fmch = -fmch if self.isdemodulated_r else fmch
         fsig = interp1d(self.chid, self.fsig, fill_value='extrapolate')(newchid)
         fimg = interp1d(self.chid, self.fimg, fill_value='extrapolate')(newchid)
 
-        tcoords  = deepcopy(self.tcoords)
-        chcoords = deepcopy(self.chcoords)
-        scalarcoords = deepcopy(self.scalarcoords)
+        tcoords = deepcopy(self.tcoords)
         tcoords.update({'fmch': fmch})
+
+        chcoords = deepcopy(self.chcoords)
         chcoords.update({'fsig': fsig, 'fimg': fimg})
-        scalarcoords.update({'status': status})
         chcoords.pop('chid')
+
+        scalarcoords = deepcopy(self.scalarcoords)
+        scalarcoords.update({'status': self.MODULATED})
         scalarcoords.pop('chno')
 
         return fm.array(data, tcoords, chcoords, scalarcoords)
