@@ -76,7 +76,7 @@ class FMArrayAccessor(BaseAccessor):
         fmch = -fmch if reverse else fmch
         newshape = (self.shape[0], self.shape[1]+np.ptp(fmch))
 
-        if not np.ptp(fmch):
+        if np.ptp(fmch):
             data = np.full(newshape, np.nan)
             data[:,:-np.ptp(fmch)] = self.values
             data = fm.utils.rollrows(data, fmch-np.min(fmch))
@@ -123,7 +123,7 @@ class FMArrayAccessor(BaseAccessor):
         extchid = np.arange(np.min(self.chid)-lextch, np.max(self.chid)+rextch+1)
         newchid = np.arange(self.chno)
 
-        if not np.ptp(fmch):
+        if np.ptp(fmch):
             data = np.full(extshape, np.nan)
             data[:,lextch:extshape[1]-rextch] = self.values
             data = fm.utils.rollrows(data, -fmch)
