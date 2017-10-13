@@ -12,7 +12,6 @@ import warnings
 import fmflow as fm
 import numpy as np
 from .. import BaseModel
-from scipy.ndimage import gaussian_filter
 from scipy.optimize import curve_fit, OptimizeWarning
 warnings.simplefilter('ignore', OptimizeWarning)
 
