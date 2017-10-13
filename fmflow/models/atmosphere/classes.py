@@ -37,7 +37,7 @@ class AtmosLines(BaseModel):
     amtaus = []
     amtbs = []
 
-    def __init__(self, snr_threshold=5, ch_tolerance=5, *, logger=None):
+    def __init__(self, snr_threshold=10, ch_tolerance=5, *, logger=None):
         super().__init__(logger)
         self.params = {
             'snr_threshold': snr_threshold,
