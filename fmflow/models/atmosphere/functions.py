@@ -16,7 +16,7 @@ import numpy as np
 
 # functions
 @fm.chunk('array', 'weights')
-def atmoslines(array, weights=None, reverse=False, snr_threshold=5, ch_tolerance=5):
+def atmoslines(array, weights=None, reverse=False, snr_threshold=10, ch_tolerance=5):
     logger = getLogger('fmflow.models.atmoslines')
     logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
