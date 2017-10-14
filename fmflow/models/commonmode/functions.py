@@ -27,7 +27,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 def empca(
         array, weights=None, n_components=20, ch_smooth=None, optimize_n=True,
         initialize='random', random_seed=None, centering=True,
-        convergence=1e-4, n_maxiters=100, **kwargs
+        convergence=1e-3, n_maxiters=100, **kwargs
     ):
     """Reconstruct an array from decomposed one with EMPCA.
 
