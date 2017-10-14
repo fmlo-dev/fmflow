@@ -12,7 +12,6 @@ from math import log10
 # dependent packages
 import numpy as np
 from numpy.linalg import norm
-from scipy.stats import gmean
 
 
 # classes
@@ -46,8 +45,8 @@ class Convergence(object):
         else:
             self._thresholds = [threshold]
 
-        self._set_threshold()
         self._reset_status()
+        self._set_threshold()
 
     def __call__(self, data_new):
         self.n_iters += 1
@@ -77,8 +76,8 @@ class Convergence(object):
 
     def _converged(self, raise_exception=False):
         if self.reuseable:
-            self._set_threshold()
             self._reset_status()
+            self._set_threshold()
 
         if raise_exception:
             message = 'reached maximum iteration'
