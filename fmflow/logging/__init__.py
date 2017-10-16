@@ -20,7 +20,7 @@ DEFAULTLEVEL = 'INFO'
 
 # default logger
 logger = logging.getLogger('fmflow')
-logger.addHandler(logging.NullHandler)
+logger.addHandler(logging.NullHandler())
 logger.propagate = False
 
 
