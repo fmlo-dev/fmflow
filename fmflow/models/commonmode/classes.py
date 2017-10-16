@@ -20,11 +20,9 @@ from scipy.signal import savgol_filter
 
 # classes
 class EMPCA(BaseModel):
-    def __init__(
-            self, n_components=20, ch_smooth=None, optimize_n=True,
-            initialize='random', random_seed=None, convergence=1e-3,
-            n_maxiters=300, *, logger=None
-        ):
+    def __init__(self, n_components=50, ch_smooth=None, optimize_n=True,
+                 initialize='random', random_seed=None, convergence=1e-3,
+                 n_maxiters=300, *, logger=None):
         super().__init__(logger)
         self.params = {
             'n_components': n_components,
@@ -53,7 +51,7 @@ class EMPCA(BaseModel):
 
         if self.optimize_n:
             model = decomposition.TruncatedSVD(K)
-            K_opt = 2 * self._optimize_K(model.fit_transform(X))
+            K_opt = self._optimize_K(model.fit_transform(X), 7)
             K = K_opt if K_opt < K else K
 
         # initial arrays
@@ -88,7 +86,7 @@ class EMPCA(BaseModel):
 
         # finally
         if self.optimize_n:
-            K_opt = self._optimize_K(C)
+            K_opt = self._optimize_K(C, 5)
             if K_opt < self.n_components:
                 self.logger.info('optimized n_components: {}'.format(K_opt))
                 C, P = C[:,:K_opt], P[:K_opt]
@@ -121,7 +119,7 @@ class EMPCA(BaseModel):
         return savgol_filter(P, ch_smooth, polyorder=3, axis=1)
 
     @staticmethod
-    def _optimize_K(C):
+    def _optimize_K(C, level=5):
         npc = np.arange(C.shape[1])
         lmd = np.log10(C.var(0)) # log eigen values
 
@@ -129,7 +127,7 @@ class EMPCA(BaseModel):
             return a * 2**(-b*x) + c
 
         popt, pcov = curve_fit(func, npc, lmd)
-        return int(7/popt[1]) + 1
+        return int(level/popt[1]) + 1
 
     @staticmethod
     @jit(nopython=True, cache=True)
