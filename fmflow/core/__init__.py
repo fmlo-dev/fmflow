@@ -3,6 +3,7 @@
 # standard library
 import re as _re
 
+
 # base accessor
 class BaseAccessor(object):
     MODULATED     = 'MODULATED'
