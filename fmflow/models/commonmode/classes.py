@@ -51,7 +51,8 @@ class EMPCA(BaseModel):
 
         if self.optimize_n:
             model = decomposition.TruncatedSVD(K)
-            K_opt = self._optimize_K(model.fit_transform(X), 7)
+            C = model.fit_transform(X)
+            K_opt = 2 * self._optimize_K(C, 5)
             K = K_opt if K_opt < K else K
 
         # initial arrays
