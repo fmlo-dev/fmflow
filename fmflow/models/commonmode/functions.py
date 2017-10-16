@@ -68,10 +68,8 @@ def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
 
 @fm.numpyfunc
 @fm.chunk('array')
-def decomposition(
-        array, n_components=None, decomposer='TruncatedSVD',
-        centering=True, **kwargs
-    ):
+def decomposition(array, n_components=None, decomposer='TruncatedSVD',
+                  centering=True, **kwargs):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
 
     Args:
