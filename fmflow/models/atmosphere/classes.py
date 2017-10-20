@@ -33,9 +33,9 @@ AMLAYERS = yaml.load(AMDATA)['layers']
 class AtmosLines(BaseModel):
     amconfig = AMCONFIG
     amlayers = AMLAYERS
-    amfreqs = []
-    amtaus = []
-    amtbs = []
+    amfreqs  = []
+    amtaus   = []
+    amtbs    = []
 
     def __init__(self, snr_threshold=10, ch_tolerance=5, *, logger=None):
         super().__init__(logger)
