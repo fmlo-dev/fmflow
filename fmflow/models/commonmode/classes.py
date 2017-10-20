@@ -21,8 +21,8 @@ from scipy.signal import savgol_filter
 # classes
 class EMPCA(BaseModel):
     def __init__(self, n_components=50, ch_smooth=None, optimize_n=True,
-                 initialize='random', random_seed=None, convergence=1e-3,
-                 n_maxiters=300, *, logger=None):
+                 initialize='random', random_seed=None, *, convergence=1e-3,
+                 n_maxiters=300, logger=None):
         super().__init__(logger)
         self.params = {
             'n_components': n_components,
@@ -67,10 +67,8 @@ class EMPCA(BaseModel):
             raise ValueError(self.initialize)
 
         # convergence
-        cv = fm.utils.Convergence(
-            self.convergence, self.n_maxiters,
-            centering=True, raise_exception=True,
-        )
+        cv = fm.utils.Convergence(self.convergence, self.n_maxiters,
+                                  centering=True, raise_exception=True)
 
         # EM algorithm
         try:
