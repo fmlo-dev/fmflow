@@ -56,10 +56,8 @@ def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
     logger = getLogger('fmflow.models.empca')
     logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
-    model = fm.models.EMPCA(
-        n_components, ch_smooth, optimize_n, initialize, random_seed,
-        convergence, n_maxiters, logger=logger
-    )
+    model = fm.models.EMPCA(n_components, ch_smooth, optimize_n, initialize, random_seed,
+                            convergence=convergence, n_maxiters=n_maxiters, logger=logger)
 
     mean = np.mean(array, 0) if centering else 0
     transformed = model.fit_transform(array-mean, weights)
