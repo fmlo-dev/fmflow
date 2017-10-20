@@ -6,6 +6,7 @@ __all__ = [
 ]
 
 # standard library
+from copy import deepcopy
 from decimal import Decimal
 from math import log10
 
@@ -50,7 +51,7 @@ class Convergence(object):
 
     def __call__(self, data_new):
         self.n_iters += 1
-        self.data_new, self.data_old = data_new, self.data_new
+        self.data_new, self.data_old = deepcopy(data_new), self.data_new
 
         if self.n_iters <= min(self.n_miniters, self.n_maxiters):
             return self._not_converged()
