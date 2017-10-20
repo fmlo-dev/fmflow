@@ -19,7 +19,7 @@ i8 = 'i8'
 
 # classes
 class ONGain(BaseModel):
-    def __init__(self, window_length=51, polyorder=3, logger=None):
+    def __init__(self, window_length=51, polyorder=3, *, logger=None):
         super().__init__(logger)
         self.params = {
             'window_length': window_length,
