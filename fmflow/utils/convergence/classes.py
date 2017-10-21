@@ -18,7 +18,7 @@ from numpy.linalg import norm
 # classes
 class Convergence(object):
     def __init__(self, threshold=1e-3, n_maxiters=300, n_miniters=2,
-                 centering=False, reuseable=True, *, raise_exception=False):
+                 *, centering=False, reuseable=True, raise_exception=False):
         """Determine a convergence of data by monitoring their variation in iterations.
 
         Args:
@@ -112,5 +112,10 @@ class Convergence(object):
     def __getattr__(self, name):
         return self.params[name]
 
-    def __repr__(self):
+    def __str__(self):
         return str(self.status)
+
+    def __repr__(self):
+        cname  = self.__class__.__name__
+        params = self.params
+        return '{0}({1})'.format(cname, params)
