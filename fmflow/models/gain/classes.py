@@ -11,7 +11,7 @@ import numpy as np
 from .. import BaseModel
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-savgol_filter = fm.numpyfunc(savgol_filter)
+savgol_filter = fm.xarrayfunc(savgol_filter)
 
 # module constants
 i8 = 'i8'
