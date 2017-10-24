@@ -23,6 +23,7 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 # functions
 @fm.numpyfunc
+@fm.xarrayfunc
 @fm.chunk('array', 'weights')
 def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
           initialize='random', random_seed=None, centering=True,
@@ -54,8 +55,6 @@ def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
 
     """
     logger = getLogger('fmflow.models.empca')
-    logger.debug({k:v for k,v in locals().items() if k!='logger'})
-
     model = fm.models.EMPCA(n_components, ch_smooth, optimize_n, initialize, random_seed,
                             convergence=convergence, n_maxiters=n_maxiters, logger=logger)
 
