@@ -2,6 +2,7 @@
 
 # public items
 __all__ = [
+    'PCA',
     'EMPCA',
 ]
 
@@ -19,6 +20,46 @@ from scipy.signal import savgol_filter
 
 
 # classes
+class PCA(BaseModel):
+    def __init__(self, n_components=50, optimize_n=True, *, logger=None):
+        super().__init__(logger)
+        self.params = {
+            'n_components': n_components,
+            'optimize_n': optimize_n,
+        }
+
+    def fit_transform(self, X):
+        K = deepcopy(self.n_components)
+        model = decomposition.TruncatedSVD(K)
+
+        X = np.asarray(X)
+        C = model.fit_transform(X)
+        P = model.components_
+
+        if self.optimize_n:
+            K_opt = self._optimize_K(C, 7)
+            if K_opt < self.n_components:
+                C, P = C[:,:K_opt], P[:K_opt]
+                self.logger.info('optimized n_components: {}'.format(K_opt))
+            else:
+                self.logger.warning('optimized n_components exceeds the original')
+                self.logger.warning('the original is used for reconstruction')
+
+        self.components_ = P
+        return C
+
+    @staticmethod
+    def _optimize_K(C, level=5):
+        npc = np.arange(C.shape[1])
+        lmd = np.log10(C.var(0)) # log eigen values
+
+        def func(x, a, b, c):
+            return a * 2**(-b*x) + c
+
+        popt, pcov = curve_fit(func, npc, lmd)
+        return int(level/popt[1]) + 1
+
+
 class EMPCA(BaseModel):
     def __init__(self, n_components=50, ch_smooth=None, optimize_n=True,
                  initialize='random', random_seed=None, *, convergence=1e-3,
