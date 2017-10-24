@@ -63,7 +63,7 @@ def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
     return transformed @ model.components_ + mean
 
 
-@fm.numpyfunc
+@fm.xarrayfunc
 @fm.chunk('array')
 def decomposition(array, n_components=None, decomposer='TruncatedSVD',
                   centering=True, **kwargs):
@@ -89,7 +89,6 @@ def decomposition(array, n_components=None, decomposer='TruncatedSVD',
 
     """
     logger = getLogger('fmflow.models.decomposition')
-    logger.debug({k:v for k,v in locals().items() if k!='logger'})
 
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
