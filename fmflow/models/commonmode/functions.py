@@ -2,6 +2,7 @@
 
 # public items
 __all__ = [
+    'pca',
     'empca',
     'decomposition',
 ]
@@ -22,7 +23,33 @@ SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
 
 
 # functions
-@fm.numpyfunc
+@fm.xarrayfunc
+@fm.chunk('array')
+def pca(array, n_components=50, optimize_n=True, centering=True):
+    """Reconstruct an array from decomposed one with PCA.
+
+    Args:
+        array (xarray.DataArray): An input array to be decomposed.
+        n_components (int): A number of components to keep.
+        optimize_n (bool): If True, `n_components` used for reconstruction is
+            optimized by an exponential fitting of eigen values of PCA.
+        centering (bool): If True, mean vector along time axis is subtracted from
+            `array` before computing PCA and then added to the reconstructed one.
+        kwargs (dict): Parameters for the timechunk calculation such as
+            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.
+
+    Returns:
+        array (xarray.DataArray): An output reconstructed array.
+
+    """
+    logger = getLogger('fmflow.models.pca')
+    model = fm.models.PCA(n_components, optimize_n, logger=logger)
+
+    mean = np.mean(array, 0) if centering else 0
+    transformed = model.fit_transform(array-mean)
+    return transformed @ model.components_ + mean
+
+
 @fm.xarrayfunc
 @fm.chunk('array', 'weights')
 def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
