@@ -329,7 +329,6 @@ def make_obsinfo_sam45(hdus):
     header['ra']       = obsinfo['dsrc_pos'][0][0]
     header['dec']      = obsinfo['dsrc_pos'][1][0]
     header['equinox']  = float(re.findall('\d+', obsinfo['cepoch'])[0])
-    header['fmflow']   = fm.__version__
 
     data = OrderedDict()
     data['arrayid']   = np.unique(datinfo['arrayid'])
