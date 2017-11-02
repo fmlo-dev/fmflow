@@ -45,10 +45,12 @@ class FMSpectrumAccessor(BaseAccessor):
         """
         super().__init__(spectrum)
 
-    def fromarray(self, weights=None, reverse=False):
+    @classmethod
+    def fromarray(cls, array, weights=None, reverse=False):
         """Create a spectrum from the array.
 
         Args:
+            array (xarray.DataArray): An array.
             weights (xarray.DataArray, optional): A weight array.
             reverse (bool, optional): If True, the array is reverse-demodulated
                 (i.e. -1 * fmch is used for demodulation). Default is False.
@@ -57,7 +59,7 @@ class FMSpectrumAccessor(BaseAccessor):
             spectrum (xarray.DataArray): A spectrum.
 
         """
-        array = self._dataarray.copy()
+        array = array.copy()
 
         if weights is None:
             weights = fm.ones_like(array)
@@ -71,19 +73,15 @@ class FMSpectrumAccessor(BaseAccessor):
         # weighted mean and square mean
         mean1 = (weights*array).sum('t') / weights.sum('t')
         mean2 = (weights*array**2).sum('t') / weights.sum('t')
-        num   = (~np.isnan(array)).sum('t')
+        sum_n = (~np.isnan(weights)).sum('t')
 
         # noise (weighted std)
-        noise = ((mean2-mean1**2) / num)**0.5
-        noise[num<=2] = np.inf # edge treatment
-
-        # freq
-        if array.fma.isdemodulated_r:
-            freq = array.fimg
-        else:
-            freq = array.fsig
+        noise = ((mean2-mean1**2) / sum_n)**0.5
+        noise[sum_n<=2] = np.inf # edge treatment
 
         # coords
+        freq = array.fimg if reverse else array.fsig
+
         chcoords = deepcopy(array.fma.chcoords)
         scalarcoords = deepcopy(array.fma.scalarcoords)
         chcoords.update({'freq': freq.values, 'noise': noise.values})
