@@ -34,10 +34,10 @@ def spectrum(data, chcoords=None, scalarcoords=None, attrs=None, name=None):
 
     # update coords with input values (if any)
     if chcoords is not None:
-        spectrum.coords.update({key: ('ch', val) for key, val in chcoords.items()})
+        spectrum.fms.updatecoords(chcoords, 'ch')
 
     if scalarcoords is not None:
-        spectrum.coords.update(scalarcoords)
+        spectrum.fms.updatecoords(scalarcoords)
 
     return spectrum
 
