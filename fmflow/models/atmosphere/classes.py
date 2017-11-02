@@ -38,11 +38,11 @@ class AtmosLines(BaseModel):
     amtbs    = []
 
     def __init__(self, snr_threshold=10, ch_tolerance=5, *, logger=None):
-        super().__init__(logger)
-        self.params = {
+        params = {
             'snr_threshold': snr_threshold,
             'ch_tolerance': ch_tolerance,
         }
+        super().__init__(params, logger)
 
 
     def fit(self, freq, spec, noise, vrad=0.0):
