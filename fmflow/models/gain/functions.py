@@ -18,5 +18,4 @@ import numpy as np
 def ongain(Pon, window_length=51, polyorder=3):
     logger = getLogger('fmflow.models.ongain')
     model  = fm.models.ONGain(window_length, polyorder, logger=logger)
-    logger.debug(model)
     return model.fit(Pon)
