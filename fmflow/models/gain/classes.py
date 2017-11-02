@@ -5,6 +5,9 @@ __all__ = [
     'ONGain',
 ]
 
+# standard library
+from copy import deepcopy
+
 # dependent packages
 import fmflow as fm
 import numpy as np
@@ -39,15 +42,24 @@ class ONGain(BaseModel):
     def to_ilogG(logG):
         bfmch = logG.fmch.values.astype(i8).tobytes()
         ifmch = np.arange(logG.fmch.min(), logG.fmch.max()+1)
-
         glogG = logG.groupby('fmch').mean('t')
-        interp = interp1d(glogG.fmch, glogG, axis=0)
-        return fm.array(interp(ifmch), {'fmch': ifmch}, {}, {'bfmch': bfmch})
+        ilogG = interp1d(glogG.fmch, glogG, axis=0)(ifmch)
+
+        # coords
+        tcoords = {'fmch': ifmch}
+        chcoords = deepcopy(logG.fma.chcoords)
+        scalarcoords = {'bfmch': bfmch}
+
+        return fm.array(ilogG, tcoords, chcoords, scalarcoords)
 
     @staticmethod
     def to_logG(ilogG):
         ifmch = ilogG.fmch.values
-        fmch = np.fromstring(ilogG.bfmch.values, i8)
+        fmch  = np.fromstring(ilogG.bfmch.values, i8)
+        logG  = interp1d(ifmch, ilogG, axis=0)(fmch)
 
-        interp = interp1d(ifmch, ilogG, axis=0)
-        return fm.array(interp(fmch), {'fmch': fmch})
+        # coords
+        tcoords = {'fmch': fmch}
+        chcoords = deepcopy(ilogG.fma.chcoords)
+
+        return fm.array(logG, tcoords, chcoords)
