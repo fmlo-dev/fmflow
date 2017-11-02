@@ -16,9 +16,10 @@ import numpy as np
 
 # functions
 @fm.chunk('array', 'weights')
-def astrolines(array, weights=None, reverse=False, mode='spectrum', freqlim=None,
-               snr_threshold=10, cutoff_width=3, despiking=True, fit_function=None,
-               subtraction_gain=0.5, convergence=1e-3, n_maxiters=10000, **kwargs):
+def astrolines(array, weights=None, reverse=False, mode='spectrum',
+               freqlim=None, function='cutoff', despiking=True, snr_threshold=10,
+               deconvolution_width=3, subtraction_gain=0.5, convergence=1e-3,
+               n_maxiters=10000, **kwargs):
     """Model astrolines by cutoff-and-fitting method.
 
     Args:
@@ -27,10 +28,10 @@ def astrolines(array, weights=None, reverse=False, mode='spectrum', freqlim=None
         reverse (bool, optional):
         mode (str, optional):
         freqlim (list of float, optional):
-        snr_threshold (float, optional):
-        cutoff_width (float, optional):
+        function (str, optional):
         despiking (bool, optional):
-        fit_function (str, optional):
+        snr_threshold (float, optional):
+        deconvolution_width (float, optional):
         subtraction_gain (float, optional):
         convergence (float, optional):
         n_maxiters (int, optional):
@@ -40,9 +41,9 @@ def astrolines(array, weights=None, reverse=False, mode='spectrum', freqlim=None
 
     """
     logger = getLogger('fmflow.models.atmoslines')
-    model = fm.models.AstroLines(snr_threshold, cutoff_width, despiking, fit_function,
-                                 subtraction_gain, convergence=convergence,
-                                 n_maxiters=n_maxiters, logger=logger)
+    model = fm.models.AstroLines(function, despiking, snr_threshold,
+                                 deconvolution_width, subtraction_gain, convergence=convergence, n_maxiters=n_maxiters,
+                                 logger=logger)
 
     if mode.lower() == 'spectrum':
         spec = fm.tospectrum(array, weights, reverse, **kwargs)
