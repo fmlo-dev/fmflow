@@ -37,7 +37,8 @@ DATACOORDS = lambda array: OrderedDict([
 ])
 
 SCALARCOORDS = OrderedDict([
-    ('status', 'DEMODULATED+'),
+    ('type', BaseAccessor.FMCUBE),
+    ('status', BaseAccessor.DEMODULATED),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
     ('yref', 0.0),
