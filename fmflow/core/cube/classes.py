@@ -44,13 +44,14 @@ SCALARCOORDS = OrderedDict([
     ('chno', 0),
 ])
 
-GRIDDIST_MAX = 3
-N_CHUNKS = os.cpu_count() - 1
+GDIST_MAX = 3
 
 
 # classes
 @xr.register_dataarray_accessor('fmc')
 class FMCubeAccessor(BaseAccessor):
+    kernel = None
+
     def __init__(self, cube):
         """Initialize the FM cube accessor.
 
@@ -65,7 +66,8 @@ class FMCubeAccessor(BaseAccessor):
         super().__init__(cube)
 
     @classmethod
-    def fromarray(cls, array, weights=None, reverse=False, gridsize=10.0/3600):
+    def fromarray(cls, array, weights=None, reverse=False, gridsize=10.0/3600,
+                  gcf='besselgauss', reuse_kernel=True):
         """Create a cube from an array.
 
         Args:
@@ -93,12 +95,9 @@ class FMCubeAccessor(BaseAccessor):
         array1 = weights * array
         array2 = weights * array**2
 
-        # set gridparams
-        cls.set_gridparams(array, gridsize)
-
         # make cube, noise
-        gcv = cls.gcv
-        shape = (*gcv.shape[:2], array.shape[1])
+        cls.setgrid(array, gridsize, gcf, reuse_kernel)
+        shape = (*cls.kernel.shape[:2], array.shape[1])
 
         sum_a1 = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
         sum_a2 = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
@@ -107,14 +106,14 @@ class FMCubeAccessor(BaseAccessor):
 
         with fm.utils.ignore_numpy_errors():
             for i, j in product(*map(range, shape[:2])):
-                gcv_ij = gcv[i, j]
-                mask   = (gcv_ij > 0)
-                mgcv, mweights = gcv_ij[mask], weights[mask]
+                kernel_ij = cls.kernel[i, j]
+                mask = (kernel_ij > 0)
+                mkernel, mweights = kernel_ij[mask], weights[mask]
                 marray1, marray2 = array1[mask], array2[mask]
 
-                sum_a1[i, j] = (mgcv*marray1).sum('t')
-                sum_a2[i, j] = (mgcv*marray2).sum('t')
-                sum_w[i, j]  = mweights.sum('t')
+                sum_a1[i, j] = (mkernel*marray1).sum('t')
+                sum_a2[i, j] = (mkernel*marray2).sum('t')
+                sum_w[i, j]  = (mkernel*mweights).sum('t')
                 sum_n[i, j]  = (~np.isnan(mweights)).sum('t')
 
             # weighted mean and square mean
@@ -123,7 +122,7 @@ class FMCubeAccessor(BaseAccessor):
 
             # noise (weighted std)
             noise = ((mean2-mean1**2) / sum_n)**0.5
-            noise[sum_n<=2] = np.inf # edge treatment
+            noise.values[sum_n.values<=2] = np.inf # edge treatment
 
         # coords
         freq = array.fimg if reverse else array.fsig
@@ -149,33 +148,65 @@ class FMCubeAccessor(BaseAccessor):
             array (xarray.DataArray): An array filled with the cube.
 
         """
-        pass
+        array = fm.zeros_like(array)
+
+        if array.fma.ismodulated:
+            ismodulated = True
+            if self.isdemodulated_r:
+                array = fm.demodulate(array, True)
+            else:
+                array = fm.demodulate(array, False)
+        else:
+            ismodulated = False
+
+        # check compatibility
+        if not np.all(self.chid == array.chid):
+            raise FMCubeError('cannot cast the cube on the array')
+
+        if not self.chno == array.chno:
+            raise FMCubeError('cannot cast the cube to the array')
+
+        x, y = array.x, array.y
+        gx, gy = self.x, self.y
+        ix = interp1d(gx, np.arange(len(gx)))(x)
+        iy = interp1d(gy, np.arange(len(gy)))(y)
+        for ch in range(len(self.ch)):
+            array[:, ch] = map_coordinates(self.values[:, :, ch], (ix, iy))
+
+        if ismodulated:
+            return fm.modulate(array)
+        else:
+            return array
+
 
     @classmethod
-    def set_gridparams(cls, array, gridsize=10/3600):
-        # x, y (and their references) of the array
-        cls.x  = xr.DataArray(array.x.values, dims='t')
-        cls.y  = xr.DataArray(array.y.values, dims='t')
-        cls.x0 = array.xref.values
-        cls.y0 = array.yref.values
+    def setgrid(cls, array, gridsize=10/3600, gcf='besselgauss', reuse_kernel=True):
+        if cls.kernel is None or not reuse_kernel:
+            # x, y (and their references) of the array
+            x  = xr.DataArray(array.x.values, dims='t')
+            y  = xr.DataArray(array.y.values, dims='t')
+            x0 = array.xref.values
+            y0 = array.yref.values
 
-        # x, y of the grid
-        gxrel_min = gridsize * np.floor((cls.x-cls.x0).min() / gridsize)
-        gyrel_min = gridsize * np.floor((cls.y-cls.y0).min() / gridsize)
-        gxrel_max = gridsize * np.ceil((cls.x-cls.x0).max() / gridsize)
-        gyrel_max = gridsize * np.ceil((cls.y-cls.y0).max() / gridsize)
-        cls.gx = cls.x0 + np.arange(gxrel_min, gxrel_max+gridsize, gridsize)
-        cls.gy = cls.y0 + np.arange(gyrel_min, gyrel_max+gridsize, gridsize)
+            # x, y of the grid
+            gxrel_min = gridsize * np.floor((x-x0).min() / gridsize)
+            gyrel_min = gridsize * np.floor((y-y0).min() / gridsize)
+            gxrel_max = gridsize * np.ceil((x-x0).max() / gridsize)
+            gyrel_max = gridsize * np.ceil((y-y0).max() / gridsize)
+            cls.gx = x0 + np.arange(gxrel_min, gxrel_max+gridsize, gridsize)
+            cls.gy = y0 + np.arange(gyrel_min, gyrel_max+gridsize, gridsize)
 
-        # grid distances between grid (x,y)s and each (x,y) of array
-        # as an xarray.DataArray whose dims = ('x', 'y', 't')
-        mgx = xr.DataArray(np.meshgrid(cls.gx, cls.gy)[0].T, dims=('x', 'y'))
-        mgy = xr.DataArray(np.meshgrid(cls.gx, cls.gy)[1].T, dims=('x', 'y'))
-        cls.gdist = np.sqrt((mgx-cls.x)**2+(mgy-cls.y)**2) / gridsize
+            # grid distances between grid (x,y)s and each (x,y) of array
+            # as an xarray.DataArray whose dims = ('x', 'y', 't')
+            mgx, mgy = np.meshgrid(cls.gx, cls.gy)
+            mgx = xr.DataArray(mgx.T, dims=('x', 'y'))
+            mgy = xr.DataArray(mgy.T, dims=('x', 'y'))
+            gdist = np.sqrt((mgx-x)**2+(mgy-y)**2) / gridsize
 
-        # grid convolution values
-        cls.gcv = fm.xarrayfunc(cls.gcf_besselgauss)(cls.gdist)
-        cls.gcv.values[cls.gdist>GRIDDIST_MAX] = 0.0
+            # grid convolution kernel
+            gcf = getattr(cls, 'gcf_{}'.format(gcf))
+            cls.kernel = fm.xarrayfunc(gcf)(gdist)
+            cls.kernel.values[gdist.values>GDIST_MAX] = 0
 
     @staticmethod
     def gcf_besselgauss(r, a=1.55, b=2.52):
