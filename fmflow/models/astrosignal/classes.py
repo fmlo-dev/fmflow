@@ -23,8 +23,7 @@ class AstroLines(BaseModel):
     def __init__(self, snr_threshold=10, cutoff_width=3, despiking=True,
                  fit_function=None, subtraction_gain=0.5, *, convergence=1e-3,
                  n_maxiters=10000, logger=None):
-        super().__init__(logger)
-        self.params = {
+        params = {
             'snr_threshold': snr_threshold,
             'cutoff_width': cutoff_width,
             'despiking': despiking,
@@ -33,6 +32,7 @@ class AstroLines(BaseModel):
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
+        super().__init__(params, logger)
 
     def fit(self, freq, spec, noise, freqlim=None):
         freq  = np.asarray(freq).copy()
