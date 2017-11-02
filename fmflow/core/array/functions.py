@@ -55,13 +55,13 @@ def array(data, tcoords=None, chcoords=None, scalarcoords=None, attrs=None, name
 
     # update coords with input values (if any)
     if tcoords is not None:
-        array.coords.update({key: ('t', val) for key, val in tcoords.items()})
+        array.fma.updatecoords(tcoords, 't')
 
     if chcoords is not None:
-        array.coords.update({key: ('ch', val) for key, val in chcoords.items()})
+        array.fma.updatecoords(chcoords, 'ch')
 
     if scalarcoords is not None:
-        array.coords.update(scalarcoords)
+        array.fma.updatecoords(scalarcoords)
 
     return array
 
