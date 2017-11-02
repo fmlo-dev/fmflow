@@ -68,7 +68,7 @@ def tocube(array, weights=None, reverse=False):
         cube (xarray.DataArray): A cube.
 
     """
-    return array.fmc.fromarray(weights, reverse)
+    return xr.DataArray.fmc.fromarray(array, weights, reverse)
 
 
 def fromcube(cube, array):
