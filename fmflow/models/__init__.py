@@ -2,18 +2,19 @@
 
 # base model
 class BaseModel(object):
-    def __init__(self, logger=None):
+    def __init__(self, params, logger=None):
         import fmflow as fm
+        self.params = params
         self.logger = logger or fm.logger
-        self.params = {}
+        self.logger.debug(self)
 
     def __getattr__(self, name):
         return self.params[name]
 
     def __repr__(self):
-        cname = self.__class__.__name__
-        params = self.params
-        return '{0}({1})'.format(cname, params)
+        clsname = self.__class__.__name__
+        params  = self.params
+        return '{0}({1})'.format(clsname, params)
 
 
 # submodules
