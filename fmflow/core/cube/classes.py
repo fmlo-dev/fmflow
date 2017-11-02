@@ -32,11 +32,11 @@ CHCOORDS = lambda array: OrderedDict([
     ('freq', ('ch', np.zeros(array.shape[2], dtype=float))),
 ])
 
-CUBECOORDS = lambda array: OrderedDict([
+DATACOORDS = lambda array: OrderedDict([
     ('noise', (('x', 'y', 'ch'), np.zeros(array.shape, dtype=float))),
 ])
 
-PTCOORDS = OrderedDict([
+SCALARCOORDS = OrderedDict([
     ('status', 'DEMODULATED+'),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
@@ -44,7 +44,7 @@ PTCOORDS = OrderedDict([
     ('chno', 0),
 ])
 
-DIST_MAX = 3
+GRIDDIST_MAX = 3
 N_CHUNKS = os.cpu_count() - 1
 
 
@@ -64,19 +64,22 @@ class FMCubeAccessor(BaseAccessor):
         """
         super().__init__(cube)
 
-    def fromarray(self, weights=None, reverse=False, gridsize=10.0/3600):
+    @classmethod
+    def fromarray(cls, array, weights=None, reverse=False, gridsize=10.0/3600):
         """Create a cube from an array.
 
         Args:
+            array (xarray.DataArray): An array.
             weights (xarray.DataArray, optional): A weight array.
             reverse (bool, optional): If True, the array is reverse-demodulated
                 (i.e. -1 * fmch is used for demodulation). Default is False.
+            gridsize (float, optional): Grid size in units of degree.
 
         Returns:
             cube (xarray.DataArray): A cube.
 
         """
-        array = self._dataarray.copy()
+        array = array.copy()
 
         if weights is None:
             weights = fm.ones_like(array)
@@ -91,40 +94,49 @@ class FMCubeAccessor(BaseAccessor):
         array2 = weights * array**2
 
         # set gridparams
-        self.set_gridparams(array, gridsize)
+        cls.set_gridparams(array, gridsize)
 
-        # calc gridding to make cube, noise
-        @fm.chunk('i', concatfunc=self.concatfunc)
-        def gridding(i):
-            sgcvs  = np.array_split(cls.gcvs, N_CHUNKS)[int(i)]
-            smasks = (sgcvs > 0)
+        # make cube, noise
+        gcv = cls.gcv
+        shape = (*gcv.shape[:2], array.shape[1])
 
-            shape = (*sgcvs.shape[:2], array.shape[1])
-            cube  = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
-            noise = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
+        sum_a1 = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
+        sum_a2 = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
+        sum_w  = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
+        sum_n  = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
 
-            with fm.utils.ignore_numpy_errors():
-                for i, j in product(*map(range, shape[:2])):
-                    gcv, mask = sgcvs[i, j], smasks[i, j]
-                    mgcv, mweights = gcv[mask], weights[mask]
-                    marray1, marray2 = array1[mask], array2[mask]
+        with fm.utils.ignore_numpy_errors():
+            for i, j in product(*map(range, shape[:2])):
+                gcv_ij = gcv[i, j]
+                mask   = (gcv_ij > 0)
+                mgcv, mweights = gcv_ij[mask], weights[mask]
+                marray1, marray2 = array1[mask], array2[mask]
 
-                    mean1 = (mgcv*marray1).sum('t') / mweights.sum('t')
-                    mean2 = (mgcv*marray2).sum('t') / mweights.sum('t')
-                    num   = (~np.isnan(marray1)).sum('t')
+                sum_a1[i, j] = (mgcv*marray1).sum('t')
+                sum_a2[i, j] = (mgcv*marray2).sum('t')
+                sum_w[i, j]  = mweights.sum('t')
+                sum_n[i, j]  = (~np.isnan(mweights)).sum('t')
 
-                    cube[i, j]  = mean1
-                    noise[i, j] = ((mean2-mean1**2)/num)**0.5
+            # weighted mean and square mean
+            mean1 = sum_a1 / sum_w
+            mean2 = sum_a2 / sum_w
 
-            return cube, noise
+            # noise (weighted std)
+            noise = ((mean2-mean1**2) / sum_n)**0.5
+            noise[sum_n<=2] = np.inf # edge treatment
 
-        cube, noise = mapping(np.arange(N_CHUNKS), numchunk=N_CHUNKS)
+        # coords
+        freq = array.fimg if reverse else array.fsig
 
-        # freq
-        if array.fma.isdemodulated_r:
-            freq = array.fimg
-        else:
-            freq = array.fsig
+        xcoords = {'x': cls.gx}
+        ycoords = {'y': cls.gy}
+        chcoords = deepcopy(array.fma.chcoords)
+        chcoords.update({'freq': freq.values})
+        datacoords = {'noise': noise.values}
+        scalarcoords = deepcopy(array.fma.scalarcoords)
+
+        return fm.cube(mean1.values, xcoords, ycoords,
+                       chcoords, datacoords, scalarcoords)
 
     def toarray(self, array):
         """Create an array filled with the cube.
@@ -137,7 +149,7 @@ class FMCubeAccessor(BaseAccessor):
             array (xarray.DataArray): An array filled with the cube.
 
         """
-        array = fm.zeros_like(array)
+        pass
 
     @classmethod
     def set_gridparams(cls, array, gridsize=10/3600):
@@ -152,21 +164,22 @@ class FMCubeAccessor(BaseAccessor):
         gyrel_min = gridsize * np.floor((cls.y-cls.y0).min() / gridsize)
         gxrel_max = gridsize * np.ceil((cls.x-cls.x0).max() / gridsize)
         gyrel_max = gridsize * np.ceil((cls.y-cls.y0).max() / gridsize)
-        cls.gx = x0 + np.arange(gxrel_min, gxrel_max+gridsize, gridsize)
-        cls.gy = y0 + np.arange(gyrel_min, gyrel_max+gridsize, gridsize)
+        cls.gx = cls.x0 + np.arange(gxrel_min, gxrel_max+gridsize, gridsize)
+        cls.gy = cls.y0 + np.arange(gyrel_min, gyrel_max+gridsize, gridsize)
 
         # grid distances between grid (x,y)s and each (x,y) of array
         # as an xarray.DataArray whose dims = ('x', 'y', 't')
         mgx = xr.DataArray(np.meshgrid(cls.gx, cls.gy)[0].T, dims=('x', 'y'))
         mgy = xr.DataArray(np.meshgrid(cls.gx, cls.gy)[1].T, dims=('x', 'y'))
-        cls.dist = np.sqrt((mgx-x)**2+(mgy-y)**2) / gridsize
+        cls.gdist = np.sqrt((mgx-cls.x)**2+(mgy-cls.y)**2) / gridsize
 
         # grid convolution values
-        cls.gcvs = self.gcf_besselgauss(cls.dist)
-        cls.gcvs.values[cls.dist>DIST_MAX] = 0.0
+        cls.gcv = fm.xarrayfunc(cls.gcf_besselgauss)(cls.gdist)
+        cls.gcv.values[cls.gdist>GRIDDIST_MAX] = 0.0
 
     @staticmethod
     def gcf_besselgauss(r, a=1.55, b=2.52):
+        """Grid convolution function of Bessel-Gaussian."""
         with fm.utils.ignore_numpy_errors():
             gcf = 2*j1(np.pi*r/a)/(np.pi*r/a) * np.exp(-(r/b)**2)
 
@@ -174,17 +187,13 @@ class FMCubeAccessor(BaseAccessor):
 
     @staticmethod
     def gcf_sincgauss(r, a=1.55, b=2.52):
+        """Grid convolution function of Sinc-Gaussian."""
         return np.sinc(r/a) * np.exp(-(r/b)**2)
 
     @staticmethod
     def gcf_gauss(r, a=1.00):
+        """Grid convolution function of Gaussian."""
         return np.exp(-(r/a)**2)
-
-    @staticmethod
-    def concatfunc(gridding_results):
-        cube  = xr.concat([r[0] for r in gridding_results], dim='x')
-        noise = xr.concat([r[1] for r in gridding_results], dim='x')
-        return cube, noise
 
     def _initcoords(self):
         """Initialize coords with default values.
@@ -197,8 +206,8 @@ class FMCubeAccessor(BaseAccessor):
         self.coords.update(XCOORDS(self))
         self.coords.update(YCOORDS(self))
         self.coords.update(CHCOORDS(self))
-        self.coords.update(CUBECOORDS(self))
-        self.coords.update(PTSCOORDS)
+        self.coords.update(DATACOORDS(self))
+        self.coords.update(SCALARCOORDS)
 
 
 class FMCubeError(Exception):
