@@ -6,6 +6,9 @@ import re as _re
 
 # base accessor
 class BaseAccessor(object):
+    FMARRAY    = 'FMARRAY',
+    FMCUBE     = 'FMCUBE',
+    FMSPECTRUM = 'FMSPECTRUM',
     MODULATED     = 'MODULATED'
     DEMODULATED   = 'DEMODULATED'
     DEMODULATED_R = 'DEMODULATED_R'
