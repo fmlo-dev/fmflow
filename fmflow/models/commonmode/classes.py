@@ -22,11 +22,11 @@ from scipy.signal import savgol_filter
 # classes
 class PCA(BaseModel):
     def __init__(self, n_components=50, optimize_n=True, *, logger=None):
-        super().__init__(logger)
-        self.params = {
+        params = {
             'n_components': n_components,
             'optimize_n': optimize_n,
         }
+        super().__init__(params, logger)
 
     def fit_transform(self, X):
         K = deepcopy(self.n_components)
@@ -64,8 +64,7 @@ class EMPCA(BaseModel):
     def __init__(self, n_components=50, ch_smooth=None, optimize_n=True,
                  initialize='random', random_seed=None, *, convergence=1e-3,
                  n_maxiters=300, logger=None):
-        super().__init__(logger)
-        self.params = {
+        params = {
             'n_components': n_components,
             'ch_smooth': ch_smooth,
             'optimize_n': optimize_n,
@@ -74,6 +73,7 @@ class EMPCA(BaseModel):
             'convergence': convergence,
             'n_maxiters': n_maxiters,
         }
+        super().__init__(params, logger)
 
     def fit_transform(self, X, W=None):
         X = np.asarray(X)
