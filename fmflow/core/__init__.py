@@ -18,6 +18,12 @@ class BaseAccessor(object):
         """A dictionary of values that label `dim` axis."""
         return {k: v.values for k, v in self.coords.items() if v.dims==(dim,)}
 
+    def updatecoords(self, coords, dim=None):
+        if dim is None:
+            self.coords.update(coords)
+        else:
+            self.coords.update({key: (dim, val) for key, val in coords.items()})
+
     @property
     def scalarcoords(self):
         """A dictionary of values that don't label any axes."""
