@@ -70,14 +70,15 @@ class FMSpectrumAccessor(BaseAccessor):
         if weights.fma.ismodulated:
             weights = fm.demodulate(weights, reverse)
 
-        # weighted mean and square mean
-        mean1 = (weights*array).sum('t') / weights.sum('t')
-        mean2 = (weights*array**2).sum('t') / weights.sum('t')
-        sum_n = (~np.isnan(weights)).sum('t')
+        with fm.utils.ignore_numpy_errors():
+            # weighted mean and square mean
+            mean1 = (weights*array).sum('t') / weights.sum('t')
+            mean2 = (weights*array**2).sum('t') / weights.sum('t')
+            sum_n = (~np.isnan(weights)).sum('t')
 
-        # noise (weighted std)
-        noise = ((mean2-mean1**2) / sum_n)**0.5
-        noise[sum_n<=2] = np.inf # edge treatment
+            # noise (weighted std)
+            noise = ((mean2-mean1**2) / sum_n)**0.5
+            noise.values[sum_n.values<=2] = np.inf # edge treatment
 
         # coords
         freq = array.fimg if reverse else array.fsig
@@ -102,10 +103,13 @@ class FMSpectrumAccessor(BaseAccessor):
         array = fm.zeros_like(array)
 
         if array.fma.ismodulated:
+            ismodulated = True
             if self.isdemodulated_r:
                 array = fm.demodulate(array, True)
             else:
                 array = fm.demodulate(array, False)
+        else:
+            ismodulated = False
 
         # check compatibility
         if not np.all(self.chid == array.chid):
@@ -114,7 +118,10 @@ class FMSpectrumAccessor(BaseAccessor):
         if not self.chno == array.chno:
             raise FMSpectrumError('cannot cast the spectrum to the array')
 
-        return fm.modulate(array + self.values)
+        if ismodulated:
+            return fm.modulate(array + self.values)
+        else:
+            return array
 
     def _initcoords(self):
         """Initialize coords with default values.
