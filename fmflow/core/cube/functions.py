@@ -55,7 +55,8 @@ def cube(data, xcoords=None, ycoords=None, chcoords=None,
     return cube
 
 
-def tocube(array, weights=None, reverse=False):
+def tocube(array, weights=None, reverse=False,
+           gridsize=10/3600, gcf='besselgauss', reuse_kernel=True):
     """Create a cube from an array.
 
     Args:
@@ -68,7 +69,8 @@ def tocube(array, weights=None, reverse=False):
         cube (xarray.DataArray): A cube.
 
     """
-    return xr.DataArray.fmc.fromarray(array, weights, reverse)
+    return xr.DataArray.fmc.fromarray(array, weights, reverse,
+                                      gridsize, gcf, reuse_kernel)
 
 
 def fromcube(cube, array):
