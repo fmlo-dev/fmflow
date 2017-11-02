@@ -30,6 +30,7 @@ CHCOORDS = lambda array: OrderedDict([
 ])
 
 SCALARCOORDS = OrderedDict([
+    ('type', BaseAccessor.FMARRAY),
     ('status', BaseAccessor.MODULATED),
     ('coordsys', 'RADEC'),
     ('xref', 0.0),
