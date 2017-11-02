@@ -14,6 +14,7 @@ import fmflow as fm
 import numpy as np
 import xarray as xr
 from .. import BaseAccessor
+from numba import jit
 from scipy.interpolate import interp1d
 from scipy.ndimage.interpolation import map_coordinates
 from scipy.special import j1
@@ -93,8 +94,8 @@ class FMCubeAccessor(BaseAccessor):
         if weights.fma.ismodulated:
             weights = fm.demodulate(weights, reverse)
 
-        array1 = weights * array
-        array2 = weights * array**2
+        warray1 = weights * array
+        warray2 = weights * array**2
 
         # make cube, noise
         cls.setgrid(array, gridsize, gcf, reuse_kernel)
@@ -106,16 +107,18 @@ class FMCubeAccessor(BaseAccessor):
         sum_n  = xr.DataArray(np.empty(shape), dims=('x', 'y', 'ch'))
 
         with fm.utils.ignore_numpy_errors():
-            for i, j in product(*map(range, shape[:2])):
-                kernel_ij = cls.kernel[i, j]
-                mask = (kernel_ij > 0)
-                mkernel, mweights = kernel_ij[mask], weights[mask]
-                marray1, marray2 = array1[mask], array2[mask]
+            for x, y in product(*map(range, shape[:2])):
+                k_ij = cls.kernel[x, y]
+                mask = (k_ij > 0)
+                mkernel   = k_ij[mask]
+                mwarray1  = warray1[mask]
+                mwarray2  = warray2[mask]
+                mweights  = weights[mask]
 
-                sum_a1[i, j] = (mkernel*marray1).sum('t')
-                sum_a2[i, j] = (mkernel*marray2).sum('t')
-                sum_w[i, j]  = (mkernel*mweights).sum('t')
-                sum_n[i, j]  = (~np.isnan(mweights)).sum('t')
+                sum_a1[x, y] = (mkernel * mwarray1).sum('t')
+                sum_a2[x, y] = (mkernel * mwarray2).sum('t')
+                sum_w[x, y]  = (mkernel * mweights).sum('t')
+                sum_n[x, y]  = (~np.isnan(mweights)).sum('t')
 
             # weighted mean and square mean
             mean1 = sum_a1 / sum_w
