@@ -42,7 +42,8 @@ def astrolines(array, weights=None, reverse=False, mode='spectrum',
     """
     logger = getLogger('fmflow.models.atmoslines')
     model = fm.models.AstroLines(function, despiking, snr_threshold,
-                                 deconvolution_width, subtraction_gain, convergence=convergence, n_maxiters=n_maxiters,
+                                 deconvolution_width, subtraction_gain,
+                                 convergence=convergence, n_maxiters=n_maxiters,
                                  logger=logger)
 
     if mode.lower() == 'spectrum':
