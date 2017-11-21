@@ -66,10 +66,10 @@ class FMSpectrumAccessor(BaseAccessor):
             weights = fm.ones_like(array)
 
         if array.fma.ismodulated:
-            array = fm.demodulate(array, reverse)
-
-        if weights.fma.ismodulated:
+            array   = fm.demodulate(array, reverse)
             weights = fm.demodulate(weights, reverse)
+        else:
+            weights.values[np.isnan(array.values)] = np.nan
 
         with fm.utils.ignore_numpy_errors():
             # weighted mean and square mean
