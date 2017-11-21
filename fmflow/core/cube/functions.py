@@ -56,7 +56,7 @@ def cube(data, chcoords=None, ycoords=None, xcoords=None,
 
 
 def tocube(array, weights=None, reverse=False,
-           gridsize=10/3600, gcf='besselgauss', reuse_kernel=True):
+           gridsize=10, gridunit='arcsec', gcf='besselgauss'):
     """Create a cube from an array.
 
     Args:
@@ -64,13 +64,16 @@ def tocube(array, weights=None, reverse=False,
         weights (xarray.DataArray, optional): A weight array.
         reverse (bool, optional): If True, the array is reverse-demodulated
             (i.e. -1 * fmch is used for demodulation). Default is False.
+        gridsize (float, optional): Grid size in units of `gridunit`.
+        gridunit (str, optional): Grid unit of `gridsize`.
+        gcf (str, optional): Grid convolution function.
 
     Returns:
         cube (xarray.DataArray): A cube.
 
     """
     return xr.DataArray.fmc.fromarray(array, weights, reverse,
-                                      gridsize, gcf, reuse_kernel)
+                                      gridsize, gridunit, gcf)
 
 
 def fromcube(cube, array):
