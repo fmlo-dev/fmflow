@@ -53,10 +53,11 @@ def astrolines(array, weights=None, reverse=False, mode='spectrum',
         return fm.fromspectrum(spec, array)
     elif mode.lower() == 'cube':
         cube  = fm.tocube(array, weights, reverse, **kwargs)
+        cube.values[np.isnan(cube.values)] = 0
         freq  = 1e-9 * cube.freq
         noise = cube.noise
-        for x, y in product(range(len(cube.x)), range(len(cube.y))):
-            cube[x, y, :] = model.fit(freq, cube[x, y], noise[x, y], freqlim)
+        for y, x in product(range(len(cube.y)), range(len(cube.x))):
+            cube[:, y, x] = model.fit(freq, cube[:, y, x], noise[:, y, x], freqlim)
 
         return fm.fromcube(cube, array)
     else:
