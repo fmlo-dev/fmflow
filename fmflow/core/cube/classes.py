@@ -186,8 +186,12 @@ class FMCubeAccessor(BaseAccessor):
         y, x = array.y.values, array.x.values
         y0, x0 = array.yref.values, array.xref.values
 
+        # parse gridsize (if any)
+        if isinstance(gridsize, str):
+            gridsize, gridunit = str(u.Unit(gridsize)).split()
+
         # x, y of the grid
-        gs = gridsize * getattr(u, gridunit).to('degree')
+        gs = float(gridsize) * getattr(u, gridunit).to('degree')
         gyrel_min = gs * np.floor((y-y0).min() / gs)
         gxrel_min = gs * np.floor((x-x0).min() / gs)
         gyrel_max = gs * np.ceil((y-y0).max() / gs)
