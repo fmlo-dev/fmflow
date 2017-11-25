@@ -48,8 +48,9 @@ class AstroLines(BaseModel):
         if self.function is None or not np.any(spec):
             model = spec.copy()
         elif self.function == 'cutoff':
-            model = spec.copy()
-            model[spec/noise < self.snr_threshold] = 0
+            with fm.utils.ignore_numpy_errors():
+                model = spec.copy()
+                model[spec/noise < self.snr_threshold] = 0
         elif self.function == 'deconvolution':
             model = self._deconvolve(freq, spec, noise)
         else:
@@ -125,5 +126,6 @@ class AstroLines(BaseModel):
         return model
 
     def _despike(self, model, noise):
-        neighbors = np.hstack([model[1:],0]) + np.hstack([0,model[:-1]])
-        model[neighbors/noise < 0.5*self.snr_threshold] = 0
+        with fm.utils.ignore_numpy_errors():
+            neighbors = np.hstack([model[1:],0]) + np.hstack([0,model[:-1]])
+            model[neighbors/noise < 0.5*self.snr_threshold] = 0
