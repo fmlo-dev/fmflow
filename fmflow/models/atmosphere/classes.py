@@ -49,6 +49,8 @@ class AtmosLines(BaseModel):
         freq  = np.asarray(freq)
         spec  = np.asarray(spec)
         noise =  np.asarray(noise)
+        spec[np.isnan(spec)] = 0
+        noise[np.isnan(noise)] = np.inf 
 
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
