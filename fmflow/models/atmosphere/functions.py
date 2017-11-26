@@ -33,10 +33,13 @@ def atmoslines(array, weights=None, reverse=False, mode='spectrum',
         cube  = fm.tocube(array, weights, reverse, **kwargs)
         spec  = cube.mean(('y', 'x'))
         freq  = 1e-9 * cube.freq
-        noise = (cube.noise**2).sum(('y', 'x'))**0.5
-        noise /= (~np.isnan(cube)).sum(('y', 'x'))
+
+        with fm.utils.ignore_numpy_errors():
+            noise  = (cube.noise**2).sum(('y', 'x'))**0.5
+            noise /= (~np.isnan(cube)).sum(('y', 'x'))
+
         vrad  = array.vrad.values.mean()
-        cube[:] = model.fit(freq, spec, noise, vrad)
+        cube[:] = model.fit(freq, spec, noise, vrad)[:, None, None]
         return fm.fromcube(cube, array)
     else:
         raise ValueError(mode)
