@@ -103,7 +103,7 @@ class FMCubeAccessor(BaseAccessor):
         array_1 = array_w * array.values
         array_2 = array_1 * array.values
 
-        isnan = np.isnan(array_n)
+        isnan = np.isnan(array)
         array_n[isnan] = 0
         array_w[isnan] = 0
         array_1[isnan] = 0
