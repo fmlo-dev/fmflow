@@ -53,6 +53,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False
             'yref': info['DEC'],
             'coordsys': 'RADEC',
             'status': 'MODULATED',
+            'restfreq': info['rfcenter'],
         }
 
         # chcoords
