@@ -50,7 +50,7 @@ class AtmosLines(BaseModel):
         spec  = np.asarray(spec)
         noise =  np.asarray(noise)
         spec[np.isnan(spec)] = 0
-        noise[np.isnan(noise)] = np.inf 
+        noise[np.isnan(noise)] = np.inf
 
         frad = np.median(freq) * vrad/C
         fstep = np.diff(freq).mean()
@@ -135,7 +135,12 @@ class AtmosLines(BaseModel):
             amtau.append(output[:, 1])
             amtb.append(output[:, 2])
 
-        cls.amfreqs.append(output[:, 0])
-        cls.amtaus.append(np.array(amtau))
-        cls.amtbs.append(np.array(amtb)-2.7)
+        amfreq = output[:, 0]
+        amtau  = np.array(amtau)
+        amtb   = np.array(amtb) - 2.7
+        amtb  -= amtb.min(1)[:, np.newaxis]
+
+        cls.amfreqs.append(amfreq)
+        cls.amtaus.append(amtau)
+        cls.amtbs.append(amtb)
         logger.info('computing finished')
