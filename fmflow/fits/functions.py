@@ -21,7 +21,8 @@ i8 = 'i8'
 
 
 # functions
-def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
+def getarray(fitsname, arrayid, scantype, offsetsec=0.0,
+             *, computeam=True, ignore_antennalog=False):
     """Create a modulated array from a FMFITS.
 
     Args:
@@ -29,6 +30,7 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False
         arrayid (str): An array ID with which the output fmarray is created.
         scantype (str): A scan type with which the output fmarray is created.
         offsetsec (float, optional): A float value of FM offset time in units of sec.
+        computeam (bool, optional): If True, atmospheric model is computed. Default is True.
         ignore_antennalog (bool, optional): Whether ignoring antenna log. Default is False.
 
     Returns:
@@ -89,12 +91,15 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False
 
         # finally
         data = be['arraydata'][flag_be].astype(f8)
-        array = fm.array(data, tcoords, chcoords, ptcoords)
+        array = fm.array(data, tcoords, chcoords, ptcoords).squeeze()
 
         if scantype == 'ON':
-            return array.squeeze()
+            if computeam:
+                fm.models.computeam(array)
+
+            return array
         else:
-            return array.squeeze().drop(array.fma.tcoords.keys())
+            return array.drop(array.fma.tcoords.keys())
 
 
 def makeflags(f, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
