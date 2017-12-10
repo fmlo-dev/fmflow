@@ -3,6 +3,7 @@
 # public items
 __all__ = [
     'ONGain',
+    'FMGain',
 ]
 
 # standard library
@@ -63,3 +64,7 @@ class ONGain(BaseModel):
         chcoords = deepcopy(ilogG.fma.chcoords)
 
         return fm.array(logG, tcoords, chcoords)
+
+
+# temporary
+FMGain = ONGain
