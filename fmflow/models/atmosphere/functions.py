@@ -18,7 +18,7 @@ import numpy as np
 # functions
 @fm.chunk('array', 'weights')
 def atmoslines(array, weights=None, reverse=False, mode='spectrum',
-               snr_threshold=10, ch_tolerance=5, **kwargs):
+               freqlim=None, snr_threshold=10, ch_tolerance=5, **kwargs):
     logger = getLogger('fmflow.models.atmoslines')
     model = fm.models.AtmosLines(snr_threshold, ch_tolerance, logger=logger)
 
@@ -27,7 +27,7 @@ def atmoslines(array, weights=None, reverse=False, mode='spectrum',
         freq  = 1e-9 * spec.freq
         noise = spec.noise
         vrad  = array.vrad.values.mean()
-        spec[:] = model.fit(freq, spec, noise, vrad)
+        spec[:] = model.fit(freq, spec, noise, vrad, freqlim)
         return fm.fromspectrum(spec, array)
     elif mode.lower() == 'cube':
         cube  = fm.tocube(array, weights, reverse, **kwargs)
@@ -39,7 +39,7 @@ def atmoslines(array, weights=None, reverse=False, mode='spectrum',
             noise /= (~np.isnan(cube)).sum(('y', 'x'))
 
         vrad  = array.vrad.values.mean()
-        cube[:] = model.fit(freq, spec, noise, vrad)[:, None, None]
+        cube[:] = model.fit(freq, spec, noise, vrad, freqlim)[:, None, None]
         return fm.fromcube(cube, array)
     else:
         raise ValueError(mode)
