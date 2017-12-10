@@ -45,10 +45,16 @@ class AtmosLines(BaseModel):
         super().__init__(params, logger)
 
 
-    def fit(self, freq, spec, noise, vrad=0.0):
+    def fit(self, freq, spec, noise, vrad=0.0, freqlim=None):
         freq  = np.asarray(freq)
         spec  = np.asarray(spec)
         noise =  np.asarray(noise)
+
+        # freq limits
+        if freqlim is not None:
+            spec[freq<freqlim[0]] = 0
+            spec[freq>freqlim[1]] = 0
+
         spec[np.isnan(spec)] = 0
         noise[np.isnan(noise)] = np.inf
 
