@@ -91,15 +91,17 @@ def getarray(fitsname, arrayid, scantype, offsetsec=0.0,
 
         # finally
         data = be['arraydata'][flag_be].astype(f8)
-        array = fm.array(data, tcoords, chcoords, ptcoords).squeeze()
+        array = fm.array(data, tcoords, chcoords, ptcoords)
 
         if scantype == 'ON':
+            array = array.squeeze()
             if computeam:
                 fm.models.computeam(array)
 
             return array
         else:
-            return array.drop(array.fma.tcoords.keys())
+            labels = array.fma.tcoords.keys()
+            return array.squeeze().drop(labels)
 
 
 def makeflags(f, arrayid, scantype, offsetsec=0.0, ignore_antennalog=False):
