@@ -30,3 +30,6 @@ del astrosignal
 del atmosphere
 del commonmode
 del gain
+
+# for sphinx build
+__all__ = dir()

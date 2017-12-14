@@ -7,3 +7,9 @@ from . import fits
 from . import models
 del core
 del logging
+
+# for sphinx build
+__all__ = dir()
+
+# version
+__version__ = '0.1'

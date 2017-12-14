@@ -12,3 +12,6 @@ del datetime
 del fits
 del misc
 del ndarray
+
+# for sphinx build
+__all__ = dir()
