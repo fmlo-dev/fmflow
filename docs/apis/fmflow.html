@@ -1,0 +1,942 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fmflow package &mdash; FMFlow 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="FMFlow 0.1 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FMFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">fmflow package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#module-fmflow">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FMFlow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>fmflow package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/apis/fmflow.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fmflow-package">
+<h1>fmflow package<a class="headerlink" href="#fmflow-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.core.html">fmflow.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.core.html#module-fmflow.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.fits.html">fmflow.fits package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.fits.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.fits.html#module-fmflow.fits.functions">fmflow.fits.functions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.fits.html#module-fmflow.fits">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.logging.html">fmflow.logging package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.logging.html#module-fmflow.logging">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.models.html">fmflow.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.models.html#module-fmflow.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.utils.html">fmflow.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.utils.html#module-fmflow.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-fmflow">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmflow" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fmflow.BaseAccessor">
+<em class="property">class </em><code class="descclassname">fmflow.</code><code class="descname">BaseAccessor</code><span class="sig-paren">(</span><em>dataarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.BaseAccessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.DEMODULATED">
+<code class="descname">DEMODULATED</code><em class="property"> = 'DEMODULATED'</em><a class="headerlink" href="#fmflow.BaseAccessor.DEMODULATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.DEMODULATED_R">
+<code class="descname">DEMODULATED_R</code><em class="property"> = 'DEMODULATED_R'</em><a class="headerlink" href="#fmflow.BaseAccessor.DEMODULATED_R" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.FMARRAY">
+<code class="descname">FMARRAY</code><em class="property"> = 'FMARRAY'</em><a class="headerlink" href="#fmflow.BaseAccessor.FMARRAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.FMCUBE">
+<code class="descname">FMCUBE</code><em class="property"> = 'FMCUBE'</em><a class="headerlink" href="#fmflow.BaseAccessor.FMCUBE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.FMSPECTRUM">
+<code class="descname">FMSPECTRUM</code><em class="property"> = 'FMSPECTRUM'</em><a class="headerlink" href="#fmflow.BaseAccessor.FMSPECTRUM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.MODULATED">
+<code class="descname">MODULATED</code><em class="property"> = 'MODULATED'</em><a class="headerlink" href="#fmflow.BaseAccessor.MODULATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.datacoords">
+<code class="descname">datacoords</code><a class="headerlink" href="#fmflow.BaseAccessor.datacoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of arrays that label full axes of the data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fmflow.BaseAccessor.dimcoords">
+<code class="descname">dimcoords</code><span class="sig-paren">(</span><em>dim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor.dimcoords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.BaseAccessor.dimcoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of values that label <cite>dim</cite> axis.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.isdemodulated">
+<code class="descname">isdemodulated</code><a class="headerlink" href="#fmflow.BaseAccessor.isdemodulated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the array is demodulated (regardless of reverse).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.isdemodulated_r">
+<code class="descname">isdemodulated_r</code><a class="headerlink" href="#fmflow.BaseAccessor.isdemodulated_r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the array is reverse-demodulated.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.ismodulated">
+<code class="descname">ismodulated</code><a class="headerlink" href="#fmflow.BaseAccessor.ismodulated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the array is modulated.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fmflow.BaseAccessor.scalarcoords">
+<code class="descname">scalarcoords</code><a class="headerlink" href="#fmflow.BaseAccessor.scalarcoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary of values that don&#8217;t label any axes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fmflow.BaseAccessor.updatecoords">
+<code class="descname">updatecoords</code><span class="sig-paren">(</span><em>coords</em>, <em>dim=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor.updatecoords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.BaseAccessor.updatecoords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.array">
+<code class="descclassname">fmflow.</code><code class="descname">array</code><span class="sig-paren">(</span><em>data</em>, <em>tcoords=None</em>, <em>chcoords=None</em>, <em>scalarcoords=None</em>, <em>attrs=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array as an instance of xarray.DataArray with FM array accessor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>numpy.ndarray</em>) &#8211; A 2D (time x channel) array.</li>
+<li><strong>tcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label time axis.</li>
+<li><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label channel axis.</li>
+<li><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of values that don&#8217;t label any axes.</li>
+<li><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of attributes to add to the instance.</li>
+<li><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; A string that names the instance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A modulated array.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.chbinning">
+<code class="descclassname">fmflow.</code><code class="descname">chbinning</code><span class="sig-paren">(</span><em>array</em>, <em>size=2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#chbinning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.chbinning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binning an array along ch axis with given size.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An input array.</li>
+<li><strong>size</strong> (<em>int</em>) &#8211; Ch length of a bin.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An output binned array.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">binarray (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.chunk">
+<code class="descclassname">fmflow.</code><code class="descname">chunk</code><span class="sig-paren">(</span><em>*argnames</em>, <em>concatfunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/decorators.html#chunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.chunk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a function compatible with multicore chunk processing.</p>
+<p>This function is intended to be used as a decorator like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@fm</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># do something</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">newarray</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">timechunk</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or you can set a global chunk parameter outside the function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timechunk</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.cube">
+<code class="descclassname">fmflow.</code><code class="descname">cube</code><span class="sig-paren">(</span><em>data</em>, <em>chcoords=None</em>, <em>ycoords=None</em>, <em>xcoords=None</em>, <em>datacoords=None</em>, <em>scalarcoords=None</em>, <em>attrs=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#cube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.cube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cube as an instance of xarray.DataArray with FM accessor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>numpy.ndarray</em>) &#8211; A 3D (channel) array.</li>
+<li><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label channel axis.</li>
+<li><strong>ycoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label y axis.</li>
+<li><strong>xcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label x axis.</li>
+<li><strong>datacoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of values that label all axes.</li>
+<li><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of values that don&#8217;t label any axes.</li>
+<li><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of attributes to add to the instance.</li>
+<li><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; A string that names the instance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A cube.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.cube" title="fmflow.cube">cube</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.demodulate">
+<code class="descclassname">fmflow.</code><code class="descname">demodulate</code><span class="sig-paren">(</span><em>array</em>, <em>reverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#demodulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.demodulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a demodulated array from the modulated one.</p>
+<p>This function is only available when the array is modulated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; A modulated array.</li>
+<li><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A demodulated array.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.empty">
+<code class="descclassname">fmflow.</code><code class="descname">empty</code><span class="sig-paren">(</span><em>shape</em>, <em>dtype=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#empty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array of given shape and type, without initializing entries.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> (<em>sequence of ints</em>) &#8211; 2D shape of the array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; The desired data-type for the array.</li>
+<li><strong>kwargs</strong> (<em>optional</em>) &#8211; Other arguments of the array (<a href="#id1"><span class="problematic" id="id2">*</span></a>coords, attrs, and name).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A modulated array without initializing entries.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.empty_like">
+<code class="descclassname">fmflow.</code><code class="descname">empty_like</code><span class="sig-paren">(</span><em>array</em>, <em>dtype=None</em>, <em>keepmeta=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#empty_like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.empty_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array of empty with the same shape and type as the input array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; The shape and data-type of it define
+these same attributes of the output array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; If spacified, this function overrides
+the data-type of the output array.</li>
+<li><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether <a href="#id3"><span class="problematic" id="id4">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array without initializing entries.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.fromcube">
+<code class="descclassname">fmflow.</code><code class="descname">fromcube</code><span class="sig-paren">(</span><em>cube</em>, <em>array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#fromcube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fromcube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array filled with the cube.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cube</strong> (<em>xarray.DataArray</em>) &#8211; A cube to be cast.</li>
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An array whose shape the cube is cast on.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array filled with the cube.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.fromspectrum">
+<code class="descclassname">fmflow.</code><code class="descname">fromspectrum</code><span class="sig-paren">(</span><em>spectrum</em>, <em>array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#fromspectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fromspectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array filled with the spectrum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spectrum</strong> (<em>xarray.DataArray</em>) &#8211; A spectrum to be cast.</li>
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An array whose shape the spectrum is cast on.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array filled with the spectrum.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.full">
+<code class="descclassname">fmflow.</code><code class="descname">full</code><span class="sig-paren">(</span><em>shape</em>, <em>fill_value</em>, <em>dtype=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.full" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with <cite>fill_value</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> (<em>sequence of ints</em>) &#8211; 2D shape of the array.</li>
+<li><strong>fill_value</strong> (<em>scalar</em><em> or </em><em>numpy.ndarray</em>) &#8211; Fill value or array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; The desired data-type for the array.</li>
+<li><strong>kwargs</strong> (<em>optional</em>) &#8211; Other arguments of the array (<a href="#id5"><span class="problematic" id="id6">*</span></a>coords, attrs, and name).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A modulated array filled with <cite>fill_value</cite>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.full_like">
+<code class="descclassname">fmflow.</code><code class="descname">full_like</code><span class="sig-paren">(</span><em>array</em>, <em>fill_value</em>, <em>dtype=None</em>, <em>keepmeta=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#full_like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.full_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array of <cite>fill_value</cite> with the same shape and type as the input array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; The shape and data-type of it define
+these same attributes of the output array.</li>
+<li><strong>fill_value</strong> (<em>scalar</em><em> or </em><em>numpy.ndarray</em><em> or </em><em>xarray.DataArray</em>) &#8211; Fill value or array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; If spacified, this function overrides
+the data-type of the output array.</li>
+<li><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether <a href="#id7"><span class="problematic" id="id8">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array filled with <cite>fill_value</cite>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.load">
+<code class="descclassname">fmflow.</code><code class="descname">load</code><span class="sig-paren">(</span><em>filename</em>, <em>copy=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a dataarray from a NetCDF file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<em>str</em>) &#8211; A file name (<a href="#id9"><span class="problematic" id="id10">*</span></a>.nc).</li>
+<li><strong>copy</strong> (<em>bool</em>) &#8211; If True, dataarray is copied in memory. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A loaded dataarray.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dataarray (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.mad">
+<code class="descclassname">fmflow.</code><code class="descname">mad</code><span class="sig-paren">(</span><em>array</em>, <em>dim=None</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#mad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.mad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the median absolute deviation (MAD) along the given dim or axis.</p>
+<p>Only one of the <cite>dim</cite> and <cite>axis</cite> arguments can be supplied.
+If neither are supplied, then mad will be calculated over axes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An input array.</li>
+<li><strong>dim</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; Dim along which the MADs are computed.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Axis along which the MADs are computed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array of the MAD.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.mad" title="fmflow.mad">mad</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.modulate">
+<code class="descclassname">fmflow.</code><code class="descname">modulate</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#modulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.modulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array from the demodulated one.</p>
+<p>This function is only available when the array is demodulated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; A demodulated array.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A modulated array.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.ones">
+<code class="descclassname">fmflow.</code><code class="descname">ones</code><span class="sig-paren">(</span><em>shape</em>, <em>dtype=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#ones"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.ones" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with ones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> (<em>sequence of ints</em>) &#8211; 2D shape of the array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; The desired data-type for the array.</li>
+<li><strong>kwargs</strong> (<em>optional</em>) &#8211; Other arguments of the array (<a href="#id11"><span class="problematic" id="id12">*</span></a>coords, attrs, and name).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A modulated array filled with ones.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.ones_like">
+<code class="descclassname">fmflow.</code><code class="descname">ones_like</code><span class="sig-paren">(</span><em>array</em>, <em>dtype=None</em>, <em>keepmeta=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#ones_like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.ones_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array of ones with the same shape and type as the input array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; The shape and data-type of it define
+these same attributes of the output array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; If spacified, this function overrides
+the data-type of the output array.</li>
+<li><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether <a href="#id13"><span class="problematic" id="id14">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array filled with ones.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.save">
+<code class="descclassname">fmflow.</code><code class="descname">save</code><span class="sig-paren">(</span><em>dataarray</em>, <em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a dataarray to a NetCDF file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataarray</strong> (<em>xarray.DataArray</em>) &#8211; A dataarray to be saved.</li>
+<li><strong>filename</strong> (<em>str</em>) &#8211; A filename (used as &lt;filename&gt;.nc).
+If not spacified, random 8-character name will be used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="fmflow.setlogger">
+<em class="property">class </em><code class="descclassname">fmflow.</code><code class="descname">setlogger</code><span class="sig-paren">(</span><em>level=None</em>, <em>filename=None</em>, <em>overwrite=False</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.setlogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="staticmethod">
+<dt id="fmflow.setlogger.sethandlers">
+<em class="property">static </em><code class="descname">sethandlers</code><span class="sig-paren">(</span><em>filename</em>, <em>overwrite</em>, <em>encoding</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger.sethandlers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.setlogger.sethandlers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="fmflow.setlogger.setlevel">
+<em class="property">static </em><code class="descname">setlevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger.setlevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.setlogger.setlevel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.spectrum">
+<code class="descclassname">fmflow.</code><code class="descname">spectrum</code><span class="sig-paren">(</span><em>data</em>, <em>chcoords=None</em>, <em>scalarcoords=None</em>, <em>attrs=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#spectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a spectrum as an instance of xarray.DataArray with FM spectrum accessor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>numpy.ndarray</em>) &#8211; A 1D (channel) array.</li>
+<li><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of arrays that label channel axis.</li>
+<li><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of values that don&#8217;t label any axes.</li>
+<li><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) &#8211; A dictionary of attributes to add to the instance.</li>
+<li><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; A string that names the instance.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spectrum.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.spectrum" title="fmflow.spectrum">spectrum</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.tocube">
+<code class="descclassname">fmflow.</code><code class="descname">tocube</code><span class="sig-paren">(</span><em>array</em>, <em>weights=None</em>, <em>reverse=False</em>, <em>gridsize=10</em>, <em>gridunit='arcsec'</em>, <em>gcf='besselgauss'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#tocube"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.tocube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a cube from an array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An array.</li>
+<li><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) &#8211; A weight array.</li>
+<li><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</li>
+<li><strong>gridsize</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; Grid size in units of <cite>gridunit</cite>.</li>
+<li><strong>gridunit</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; Grid unit of <cite>gridsize</cite>.</li>
+<li><strong>gcf</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; Grid convolution function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A cube.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.cube" title="fmflow.cube">cube</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.tospectrum">
+<code class="descclassname">fmflow.</code><code class="descname">tospectrum</code><span class="sig-paren">(</span><em>array</em>, <em>weights=None</em>, <em>reverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#tospectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.tospectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a spectrum from an array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An array.</li>
+<li><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) &#8211; A weight array.</li>
+<li><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A spectrum.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.spectrum" title="fmflow.spectrum">spectrum</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.xarrayfunc">
+<code class="descclassname">fmflow.</code><code class="descname">xarrayfunc</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/decorators.html#xarrayfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.xarrayfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a function compatible with xarray.DataArray.</p>
+<p>This function is intended to be used as a decorator like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@fm</span><span class="o">.</span><span class="n">xarrayfunc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># do something</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">newarray</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> (<em>function</em>) &#8211; A function to be wrapped. The first argument
+of the function must be an array to be processed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A wrapped function.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">wrapper (function)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.zeros">
+<code class="descclassname">fmflow.</code><code class="descname">zeros</code><span class="sig-paren">(</span><em>shape</em>, <em>dtype=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#zeros"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.zeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with zeros.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shape</strong> (<em>sequence of ints</em>) &#8211; 2D shape of the array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; The desired data-type for the array.</li>
+<li><strong>kwargs</strong> (<em>optional</em>) &#8211; Other arguments of the array (<a href="#id15"><span class="problematic" id="id16">*</span></a>coords, attrs, and name).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A modulated array filled with zeros.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.zeros_like">
+<code class="descclassname">fmflow.</code><code class="descname">zeros_like</code><span class="sig-paren">(</span><em>array</em>, <em>dtype=None</em>, <em>keepmeta=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#zeros_like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.zeros_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an array of zeros with the same shape and type as the input array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; The shape and data-type of it define
+these same attributes of the output array.</li>
+<li><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) &#8211; If spacified, this function overrides
+the data-type of the output array.</li>
+<li><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; Whether <a href="#id17"><span class="problematic" id="id18">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An array filled with zeros.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, FMLO Software Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

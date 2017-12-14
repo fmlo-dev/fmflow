@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fmflow.models.commonmode.functions &mdash; FMFlow 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="FMFlow 0.1 documentation" href="../../../../index.html"/>
+        <link rel="up" title="fmflow.models" href="../../models.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> FMFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">FMFlow</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../models.html">fmflow.models</a> &raquo;</li>
+        
+      <li>fmflow.models.commonmode.functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for fmflow.models.commonmode.functions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="c1"># public items</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;pca&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;empca&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;decomposition&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># standard library</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">getLogger</span>
+
+<span class="c1"># dependent packages</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">fmflow</span> <span class="k">as</span> <span class="nn">fm</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">decomposition</span> <span class="k">as</span> <span class="n">_decomposition</span>
+
+<span class="c1"># module constants</span>
+<span class="n">SKPARAMS</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+<span class="n">SKPARAMS</span><span class="p">[</span><span class="s1">&#39;KernelPCA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fit_inverse_transform&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+
+<span class="c1"># functions</span>
+<span class="nd">@fm</span><span class="o">.</span><span class="n">xarrayfunc</span>
+<span class="nd">@fm</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="pca"><a class="viewcode-back" href="../../../../apis/fmflow.models.html#fmflow.models.pca">[docs]</a><span class="k">def</span> <span class="nf">pca</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">optimize_n</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">centering</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruct an array from decomposed one with PCA.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (xarray.DataArray): An input array to be decomposed.</span>
+<span class="sd">        n_components (int): A number of components to keep.</span>
+<span class="sd">        optimize_n (bool): If True, `n_components` used for reconstruction is</span>
+<span class="sd">            optimized by an exponential fitting of eigen values of PCA.</span>
+<span class="sd">        centering (bool): If True, mean vector along time axis is subtracted from</span>
+<span class="sd">            `array` before computing PCA and then added to the reconstructed one.</span>
+<span class="sd">        kwargs (dict): Parameters for the timechunk calculation such as</span>
+<span class="sd">            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array (xarray.DataArray): An output reconstructed array.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;fmflow.models.pca&#39;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="n">optimize_n</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">centering</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">mean</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">transformed</span> <span class="o">@</span> <span class="n">model</span><span class="o">.</span><span class="n">components_</span> <span class="o">+</span> <span class="n">mean</span></div>
+
+
+<span class="nd">@fm</span><span class="o">.</span><span class="n">xarrayfunc</span>
+<span class="nd">@fm</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="s1">&#39;weights&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="empca"><a class="viewcode-back" href="../../../../apis/fmflow.models.html#fmflow.models.empca">[docs]</a><span class="k">def</span> <span class="nf">empca</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ch_smooth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">optimize_n</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+          <span class="n">initialize</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">centering</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+          <span class="n">convergence</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">n_maxiters</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruct an array from decomposed one with EMPCA.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (xarray.DataArray): An input array to be decomposed.</span>
+<span class="sd">        weights (xarray.DataArray): A weight array. The shape must be same as `array`.</span>
+<span class="sd">        n_components (int): A number of components to keep.</span>
+<span class="sd">        ch_smooth (int): A length of the filter window for smoothing eigenvectors.</span>
+<span class="sd">            It must be a positive odd integer.</span>
+<span class="sd">        optimize_n (bool): If True, `n_components` used for reconstruction is</span>
+<span class="sd">            optimized by an exponential fitting of eigen values of EMPCA.</span>
+<span class="sd">        initialize (string): A method of initializing eigenvectors.</span>
+<span class="sd">            Options are `random` (random orthogonal matrix) and `svd`</span>
+<span class="sd">            (orthogonal matrix from singular value decomposition).</span>
+<span class="sd">        random_seed (int): random seed values used for the initial state.</span>
+<span class="sd">        centering (bool): If True, mean vector along time axis is subtracted from</span>
+<span class="sd">            `array` before computing EMPCA and then added to the reconstructed one.</span>
+<span class="sd">        convergence (float): A convergence threshold.</span>
+<span class="sd">            See `fmflow.utils.Convergence` for more detail.</span>
+<span class="sd">        n_maxiters (int): A number of maximum iterations of the EM step.</span>
+<span class="sd">        kwargs (dict): Parameters for the timechunk calculation such as</span>
+<span class="sd">            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array (xarray.DataArray): An output reconstructed array.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;fmflow.models.empca&#39;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">EMPCA</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="n">ch_smooth</span><span class="p">,</span> <span class="n">optimize_n</span><span class="p">,</span> <span class="n">initialize</span><span class="p">,</span> <span class="n">random_seed</span><span class="p">,</span>
+                            <span class="n">convergence</span><span class="o">=</span><span class="n">convergence</span><span class="p">,</span> <span class="n">n_maxiters</span><span class="o">=</span><span class="n">n_maxiters</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">centering</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">mean</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">transformed</span> <span class="o">@</span> <span class="n">model</span><span class="o">.</span><span class="n">components_</span> <span class="o">+</span> <span class="n">mean</span></div>
+
+
+<span class="nd">@fm</span><span class="o">.</span><span class="n">xarrayfunc</span>
+<span class="nd">@fm</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="decomposition"><a class="viewcode-back" href="../../../../apis/fmflow.models.html#fmflow.models.decomposition">[docs]</a><span class="k">def</span> <span class="nf">decomposition</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">decomposer</span><span class="o">=</span><span class="s1">&#39;TruncatedSVD&#39;</span><span class="p">,</span>
+                  <span class="n">centering</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruct an array from decomposed one with a scikit-learn decomposer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (xarray.DataArray): An input array to be decomposed.</span>
+<span class="sd">        n_components (int): A number of components to keep.</span>
+<span class="sd">        decomposer (str): A name of algorithm provided by sklearn.decomposition.</span>
+<span class="sd">        centering (bool): If True, mean vector along time axis is subtracted from</span>
+<span class="sd">            `array` before decomposition and then added to the reconstructed one.</span>
+<span class="sd">        kwargs (dict): Parameters for the spacified algorithm such as</span>
+<span class="sd">            `n_components` and for the timechunk calculation such as</span>
+<span class="sd">            `timechunk`, `n_processes`. See `fmflow.timechunk` for more detail.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array (xarray.DataArray): An output reconstructed array.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        To reconstruct an array from top two principal components:</span>
+
+<span class="sd">        &gt;&gt;&gt; result = fm.model.reducedim(array, &#39;PCA&#39;, n_components=2)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;fmflow.models.decomposition&#39;</span><span class="p">)</span>
+
+    <span class="n">AlgorithmClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_decomposition</span><span class="p">,</span> <span class="n">decomposer</span><span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">SKPARAMS</span><span class="p">[</span><span class="n">decomposer</span><span class="p">])</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AlgorithmClass</span><span class="p">(</span><span class="n">n_components</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="n">centering</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">transformed</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">array</span><span class="o">-</span><span class="n">mean</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;components_&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">transformed</span> <span class="o">@</span> <span class="n">model</span><span class="o">.</span><span class="n">components_</span> <span class="o">+</span> <span class="n">mean</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s1">&#39;inverse_transform&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">inverse_transform</span><span class="p">(</span><span class="n">transformed</span><span class="p">)</span> <span class="o">+</span> <span class="n">mean</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;cannot reconstruct with the spacified algorithm&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, FMLO Software Team.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
