@@ -1,14 +1,17 @@
 # coding: utf-8
 
-"Data Analysis Package for FMLO"
-
 # standard library
 from setuptools import setup
 
 # module constants
-# INSTALL_REQUIRES = [
-#     'xarray >= 0.9.6',
-# ]
+REQUIRES = ['astropy',
+            'numba',
+            'numpy'
+            'pyyaml',
+            'scikit-learn',
+            'scipy',
+            'tqdm',
+            'xarray']
 
 PACKAGES = [
     'fmflow',
@@ -37,12 +40,12 @@ PACKAGES = [
 # main
 setup(
     name = 'fmflow',
-    description = __doc__,
-    version = '0.1',
-    author = 'FMLO software team',
-    author_email = 'ataniguchi@ioa.s.u-tokyo.ac.jp',
+    description = 'Data analysis package for FMLO',
+    version = '0.2',
+    author = 'astropenguin',
+    author_email = 'taniguchi@a.phys.nagoya-u.ac.jp',
     url = 'https://github.com/fmlo-dev/fmflow',
-    # install_requires = INSTALL_REQUIRES,
+    install_requires = INSTALL_REQUIRES,
     packages = PACKAGES,
     package_data = {'fmflow': ['data/*.yaml']},
 )
