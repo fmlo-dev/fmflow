@@ -45,7 +45,7 @@ setup(
     author = 'astropenguin',
     author_email = 'taniguchi@a.phys.nagoya-u.ac.jp',
     url = 'https://github.com/fmlo-dev/fmflow',
-    install_requires = INSTALL_REQUIRES,
+    install_requires = REQUIRES,
     packages = PACKAGES,
     package_data = {'fmflow': ['data/*.yaml']},
 )
