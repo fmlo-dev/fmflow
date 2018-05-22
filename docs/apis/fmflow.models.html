@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmflow.models package &mdash; FMFlow 0.1 documentation</title>
+  <title>fmflow.models package &mdash; FMFlow 0.2 documentation</title>
   
 
   
@@ -25,24 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FMFlow 0.1 documentation" href="../index.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -64,7 +57,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -105,7 +98,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FMFlow</a>
@@ -113,9 +106,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,7 +158,7 @@
 <dl class="class">
 <dt id="fmflow.models.AstroLines">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">AstroLines</code><span class="sig-paren">(</span><em>function='cutoff'</em>, <em>despiking=True</em>, <em>snr_threshold=10</em>, <em>deconvolution_width=3</em>, <em>subtraction_gain=0.5</em>, <em>*</em>, <em>convergence=0.001</em>, <em>n_maxiters=10000</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/astrosignal/classes.html#AstroLines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.AstroLines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
 <dl class="method">
 <dt id="fmflow.models.AstroLines.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>freq</em>, <em>spec</em>, <em>noise</em>, <em>freqlim=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/astrosignal/classes.html#AstroLines.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.AstroLines.fit" title="Permalink to this definition">¶</a></dt>
@@ -175,7 +169,7 @@
 <dl class="class">
 <dt id="fmflow.models.AtmosLines">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">AtmosLines</code><span class="sig-paren">(</span><em>snr_threshold=10</em>, <em>ch_tolerance=5</em>, <em>*</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/classes.html#AtmosLines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.AtmosLines" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
 <dl class="attribute">
 <dt id="fmflow.models.AtmosLines.amconfig">
 <code class="descname">amconfig</code><em class="property"> = 'f {fmin} GHz {fmax} GHz {fstep} GHz\noutput f GHz tau Tb K\n\nza 0 deg\ntol 0\nNscale h2o 0\nT0 2.7 K\n\nlayer\nPbase {Pbase} mbar\nTbase {Tbase} K\ncolumn o3 vmr {O3col}\n'</em><a class="headerlink" href="#fmflow.models.AtmosLines.amconfig" title="Permalink to this definition">¶</a></dt>
@@ -188,7 +182,7 @@
 
 <dl class="attribute">
 <dt id="fmflow.models.AtmosLines.amlayers">
-<code class="descname">amlayers</code><em class="property"> = [{'O3col': 1.74e-06, 'Pbase': 0.1, 'Tbase': 221.1}, {'O3col': 1.64e-06, 'Pbase': 0.3, 'Tbase': 243.3}, {'O3col': 1.62e-06, 'Pbase': 0.4, 'Tbase': 249.4}, {'O3col': 1.81e-06, 'Pbase': 0.5, 'Tbase': 254.9}, {'O3col': 2.12e-06, 'Pbase': 0.7, 'Tbase': 262.8}, {'O3col': 2.66e-06, 'Pbase': 1, 'Tbase': 265.8}, {'O3col': 3.99e-06, 'Pbase': 2, 'Tbase': 256.4}, {'O3col': 5.83e-06, 'Pbase': 3, 'Tbase': 248.9}, {'O3col': 7.19e-06, 'Pbase': 4, 'Tbase': 244.3}, {'O3col': 8e-06, 'Pbase': 5, 'Tbase': 240.5}, {'O3col': 8.51e-06, 'Pbase': 7, 'Tbase': 234.8}, {'O3col': 8.71e-06, 'Pbase': 10, 'Tbase': 230.0}, {'O3col': 7.69e-06, 'Pbase': 20, 'Tbase': 221.7}, {'O3col': 5.52e-06, 'Pbase': 30, 'Tbase': 216.5}, {'O3col': 3.53e-06, 'Pbase': 40, 'Tbase': 212.4}, {'O3col': 2.2e-06, 'Pbase': 50, 'Tbase': 208.9}, {'O3col': 1.16e-06, 'Pbase': 70, 'Tbase': 200.4}, {'O3col': 3.92e-07, 'Pbase': 100, 'Tbase': 197.8}, {'O3col': 1.14e-07, 'Pbase': 150, 'Tbase': 207.4}, {'O3col': 6.18e-08, 'Pbase': 200, 'Tbase': 219.4}, {'O3col': 5.02e-08, 'Pbase': 250, 'Tbase': 230.4}, {'O3col': 4.7e-08, 'Pbase': 300, 'Tbase': 239.9}, {'O3col': 4.58e-08, 'Pbase': 350, 'Tbase': 247.9}, {'O3col': 4.52e-08, 'Pbase': 400, 'Tbase': 254.9}, {'O3col': 4.47e-08, 'Pbase': 450, 'Tbase': 261.2}, {'O3col': 4.39e-08, 'Pbase': 500, 'Tbase': 266.8}, {'O3col': 4.3e-08, 'Pbase': 550, 'Tbase': 271.8}, {'O3col': 4.24e-08, 'Pbase': 554, 'Tbase': 272.2}]</em><a class="headerlink" href="#fmflow.models.AtmosLines.amlayers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">amlayers</code><em class="property"> = [{'Pbase': 0.1, 'Tbase': 221.1, 'O3col': 1.74e-06}, {'Pbase': 0.3, 'Tbase': 243.3, 'O3col': 1.64e-06}, {'Pbase': 0.4, 'Tbase': 249.4, 'O3col': 1.62e-06}, {'Pbase': 0.5, 'Tbase': 254.9, 'O3col': 1.81e-06}, {'Pbase': 0.7, 'Tbase': 262.8, 'O3col': 2.12e-06}, {'Pbase': 1, 'Tbase': 265.8, 'O3col': 2.66e-06}, {'Pbase': 2, 'Tbase': 256.4, 'O3col': 3.99e-06}, {'Pbase': 3, 'Tbase': 248.9, 'O3col': 5.83e-06}, {'Pbase': 4, 'Tbase': 244.3, 'O3col': 7.19e-06}, {'Pbase': 5, 'Tbase': 240.5, 'O3col': 8e-06}, {'Pbase': 7, 'Tbase': 234.8, 'O3col': 8.51e-06}, {'Pbase': 10, 'Tbase': 230.0, 'O3col': 8.71e-06}, {'Pbase': 20, 'Tbase': 221.7, 'O3col': 7.69e-06}, {'Pbase': 30, 'Tbase': 216.5, 'O3col': 5.52e-06}, {'Pbase': 40, 'Tbase': 212.4, 'O3col': 3.53e-06}, {'Pbase': 50, 'Tbase': 208.9, 'O3col': 2.2e-06}, {'Pbase': 70, 'Tbase': 200.4, 'O3col': 1.16e-06}, {'Pbase': 100, 'Tbase': 197.8, 'O3col': 3.92e-07}, {'Pbase': 150, 'Tbase': 207.4, 'O3col': 1.14e-07}, {'Pbase': 200, 'Tbase': 219.4, 'O3col': 6.18e-08}, {'Pbase': 250, 'Tbase': 230.4, 'O3col': 5.02e-08}, {'Pbase': 300, 'Tbase': 239.9, 'O3col': 4.7e-08}, {'Pbase': 350, 'Tbase': 247.9, 'O3col': 4.58e-08}, {'Pbase': 400, 'Tbase': 254.9, 'O3col': 4.52e-08}, {'Pbase': 450, 'Tbase': 261.2, 'O3col': 4.47e-08}, {'Pbase': 500, 'Tbase': 266.8, 'O3col': 4.39e-08}, {'Pbase': 550, 'Tbase': 271.8, 'O3col': 4.3e-08}, {'Pbase': 554, 'Tbase': 272.2, 'O3col': 4.24e-08}]</em><a class="headerlink" href="#fmflow.models.AtmosLines.amlayers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -216,13 +210,13 @@
 <dl class="class">
 <dt id="fmflow.models.BaseModel">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>params</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.BaseModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="fmflow.models.EMPCA">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">EMPCA</code><span class="sig-paren">(</span><em>n_components=50</em>, <em>ch_smooth=None</em>, <em>optimize_n=True</em>, <em>initialize='random'</em>, <em>random_seed=None</em>, <em>*</em>, <em>convergence=0.001</em>, <em>n_maxiters=300</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#EMPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.EMPCA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
 <dl class="method">
 <dt id="fmflow.models.EMPCA.fit_transform">
 <code class="descname">fit_transform</code><span class="sig-paren">(</span><em>X</em>, <em>W=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#EMPCA.fit_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.EMPCA.fit_transform" title="Permalink to this definition">¶</a></dt>
@@ -233,13 +227,13 @@
 <dl class="attribute">
 <dt id="fmflow.models.FMGain">
 <code class="descclassname">fmflow.models.</code><code class="descname">FMGain</code><a class="headerlink" href="#fmflow.models.FMGain" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <a class="reference internal" href="#fmflow.models.ONGain" title="fmflow.models.ONGain"><code class="xref py py-class docutils literal"><span class="pre">ONGain</span></code></a></p>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.gain.classes.ONGain</span></code></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="fmflow.models.ONGain">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">ONGain</code><span class="sig-paren">(</span><em>window_length=51</em>, <em>polyorder=3</em>, <em>*</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.ONGain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
 <dl class="method">
 <dt id="fmflow.models.ONGain.fit">
 <code class="descname">fit</code><span class="sig-paren">(</span><em>Pon</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.ONGain.fit" title="Permalink to this definition">¶</a></dt>
@@ -260,7 +254,7 @@
 <dl class="class">
 <dt id="fmflow.models.PCA">
 <em class="property">class </em><code class="descclassname">fmflow.models.</code><code class="descname">PCA</code><span class="sig-paren">(</span><em>n_components=50</em>, <em>optimize_n=True</em>, <em>*</em>, <em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#PCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.PCA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">fmflow.models.BaseModel</span></code></a></p>
 <dl class="method">
 <dt id="fmflow.models.PCA.fit_transform">
 <code class="descname">fit_transform</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#PCA.fit_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.models.PCA.fit_transform" title="Permalink to this definition">¶</a></dt>
@@ -277,18 +271,18 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; </li>
-<li><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>mode</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>freqlim</strong> (<em>list of float</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>function</strong> (<em>str</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>despiking</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>snr_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>deconvolution_width</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>subtraction_gain</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>convergence</strong> (<em>float</em><em>, </em><em>optional</em>) &#8211; </li>
-<li><strong>n_maxiters</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; </li>
+<li><strong>array</strong> (<em>xarray.DataArray</em>) – </li>
+<li><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) – </li>
+<li><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>mode</strong> (<em>str</em><em>, </em><em>optional</em>) – </li>
+<li><strong>freqlim</strong> (<em>list of float</em><em>, </em><em>optional</em>) – </li>
+<li><strong>function</strong> (<em>str</em><em>, </em><em>optional</em>) – </li>
+<li><strong>despiking</strong> (<em>bool</em><em>, </em><em>optional</em>) – </li>
+<li><strong>snr_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – </li>
+<li><strong>deconvolution_width</strong> (<em>float</em><em>, </em><em>optional</em>) – </li>
+<li><strong>subtraction_gain</strong> (<em>float</em><em>, </em><em>optional</em>) – </li>
+<li><strong>convergence</strong> (<em>float</em><em>, </em><em>optional</em>) – </li>
+<li><strong>n_maxiters</strong> (<em>int</em><em>, </em><em>optional</em>) – </li>
 </ul>
 </td>
 </tr>
@@ -321,12 +315,12 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An input array to be decomposed.</li>
-<li><strong>n_components</strong> (<em>int</em>) &#8211; A number of components to keep.</li>
-<li><strong>decomposer</strong> (<em>str</em>) &#8211; A name of algorithm provided by sklearn.decomposition.</li>
-<li><strong>centering</strong> (<em>bool</em>) &#8211; If True, mean vector along time axis is subtracted from
+<li><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</li>
+<li><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</li>
+<li><strong>decomposer</strong> (<em>str</em>) – A name of algorithm provided by sklearn.decomposition.</li>
+<li><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
 <cite>array</cite> before decomposition and then added to the reconstructed one.</li>
-<li><strong>kwargs</strong> (<em>dict</em>) &#8211; Parameters for the spacified algorithm such as
+<li><strong>kwargs</strong> (<em>dict</em>) – Parameters for the spacified algorithm such as
 <cite>n_components</cite> and for the timechunk calculation such as
 <cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</li>
 </ul>
@@ -335,14 +329,14 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An output reconstructed array.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="fmflow.html#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array (xarray.DataArray)</p>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Example</p>
 <p>To reconstruct an array from top two principal components:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">reducedim</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">reducedim</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -356,23 +350,23 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An input array to be decomposed.</li>
-<li><strong>weights</strong> (<em>xarray.DataArray</em>) &#8211; A weight array. The shape must be same as <cite>array</cite>.</li>
-<li><strong>n_components</strong> (<em>int</em>) &#8211; A number of components to keep.</li>
-<li><strong>ch_smooth</strong> (<em>int</em>) &#8211; A length of the filter window for smoothing eigenvectors.
+<li><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</li>
+<li><strong>weights</strong> (<em>xarray.DataArray</em>) – A weight array. The shape must be same as <cite>array</cite>.</li>
+<li><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</li>
+<li><strong>ch_smooth</strong> (<em>int</em>) – A length of the filter window for smoothing eigenvectors.
 It must be a positive odd integer.</li>
-<li><strong>optimize_n</strong> (<em>bool</em>) &#8211; If True, <cite>n_components</cite> used for reconstruction is
+<li><strong>optimize_n</strong> (<em>bool</em>) – If True, <cite>n_components</cite> used for reconstruction is
 optimized by an exponential fitting of eigen values of EMPCA.</li>
-<li><strong>initialize</strong> (<em>string</em>) &#8211; A method of initializing eigenvectors.
+<li><strong>initialize</strong> (<em>string</em>) – A method of initializing eigenvectors.
 Options are <cite>random</cite> (random orthogonal matrix) and <cite>svd</cite>
 (orthogonal matrix from singular value decomposition).</li>
-<li><strong>random_seed</strong> (<em>int</em>) &#8211; random seed values used for the initial state.</li>
-<li><strong>centering</strong> (<em>bool</em>) &#8211; If True, mean vector along time axis is subtracted from
+<li><strong>random_seed</strong> (<em>int</em>) – random seed values used for the initial state.</li>
+<li><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
 <cite>array</cite> before computing EMPCA and then added to the reconstructed one.</li>
-<li><strong>convergence</strong> (<em>float</em>) &#8211; A convergence threshold.
+<li><strong>convergence</strong> (<em>float</em>) – A convergence threshold.
 See <cite>fmflow.utils.Convergence</cite> for more detail.</li>
-<li><strong>n_maxiters</strong> (<em>int</em>) &#8211; A number of maximum iterations of the EM step.</li>
-<li><strong>kwargs</strong> (<em>dict</em>) &#8211; Parameters for the timechunk calculation such as
+<li><strong>n_maxiters</strong> (<em>int</em>) – A number of maximum iterations of the EM step.</li>
+<li><strong>kwargs</strong> (<em>dict</em>) – Parameters for the timechunk calculation such as
 <cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</li>
 </ul>
 </td>
@@ -380,7 +374,7 @@ See <cite>fmflow.utils.Convergence</cite> for more detail.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An output reconstructed array.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="fmflow.html#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array (xarray.DataArray)</p>
 </td>
 </tr>
 </tbody>
@@ -406,13 +400,13 @@ See <cite>fmflow.utils.Convergence</cite> for more detail.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>xarray.DataArray</em>) &#8211; An input array to be decomposed.</li>
-<li><strong>n_components</strong> (<em>int</em>) &#8211; A number of components to keep.</li>
-<li><strong>optimize_n</strong> (<em>bool</em>) &#8211; If True, <cite>n_components</cite> used for reconstruction is
+<li><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</li>
+<li><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</li>
+<li><strong>optimize_n</strong> (<em>bool</em>) – If True, <cite>n_components</cite> used for reconstruction is
 optimized by an exponential fitting of eigen values of PCA.</li>
-<li><strong>centering</strong> (<em>bool</em>) &#8211; If True, mean vector along time axis is subtracted from
+<li><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
 <cite>array</cite> before computing PCA and then added to the reconstructed one.</li>
-<li><strong>kwargs</strong> (<em>dict</em>) &#8211; Parameters for the timechunk calculation such as
+<li><strong>kwargs</strong> (<em>dict</em>) – Parameters for the timechunk calculation such as
 <cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</li>
 </ul>
 </td>
@@ -420,7 +414,7 @@ optimized by an exponential fitting of eigen values of PCA.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An output reconstructed array.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="fmflow.html#fmflow.array" title="fmflow.array">array</a> (xarray.DataArray)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array (xarray.DataArray)</p>
 </td>
 </tr>
 </tbody>
@@ -432,9 +426,7 @@ optimized by an exponential fitting of eigen values of PCA.</li>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -443,11 +435,11 @@ optimized by an exponential fitting of eigen values of PCA.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, FMLO Software Team.
+        &copy; Copyright 2018, FMLO Software Team.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -465,7 +457,8 @@ optimized by an exponential fitting of eigen values of PCA.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1',
+            VERSION:'0.2',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -483,14 +476,11 @@ optimized by an exponential fitting of eigen values of PCA.</li>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

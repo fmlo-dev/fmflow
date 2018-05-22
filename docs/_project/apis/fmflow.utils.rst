@@ -1,5 +1,5 @@
-fmflow\.utils package
-=====================
+fmflow.utils package
+====================
 
 Module contents
 ---------------

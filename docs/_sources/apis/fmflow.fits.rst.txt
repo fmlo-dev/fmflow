@@ -1,11 +1,11 @@
-fmflow\.fits package
-====================
+fmflow.fits package
+===================
 
 Submodules
 ----------
 
-fmflow\.fits\.functions module
-------------------------------
+fmflow.fits.functions module
+----------------------------
 
 .. automodule:: fmflow.fits.functions
     :members:

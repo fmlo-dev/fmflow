@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmflow.utils package &mdash; FMFlow 0.1 documentation</title>
+  <title>fmflow.utils package &mdash; FMFlow 0.2 documentation</title>
   
 
   
@@ -25,24 +25,17 @@
   
 
   
-  
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="FMFlow 0.1 documentation" href="../index.html"/> 
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
@@ -64,7 +57,7 @@
             
             
               <div class="version">
-                0.1
+                0.2
               </div>
             
           
@@ -105,7 +98,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FMFlow</a>
@@ -113,9 +106,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,11 +158,11 @@
 <dl class="class">
 <dt id="fmflow.utils.CStructReader">
 <em class="property">class </em><code class="descclassname">fmflow.utils.</code><code class="descname">CStructReader</code><span class="sig-paren">(</span><em>structure</em>, <em>ignored='$.'</em>, <em>byteorder='&lt;'</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/binary/classes.html#CStructReader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.CStructReader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Read a binary file to unpack values in a C structure.</p>
 <p>C structures can be expressed as a Python list that stores name, type, and shape
 of each member in a C structure. For example, the following C structure:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">structure</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">structure</span> <span class="p">{</span>
 <span class="nb">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 <span class="nb">float</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">3</span><span class="p">];</span>
 <span class="n">char</span> <span class="n">c</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
@@ -176,7 +170,7 @@ of each member in a C structure. For example, the following C structure:</p>
 </pre></div>
 </div>
 <p>will be expressed as the following Python list:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">structure</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">structure</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
     <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span>
     <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;10s&#39;</span><span class="p">)</span>
@@ -187,7 +181,7 @@ of each member in a C structure. For example, the following C structure:</p>
 character (<a class="reference external" href="https://docs.python.jp/3/library/struct.html#format-characters">https://docs.python.jp/3/library/struct.html#format-characters</a>)
 that represents C type in Python, and the third one (optional) is shape.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;10s&#39;</span><span class="p">)]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">structure</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;10s&#39;</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">structure</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;binaryfile&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -202,25 +196,25 @@ that represents C type in Python, and the third one (optional) is shape.</p>
 <dl class="attribute">
 <dt id="fmflow.utils.CStructReader.size">
 <code class="descname">size</code><a class="headerlink" href="#fmflow.utils.CStructReader.size" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> &#8211; A byte size of the structure.</p>
+<dd><p><em>int</em> – A byte size of the structure.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="fmflow.utils.CStructReader.data">
 <code class="descname">data</code><a class="headerlink" href="#fmflow.utils.CStructReader.data" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>OrderedDict</em> &#8211; An ordered dictionary that stores unpacked values.</p>
+<dd><p><em>OrderedDict</em> – An ordered dictionary that stores unpacked values.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="fmflow.utils.CStructReader.jsondata">
 <code class="descname">jsondata</code><a class="headerlink" href="#fmflow.utils.CStructReader.jsondata" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>OrderedDict</em> &#8211; A JSON string that stores unpacked values.</p>
+<dd><p><em>OrderedDict</em> – A JSON string that stores unpacked values.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="fmflow.utils.CStructReader.params">
 <code class="descname">params</code><a class="headerlink" href="#fmflow.utils.CStructReader.params" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> &#8211; Stored information about the structure, ignored, and byteorder.</p>
+<dd><p><em>dict</em> – Stored information about the structure, ignored, and byteorder.</p>
 </dd></dl>
 
 <p class="rubric">References</p>
@@ -247,7 +241,7 @@ Use <cite>data</cite> or <cite>jsondata</cite> attributes to access them.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>file</em>) &#8211; A binary file object to be read.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>f</strong> (<em>file</em>) – A binary file object to be read.
 It must be <cite>open`ed with `b</cite> option.</td>
 </tr>
 </tbody>
@@ -259,7 +253,7 @@ It must be <cite>open`ed with `b</cite> option.</td>
 <dl class="class">
 <dt id="fmflow.utils.Convergence">
 <em class="property">class </em><code class="descclassname">fmflow.utils.</code><code class="descname">Convergence</code><span class="sig-paren">(</span><em>threshold=0.001</em>, <em>n_maxiters=300</em>, <em>n_miniters=2</em>, <em>*</em>, <em>centering=False</em>, <em>reuseable=True</em>, <em>raise_exception=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/convergence/classes.html#Convergence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.Convergence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="attribute">
 <dt id="fmflow.utils.Convergence.status">
 <code class="descname">status</code><a class="headerlink" href="#fmflow.utils.Convergence.status" title="Permalink to this definition">¶</a></dt>
@@ -270,7 +264,7 @@ It must be <cite>open`ed with `b</cite> option.</td>
 <dl class="class">
 <dt id="fmflow.utils.DatetimeParser">
 <em class="property">class </em><code class="descclassname">fmflow.utils.</code><code class="descname">DatetimeParser</code><span class="sig-paren">(</span><em>outputiso=True</em>, <em>cutoffsec=True</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/datetime/classes.html#DatetimeParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.DatetimeParser" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 <dl class="function">
@@ -282,8 +276,8 @@ It must be <cite>open`ed with `b</cite> option.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>func</strong> (<em>function</em>) &#8211; A function to be copied.</li>
-<li><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) &#8211; A name of the new function.
+<li><strong>func</strong> (<em>function</em>) – A function to be copied.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – A name of the new function.
 If not spacified, the same name of <cite>func</cite> will be used.</li>
 </ul>
 </td>
@@ -307,8 +301,8 @@ If not spacified, the same name of <cite>func</cite> will be used.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ctype</strong> (<em>str</em>) &#8211; A C-type format string in Python.</li>
-<li><strong>shape</strong> (<em>int</em><em> or </em><em>tuple of int</em><em>, </em><em>optional</em>) &#8211; shape of the C-type.</li>
+<li><strong>ctype</strong> (<em>str</em>) – A C-type format string in Python.</li>
+<li><strong>shape</strong> (<em>int</em><em> or </em><em>tuple of int</em><em>, </em><em>optional</em>) – shape of the C-type.</li>
 </ul>
 </td>
 </tr>
@@ -336,8 +330,8 @@ If not spacified, the same name of <cite>func</cite> will be used.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dtype</strong> (<em>str</em>) &#8211; A dtype string of NumPy.</li>
-<li><strong>shape</strong> (<em>int</em><em> or </em><em>tuple of int</em><em>, </em><em>optional</em>) &#8211; shape of the C-type.</li>
+<li><strong>dtype</strong> (<em>str</em>) – A dtype string of NumPy.</li>
+<li><strong>shape</strong> (<em>int</em><em> or </em><em>tuple of int</em><em>, </em><em>optional</em>) – shape of the C-type.</li>
 </ul>
 </td>
 </tr>
@@ -365,8 +359,8 @@ If not spacified, the same name of <cite>func</cite> will be used.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>numpy.ndarray</em>) &#8211; A 1D array.</li>
-<li><strong>sigma</strong> (<em>int</em>) &#8211; Standard deviation for Gaussian kernel.</li>
+<li><strong>array</strong> (<em>numpy.ndarray</em>) – A 1D array.</li>
+<li><strong>sigma</strong> (<em>int</em>) – Standard deviation for Gaussian kernel.</li>
 </ul>
 </td>
 </tr>
@@ -394,10 +388,10 @@ A Proposal of Robust Gaussian Filter by Using Fast M-Estimation Method
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; An input 1D array.</li>
-<li><strong>x0</strong> (<em>float</em>) &#8211; Center of the Gaussian.</li>
-<li><strong>fwhm</strong> (<em>float</em>) &#8211; FWHM of the Gaussian.</li>
-<li><strong>ampl</strong> (<em>float</em>) &#8211; Amplitude of the Gaussian.</li>
+<li><strong>x</strong> (<em>numpy.ndarray</em>) – An input 1D array.</li>
+<li><strong>x0</strong> (<em>float</em>) – Center of the Gaussian.</li>
+<li><strong>fwhm</strong> (<em>float</em>) – FWHM of the Gaussian.</li>
+<li><strong>ampl</strong> (<em>float</em>) – Amplitude of the Gaussian.</li>
 </ul>
 </td>
 </tr>
@@ -422,7 +416,7 @@ A Proposal of Robust Gaussian Filter by Using Fast M-Estimation Method
 <code class="descclassname">fmflow.utils.</code><code class="descname">ignore_numpy_errors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/misc/functions.html#ignore_numpy_errors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.ignore_numpy_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a context manager where all numpy errors are ignored.</p>
 <p>This function is intended to be used as a with statement like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ignore_numpy_errors</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ignore_numpy_errors</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">/</span> <span class="mi">0</span> <span class="c1"># no errors are displayed</span>
 </pre></div>
 </div>
@@ -438,10 +432,10 @@ A Proposal of Robust Gaussian Filter by Using Fast M-Estimation Method
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; An input 1D array.</li>
-<li><strong>x0</strong> (<em>float</em>) &#8211; Center of the Lorentzian.</li>
-<li><strong>fwhm</strong> (<em>float</em>) &#8211; FWHM of the Lorentzian.</li>
-<li><strong>ampl</strong> (<em>float</em>) &#8211; Amplitude of the Lorentzian.</li>
+<li><strong>x</strong> (<em>numpy.ndarray</em>) – An input 1D array.</li>
+<li><strong>x0</strong> (<em>float</em>) – Center of the Lorentzian.</li>
+<li><strong>fwhm</strong> (<em>float</em>) – FWHM of the Lorentzian.</li>
+<li><strong>ampl</strong> (<em>float</em>) – Amplitude of the Lorentzian.</li>
 </ul>
 </td>
 </tr>
@@ -464,10 +458,10 @@ A Proposal of Robust Gaussian Filter by Using Fast M-Estimation Method
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>numpy.ndarray</em>) &#8211; An input array.</li>
-<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) &#8211; Axis along which the MADs are computed.
+<li><strong>array</strong> (<em>numpy.ndarray</em>) – An input array.</li>
+<li><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which the MADs are computed.
 The default is to compute the MAD along a flattened version of the array.</li>
-<li><strong>keepdims</strong> (<em>bool</em><em>, </em><em>optional</em>) &#8211; If True, the axes which are reduced are left
+<li><strong>keepdims</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the axes which are reduced are left
 in the result as dimensions with size one.</li>
 </ul>
 </td>
@@ -475,7 +469,7 @@ in the result as dimensions with size one.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A new array holding the result.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="fmflow.html#fmflow.mad" title="fmflow.mad">mad</a> (numpy.ndarray)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">mad (numpy.ndarray)</p>
 </td>
 </tr>
 </tbody>
@@ -487,7 +481,7 @@ in the result as dimensions with size one.</li>
 <code class="descclassname">fmflow.utils.</code><code class="descname">one_thread_per_process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/misc/functions.html#one_thread_per_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.one_thread_per_process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a context manager where only one thread is allocated to a process.</p>
 <p>This function is intended to be used as a with statement like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">process_per_thread</span><span class="p">():</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">process_per_thread</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="n">do_something</span><span class="p">()</span> <span class="c1"># one thread per process</span>
 </pre></div>
 </div>
@@ -507,11 +501,11 @@ Otherwise this function does nothing.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> (<em>numpy.ndarray</em>) &#8211; An input 1D array.</li>
-<li><strong>x0</strong> (<em>float</em>) &#8211; Center of the Pseudo-Voigt.</li>
-<li><strong>fwhm</strong> (<em>float</em>) &#8211; FWHM of the Pseudo-Voigt.</li>
-<li><strong>ampl</strong> (<em>float</em>) &#8211; Amplitude of the Pseudo-Voigt.</li>
-<li><strong>frac</strong> (<em>float</em>) &#8211; Fraction of Gaussian and Lorentzian. Must be 0 &lt;= frac &lt;= 1.</li>
+<li><strong>x</strong> (<em>numpy.ndarray</em>) – An input 1D array.</li>
+<li><strong>x0</strong> (<em>float</em>) – Center of the Pseudo-Voigt.</li>
+<li><strong>fwhm</strong> (<em>float</em>) – FWHM of the Pseudo-Voigt.</li>
+<li><strong>ampl</strong> (<em>float</em>) – Amplitude of the Pseudo-Voigt.</li>
+<li><strong>frac</strong> (<em>float</em>) – Fraction of Gaussian and Lorentzian. Must be 0 &lt;= frac &lt;= 1.</li>
 </ul>
 </td>
 </tr>
@@ -534,8 +528,8 @@ Otherwise this function does nothing.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>array</strong> (<em>numpy.ndarray</em>) &#8211; A 2D array.</li>
-<li><strong>shifts</strong> (<em>int of list of int</em>) &#8211; The number(s) of places
+<li><strong>array</strong> (<em>numpy.ndarray</em>) – A 2D array.</li>
+<li><strong>shifts</strong> (<em>int of list of int</em>) – The number(s) of places
 by which elements of each row are shifted.</li>
 </ul>
 </td>
@@ -543,7 +537,7 @@ by which elements of each row are shifted.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">An output rolled array.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="fmflow.html#fmflow.array" title="fmflow.array">array</a> (numpy.ndarray)</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array (numpy.ndarray)</p>
 </td>
 </tr>
 </tbody>
@@ -555,7 +549,7 @@ by which elements of each row are shifted.</li>
 <code class="descclassname">fmflow.utils.</code><code class="descname">slicewhere</code><span class="sig-paren">(</span><em>condition</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/utils/ndarray/functions.html#slicewhere"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.utils.slicewhere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return slices of regions that fulfill condition.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cond</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cond</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">slicewhere</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
 <span class="go">[slice(1L, 3L, None), slice(5L, 6L, None)]</span>
 </pre></div>
@@ -564,7 +558,7 @@ by which elements of each row are shifted.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>condition</strong> (<em>numpy.ndarray</em>) &#8211; An array of booleans.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>condition</strong> (<em>numpy.ndarray</em>) – An array of booleans.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">List of slice objects.</td>
 </tr>
@@ -579,9 +573,7 @@ by which elements of each row are shifted.</li>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -590,11 +582,11 @@ by which elements of each row are shifted.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, FMLO Software Team.
+        &copy; Copyright 2018, FMLO Software Team.
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -612,7 +604,8 @@ by which elements of each row are shifted.</li>
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0.1',
+            VERSION:'0.2',
+            LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true,
@@ -630,14 +623,11 @@ by which elements of each row are shifted.</li>
     <script type="text/javascript" src="../_static/js/theme.js"></script>
   
 
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
+  </script> 
 
 </body>
 </html>

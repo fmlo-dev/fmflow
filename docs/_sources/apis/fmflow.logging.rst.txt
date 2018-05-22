@@ -1,5 +1,5 @@
-fmflow\.logging package
-=======================
+fmflow.logging package
+======================
 
 Module contents
 ---------------

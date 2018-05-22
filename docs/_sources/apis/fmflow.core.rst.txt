@@ -1,5 +1,5 @@
-fmflow\.core package
-====================
+fmflow.core package
+===================
 
 Module contents
 ---------------

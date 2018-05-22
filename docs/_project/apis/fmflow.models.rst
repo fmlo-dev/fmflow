@@ -1,5 +1,5 @@
-fmflow\.models package
-======================
+fmflow.models package
+=====================
 
 Module contents
 ---------------
