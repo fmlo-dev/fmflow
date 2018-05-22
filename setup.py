@@ -6,7 +6,7 @@ from setuptools import setup
 # module constants
 REQUIRES = ['astropy',
             'numba',
-            'numpy'
+            'numpy',
             'pyyaml',
             'scikit-learn',
             'scipy',
@@ -41,7 +41,7 @@ PACKAGES = [
 setup(
     name = 'fmflow',
     description = 'Data analysis package for FMLO',
-    version = '0.2',
+    version = '0.2.1',
     author = 'astropenguin',
     author_email = 'taniguchi@a.phys.nagoya-u.ac.jp',
     url = 'https://github.com/fmlo-dev/fmflow',
