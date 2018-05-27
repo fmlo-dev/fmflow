@@ -243,6 +243,8 @@ def read_backendlog_sam45(backendlog, byteorder):
     ifatt    = np.array(obs.data['iary_ifatt'], dtype=float)[usefg]
     islsb    = np.array(obs.data['csid_type'] == b'LSB')[usefg]
     arrayids = np.unique(data['arrayid'])
+    key = [int(aid[1:]) for aid in arrayids]
+    arrayids = arrayids[np.argsort(key)]
 
     for i, arrayid in enumerate(arrayids):
         flag = (data['arrayid'] == arrayid)
@@ -331,7 +333,9 @@ def make_obsinfo_sam45(hdus):
     header['equinox']  = float(re.findall('\d+', obsinfo['cepoch'])[0])
 
     data = OrderedDict()
-    data['arrayid']   = np.unique(datinfo['arrayid'])
+    arrayids = np.unique(datinfo['arrayid'])
+    key = [int(aid[1:]) for aid in arrayids]
+    data['arrayid']   = arrayids[np.argsort(key)]
     data['sideband']  = np.array(obsinfo['csid_type'])[flag]
     data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
     data['backend']   = np.tile(ctlinfo['cbe_type'], N)
