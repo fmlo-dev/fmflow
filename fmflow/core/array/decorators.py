@@ -110,6 +110,7 @@ def chunk(*argnames, concatfunc=None):
             # n_chunks and n_processes
             n_chunks = DEFAULT_N_CHUNKS
             n_processes = MAX_WORKERS
+            multiprocess = True
 
             if argnames:
                 length = len(kwargs[argnames[0]])
@@ -128,6 +129,11 @@ def chunk(*argnames, concatfunc=None):
                 elif 'n_processes' in f_globals:
                     n_processes = f_globals['n_processes']
 
+                if 'multiprocess' in kwargs:
+                    multiprocess = kwargs.pop('multiprocess')
+                elif 'multiprocess' in f_globals:
+                    multiprocess = f_globals['multiprocess']
+
             # make chunked args
             chunks = {}
             for name in argnames:
@@ -140,13 +146,19 @@ def chunk(*argnames, concatfunc=None):
             # run the function
             futures = []
             results = []
-            with fm.utils.one_thread_per_process(), Pool(n_processes) as p:
+
+            if multiprocess:
+                with fm.utils.one_thread_per_process(), Pool(n_processes) as p:
+                    for i in range(n_chunks):
+                        chunk = {key: val[i] for key, val in chunks.items()}
+                        futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
+
+                    for future in futures:
+                        results.append(future.result())
+            else:
                 for i in range(n_chunks):
                     chunk = {key: val[i] for key, val in chunks.items()}
-                    futures.append(p.submit(orgfunc, **{**chunk, **kwargs}))
-
-                for future in futures:
-                    results.append(future.result())
+                    results.append(orgfunc(**{**chunk, **kwargs}))
 
             # make an output
             if concatfunc is not None:
