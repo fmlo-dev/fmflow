@@ -180,7 +180,7 @@ class CStructReader(object):
 
 
 class StructureReader:
-    def __init__(self, structure, skipname='$.', byteorder='<', ecoding='utf-8'):
+    def __init__(self, structure, skipname='$.', byteorder='<', encoding='utf-8'):
         self.skipname = skipname
         self.byteorder = byteorder
         self.encoding = encoding
