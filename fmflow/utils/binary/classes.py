@@ -220,6 +220,7 @@ class StructureReader:
         for name in self.ctypes:
             if re.search(self.skipname, name):
                 del self._data[name]
+                continue
 
             shape = (len(self._data[name]), *self.shapes[name])
             datum = np.reshape(self._data[name], shape).squeeze()
