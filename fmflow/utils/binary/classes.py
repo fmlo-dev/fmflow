@@ -2,7 +2,8 @@
 
 # public items
 __all__ = [
-    'CStructReader'
+    'CStructReader',
+    'StructureReader'
 ]
 
 # standard library
@@ -176,3 +177,94 @@ class CStructReader(object):
 
     def __repr__(self):
         return 'CStructReader({0})'.format(self.params)
+
+
+class StructureReader:
+    def __init__(self, structure, skipname='$.', byteorder='<', ecoding='utf-8'):
+        self.skipname = skipname
+        self.byteorder = byteorder
+        self.encoding = encoding
+
+        self.ctypes, self.shapes = self._parse_structure(structure)
+        self.struct = self._create_struct(self.ctypes, self.shapes, byteorder)
+
+        self._data = OrderedDict((name, []) for name in self.ctypes)
+        self._processed = False
+
+    def read(self, f):
+        if self._processed:
+            raise IOError('cannot read after data processing')
+
+        bindata = f.read(self.struct.size)
+
+        if len(bindata) == 0:
+            raise EOFError('reached the end of file')
+
+        unpdata = deque(self.struct.unpack(bindata))
+
+        for name in self.ctypes:
+            N = np.prod(self.shapes[name])
+
+            if re.search('[csp]', self.ctypes[name]):
+                datum = [unpdata.popleft().strip(b'\x00 ') for i in range(N)]
+            else:
+                datum = [unpdata.popleft() for i in range(N)]
+
+            self._data[name].append(datum)
+
+    @property
+    def data(self):
+        if self._processed:
+            return self._data
+
+        for name in self.ctypes:
+            if re.search(self.skipname, name):
+                del self._data[name]
+
+            shape = (len(self._data[name]), *self.shapes[name])
+            datum = np.reshape(self._data[name], shape).squeeze()
+
+            if self.encoding and re.search('[csp]', self.ctypes[name]):
+                datum = np.char.decode(datum, self.encoding)
+
+            if np.prod(datum.shape) == 1:
+                datum = np.squeeze(datum).item()
+
+            self._data[name] = datum
+
+        self._processed = True
+        return self._data
+
+    @staticmethod
+    def _create_struct(ctypes, shapes, byteorder):
+        format = byteorder
+
+        for name in ctypes:
+            format += ctypes[name] * np.prod(shapes[name])
+
+        return Struct(format)
+
+    @staticmethod
+    def _parse_structure(structure):
+        ctypes = OrderedDict()
+        shapes = OrderedDict()
+
+        for item in structure:
+            if not 2 <= len(item) <= 3:
+                raise ValueError(item)
+
+            name, ctype = item[:2]
+            ctypes[name] = ctype
+
+            if len(item) == 2:
+                shapes[name] = (1,)
+                continue
+
+            if isinstance(item[2], int):
+                shapes[name] = (item[2],)
+            elif isinstance(item[2], (list, tuple)):
+                shapes[name] = tuple(item[2])
+            else:
+                raise ValueError(item)
+
+        return ctypes, shapes
