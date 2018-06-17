@@ -41,7 +41,7 @@ PACKAGES = [
 setup(
     name = 'fmflow',
     description = 'Data analysis package for FMLO',
-    version = '0.2.2',
+    version = '0.2.3',
     author = 'astropenguin',
     author_email = 'taniguchi@a.phys.nagoya-u.ac.jp',
     url = 'https://github.com/fmlo-dev/fmflow',
