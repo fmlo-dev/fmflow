@@ -347,7 +347,7 @@ def chbinning(array, size=2):
     binarray['fimg'].values = array['fimg'].values.reshape([binshape[1], size]).mean(1)
 
     # convert fmch (if any)
-    if 'fmch' in array:
+    if 'fmch' in array.coords:
         binarray['fmch'].values = (array['fmch'].values / size).astype(int)
 
     if set(array.dims) == {'t', 'ch'}:
