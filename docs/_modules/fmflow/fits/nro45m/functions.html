@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmflow.fits.nro45m.functions &mdash; FMFlow 0.2 documentation</title>
+  <title>fmflow.fits.nro45m.functions &mdash; FMFlow 0.2.6 documentation</title>
   
 
   
@@ -24,8 +24,7 @@
 
   
 
-  
-    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -57,7 +56,7 @@
             
             
               <div class="version">
-                0.2
+                0.2.6
               </div>
             
           
@@ -389,6 +388,8 @@
     <span class="n">ifatt</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;iary_ifatt&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)[</span><span class="n">usefg</span><span class="p">]</span>
     <span class="n">islsb</span>    <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;csid_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;LSB&#39;</span><span class="p">)[</span><span class="n">usefg</span><span class="p">]</span>
     <span class="n">arrayids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">])</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">aid</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">arrayids</span><span class="p">]</span>
+    <span class="n">arrayids</span> <span class="o">=</span> <span class="n">arrayids</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arrayid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arrayids</span><span class="p">):</span>
         <span class="n">flag</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">arrayid</span><span class="p">)</span>
@@ -477,7 +478,9 @@
     <span class="n">header</span><span class="p">[</span><span class="s1">&#39;equinox&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;\d+&#39;</span><span class="p">,</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s1">&#39;cepoch&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
-    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datinfo</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">])</span>
+    <span class="n">arrayids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datinfo</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">])</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">aid</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">aid</span> <span class="ow">in</span> <span class="n">arrayids</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;arrayid&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">arrayids</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sideband&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s1">&#39;csid_type&#39;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;frontend&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s1">&#39;cfe_type&#39;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
     <span class="n">data</span><span class="p">[</span><span class="s1">&#39;backend&#39;</span><span class="p">]</span>   <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ctlinfo</span><span class="p">[</span><span class="s1">&#39;cbe_type&#39;</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
@@ -531,7 +534,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2',
+            VERSION:'0.2.6',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -545,10 +548,7 @@
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {

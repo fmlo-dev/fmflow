@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>fmflow.core.array.decorators &mdash; FMFlow 0.2 documentation</title>
+  <title>fmflow.core.array.decorators &mdash; FMFlow 0.2.6 documentation</title>
   
 
   
@@ -24,8 +24,7 @@
 
   
 
-  
-    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -57,7 +56,7 @@
             
             
               <div class="version">
-                0.2
+                0.2.6
               </div>
             
           
@@ -258,6 +257,7 @@
             <span class="c1"># n_chunks and n_processes</span>
             <span class="n">n_chunks</span> <span class="o">=</span> <span class="n">DEFAULT_N_CHUNKS</span>
             <span class="n">n_processes</span> <span class="o">=</span> <span class="n">MAX_WORKERS</span>
+            <span class="n">multiprocess</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="n">argnames</span><span class="p">:</span>
                 <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="n">argnames</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
@@ -276,6 +276,11 @@
                 <span class="k">elif</span> <span class="s1">&#39;n_processes&#39;</span> <span class="ow">in</span> <span class="n">f_globals</span><span class="p">:</span>
                     <span class="n">n_processes</span> <span class="o">=</span> <span class="n">f_globals</span><span class="p">[</span><span class="s1">&#39;n_processes&#39;</span><span class="p">]</span>
 
+                <span class="k">if</span> <span class="s1">&#39;multiprocess&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">multiprocess</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;multiprocess&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="s1">&#39;multiprocess&#39;</span> <span class="ow">in</span> <span class="n">f_globals</span><span class="p">:</span>
+                    <span class="n">multiprocess</span> <span class="o">=</span> <span class="n">f_globals</span><span class="p">[</span><span class="s1">&#39;multiprocess&#39;</span><span class="p">]</span>
+
             <span class="c1"># make chunked args</span>
             <span class="n">chunks</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">argnames</span><span class="p">:</span>
@@ -288,13 +293,19 @@
             <span class="c1"># run the function</span>
             <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">with</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">one_thread_per_process</span><span class="p">(),</span> <span class="n">Pool</span><span class="p">(</span><span class="n">n_processes</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">multiprocess</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">one_thread_per_process</span><span class="p">(),</span> <span class="n">Pool</span><span class="p">(</span><span class="n">n_processes</span><span class="p">)</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_chunks</span><span class="p">):</span>
+                        <span class="n">chunk</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">chunks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+                        <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">orgfunc</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">chunk</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}))</span>
+
+                    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+                        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_chunks</span><span class="p">):</span>
                     <span class="n">chunk</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">chunks</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-                    <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">orgfunc</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">chunk</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}))</span>
-
-                <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
-                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orgfunc</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">chunk</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">}))</span>
 
             <span class="c1"># make an output</span>
             <span class="k">if</span> <span class="n">concatfunc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -342,7 +353,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../../../../',
-            VERSION:'0.2',
+            VERSION:'0.2.6',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
@@ -356,10 +367,7 @@
 
   
 
-  
-  
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-  
+  <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {
