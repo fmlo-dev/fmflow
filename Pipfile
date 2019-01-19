@@ -1,0 +1,30 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+astropy = "*"
+numpy = "*"
+numba = "*"
+pyyaml = "*"
+scikit-learn = "*"
+scipy = "*"
+tqdm = "*"
+xarray = "*"
+matplotlib = "*"
+
+[dev-packages]
+ipython = "*"
+jupyter = "*"
+twine = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.6"
+
+[scripts]
+ipython = "ipython"
+jupyter = "jupyter notebook ${HOME}"
+configure = "etc/configure"
+distribute = "etc/distribute"
