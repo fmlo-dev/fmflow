@@ -1,4 +1,6 @@
-## User defined files:
+# User-defined
+.vscode
+.ipython
 /docs/_doctree/
 /testdocs/
 
