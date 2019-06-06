@@ -13,12 +13,15 @@ scipy = "*"
 tqdm = "*"
 xarray = "*"
 matplotlib = "*"
+bokeh = "*"
+netcdf4 = "*"
 
 [dev-packages]
 ipython = "*"
 jupyter = "*"
 twine = "*"
 pylint = "*"
+jupyterthemes = "*"
 
 [requires]
 python_version = "3.6"
