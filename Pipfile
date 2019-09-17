@@ -36,3 +36,4 @@ allow_prereleases = true
 
 [scripts]
 lab = "jupyter lab"
+publish = "etc/publish"
