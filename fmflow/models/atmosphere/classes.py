@@ -25,8 +25,8 @@ warnings.simplefilter('ignore', OptimizeWarning)
 C = constants.c.value
 AMCMD = ['am', '-']
 AMDATA = get_data('fmflow', 'data/am.yaml')
-AMCONFIG = yaml.load(AMDATA)['config']
-AMLAYERS = yaml.load(AMDATA)['layers']
+AMCONFIG = yaml.load(AMDATA, Loader=yaml.BaseLoader)['config']
+AMLAYERS = yaml.load(AMDATA, Loader=yaml.BaseLoader)['layers']
 
 
 # classes

@@ -88,7 +88,7 @@ def read_fmlolog(fmlolog):
     fmlolog = Path(fmlolog).expanduser()
 
     # read fmlolog
-    fmts = yaml.load(CONF_FMLOLOG)
+    fmts = yaml.load(CONF_FMLOLOG, Loader=yaml.BaseLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -118,7 +118,7 @@ def read_antennalog(antennalog):
     antennalog = Path(antennalog).expanduser()
 
     # read antennalog
-    fmts = yaml.load(CONF_ANTENNA)
+    fmts = yaml.load(CONF_ANTENNA, Loader=yaml.BaseLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -167,7 +167,7 @@ def check_backend(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
 
@@ -196,8 +196,8 @@ def read_backendlog_sam45(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM)
-    sam = yaml.load(CONF_BACKEND_SAM)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
+    sam = yaml.load(CONF_BACKEND_SAM, Loader=yaml.BaseLoader)
     head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
     ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
     obs  = fm.utils.CStructReader(sam['obs'], IGNORED_KEY, byteorder)
@@ -315,7 +315,7 @@ def make_obsinfo_sam45(hdus):
     p = fm.utils.DatetimeParser()
     flag = np.array(obsinfo['iary_usefg'], dtype=bool)
 
-    fmts = yaml.load(CONF_OBSINFO)
+    fmts = yaml.load(CONF_OBSINFO, Loader=yaml.BaseLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
