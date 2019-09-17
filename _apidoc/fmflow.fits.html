@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>fmflow.fits package &mdash; FMFlow 0.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> FMFlow
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">fmflow.fits package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-fmflow.fits.functions">fmflow.fits.functions module</a></li>
+<li><a class="reference internal" href="#module-fmflow.fits">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FMFlow</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>fmflow.fits package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/_apidoc/fmflow.fits.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fmflow-fits-package">
+<h1>fmflow.fits package<a class="headerlink" href="#fmflow-fits-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fmflow.fits.functions">
+<span id="fmflow-fits-functions-module"></span><h2>fmflow.fits.functions module<a class="headerlink" href="#module-fmflow.fits.functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fmflow.fits.functions.getarray">
+<code class="sig-prename descclassname">fmflow.fits.functions.</code><code class="sig-name descname">getarray</code><span class="sig-paren">(</span><em class="sig-param">fitsname</em>, <em class="sig-param">arrayid</em>, <em class="sig-param">scantype</em>, <em class="sig-param">offsetsec=0.0</em>, <em class="sig-param">*</em>, <em class="sig-param">computeam=True</em>, <em class="sig-param">ignore_antennalog=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/fits/functions.html#getarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fits.functions.getarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array from a FMFITS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitsname</strong> (<em>str</em>) – File name of a FMFITS.</p></li>
+<li><p><strong>arrayid</strong> (<em>str</em>) – An array ID with which the output fmarray is created.</p></li>
+<li><p><strong>scantype</strong> (<em>str</em>) – A scan type with which the output fmarray is created.</p></li>
+<li><p><strong>offsetsec</strong> (<em>float</em><em>, </em><em>optional</em>) – A float value of FM offset time in units of sec.</p></li>
+<li><p><strong>computeam</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, atmospheric model is computed. Default is True.</p></li>
+<li><p><strong>ignore_antennalog</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether ignoring antenna log. Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A modulated array of the spacified <cite>arrayid</cite> and <cite>scantype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fmflow.fits">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmflow.fits" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fmflow.fits.fromaste">
+<code class="sig-prename descclassname">fmflow.fits.</code><code class="sig-name descname">fromaste</code><span class="sig-paren">(</span><em class="sig-param">fmlolog</em>, <em class="sig-param">backendlog</em>, <em class="sig-param">antennalog=None</em>, <em class="sig-param">byteorder='&lt;'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/fits/aste/functions.html#fromaste"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fits.fromaste" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read logging data of ASTE and merge them into a FITS object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fmlolog</strong> (<em>str</em>) – File name of FMLO logging.</p></li>
+<li><p><strong>backendlog</strong> (<em>str</em>) – File name of backend logging.</p></li>
+<li><p><strong>antennalog</strong> (<em>str</em>) – File name of antenna logging (optional).</p></li>
+<li><p><strong>byteorder</strong> (<em>str</em>) – format string that represents byte order
+of the backendlog. Default is ‘&lt;’ (little-endian).
+If the data in the returned FITS seems to be wrong,
+try to spacify ‘&gt;’ (big-endian).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HDU list containing the merged data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hdus (HDUlist)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.fits.fromnro45m">
+<code class="sig-prename descclassname">fmflow.fits.</code><code class="sig-name descname">fromnro45m</code><span class="sig-paren">(</span><em class="sig-param">fmlolog</em>, <em class="sig-param">backendlog</em>, <em class="sig-param">antennalog=None</em>, <em class="sig-param">byteorder='&lt;'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/fits/nro45m/functions.html#fromnro45m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fits.fromnro45m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read logging data of NRO45m and merge them into a FITS object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fmlolog</strong> (<em>str</em>) – File name of FMLO logging.</p></li>
+<li><p><strong>backendlog</strong> (<em>str</em>) – File name of backend logging.</p></li>
+<li><p><strong>antennalog</strong> (<em>str</em>) – File name of antenna logging (optional).</p></li>
+<li><p><strong>byteorder</strong> (<em>str</em>) – format string that represents byte order
+of the backendlog. Default is ‘&lt;’ (little-endian).
+If the data in the returned FITS seems to be wrong,
+try to spacify ‘&gt;’ (big-endian).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HDU list containing the merged data.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hdus (HDUlist)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fmflow.fits.getarray">
+<code class="sig-prename descclassname">fmflow.fits.</code><code class="sig-name descname">getarray</code><span class="sig-paren">(</span><em class="sig-param">fitsname</em>, <em class="sig-param">arrayid</em>, <em class="sig-param">scantype</em>, <em class="sig-param">offsetsec=0.0</em>, <em class="sig-param">*</em>, <em class="sig-param">computeam=True</em>, <em class="sig-param">ignore_antennalog=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/fits/functions.html#getarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fmflow.fits.getarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a modulated array from a FMFITS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fitsname</strong> (<em>str</em>) – File name of a FMFITS.</p></li>
+<li><p><strong>arrayid</strong> (<em>str</em>) – An array ID with which the output fmarray is created.</p></li>
+<li><p><strong>scantype</strong> (<em>str</em>) – A scan type with which the output fmarray is created.</p></li>
+<li><p><strong>offsetsec</strong> (<em>float</em><em>, </em><em>optional</em>) – A float value of FM offset time in units of sec.</p></li>
+<li><p><strong>computeam</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, atmospheric model is computed. Default is True.</p></li>
+<li><p><strong>ignore_antennalog</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether ignoring antenna log. Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A modulated array of the spacified <cite>arrayid</cite> and <cite>scantype</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Akio Taniguchi
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
