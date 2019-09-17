@@ -4,30 +4,35 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [packages]
-astropy = "*"
 numpy = "*"
-numba = "*"
-pyyaml = "*"
-scikit-learn = "*"
 scipy = "*"
-tqdm = "*"
+numba = "*"
 xarray = "*"
+astropy = "*"
 matplotlib = "*"
-bokeh = "*"
+scikit-learn = "*"
 netcdf4 = "*"
+pyyaml = "*"
+tqdm = "*"
 
 [dev-packages]
 ipython = "*"
-jupyter = "*"
+jupyterlab = "*"
 twine = "*"
-pylint = "*"
-jupyterthemes = "*"
+black = "*"
+flake8 = "*"
+pytest = "*"
+pytest-cov = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+setuptools-py2cfg = "*"
+fmflow = {editable = true,path = "."}
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
 
 [scripts]
-ipython = "ipython"
-jupyter = "jupyter notebook ${HOME}"
-configure = "etc/configure"
-distribute = "etc/distribute"
+lab = "jupyter lab"
