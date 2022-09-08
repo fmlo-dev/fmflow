@@ -3,8 +3,8 @@ message: "If you use this software, please cite it as below."
 
 title: "fmflow"
 abstract: "Data analysis package for FMLO"
-version: 0.2.7
-date-released: 2019-09-18
+version: 0.3.0
+date-released: 2022-09-09
 license: "MIT"
 doi: "10.5281/zenodo.3433962"
 url: "https://github.com/fmlo-dev/fmflow"
