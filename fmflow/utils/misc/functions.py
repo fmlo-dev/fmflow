@@ -2,10 +2,10 @@
 
 # public items
 __all__ = [
-    'copy_function',
-    'get_filename',
-    'ignore_numpy_errors',
-    'one_thread_per_process',
+    "copy_function",
+    "get_filename",
+    "ignore_numpy_errors",
+    "one_thread_per_process",
 ]
 
 # standard library
@@ -60,7 +60,7 @@ def ignore_numpy_errors():
         ...     np.arange(10) / 0 # no errors are displayed
 
     """
-    old_settings = np.seterr(all='ignore')
+    old_settings = np.seterr(all="ignore")
 
     try:
         # execute nested block in the with statement
@@ -87,6 +87,7 @@ def one_thread_per_process():
     """
     try:
         import mkl
+
         is_mkl = True
     except ImportError:
         is_mkl = False

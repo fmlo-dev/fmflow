@@ -2,9 +2,9 @@
 
 # public items
 __all__ = [
-    'pca',
-    'empca',
-    'decomposition',
+    "pca",
+    "empca",
+    "decomposition",
 ]
 
 # standard library
@@ -19,12 +19,12 @@ from sklearn import decomposition as _decomposition
 
 # module constants
 SKPARAMS = defaultdict(dict)
-SKPARAMS['KernelPCA'] = {'fit_inverse_transform': True}
+SKPARAMS["KernelPCA"] = {"fit_inverse_transform": True}
 
 
 # functions
 @fm.xarrayfunc
-@fm.chunk('array')
+@fm.chunk("array")
 def pca(array, n_components=50, optimize_n=True, centering=True):
     """Reconstruct an array from decomposed one with PCA.
 
@@ -42,19 +42,29 @@ def pca(array, n_components=50, optimize_n=True, centering=True):
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    logger = getLogger('fmflow.models.pca')
+    logger = getLogger("fmflow.models.pca")
     model = fm.models.PCA(n_components, optimize_n, logger=logger)
 
     mean = np.mean(array, 0) if centering else 0
-    transformed = model.fit_transform(array-mean)
+    transformed = model.fit_transform(array - mean)
     return transformed @ model.components_ + mean
 
 
 @fm.xarrayfunc
-@fm.chunk('array', 'weights')
-def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
-          initialize='random', random_seed=None, centering=True,
-          convergence=1e-3, n_maxiters=300, **kwargs):
+@fm.chunk("array", "weights")
+def empca(
+    array,
+    weights=None,
+    n_components=50,
+    ch_smooth=None,
+    optimize_n=True,
+    initialize="random",
+    random_seed=None,
+    centering=True,
+    convergence=1e-3,
+    n_maxiters=300,
+    **kwargs
+):
     """Reconstruct an array from decomposed one with EMPCA.
 
     Args:
@@ -81,19 +91,28 @@ def empca(array, weights=None, n_components=50, ch_smooth=None, optimize_n=True,
         array (xarray.DataArray): An output reconstructed array.
 
     """
-    logger = getLogger('fmflow.models.empca')
-    model = fm.models.EMPCA(n_components, ch_smooth, optimize_n, initialize, random_seed,
-                            convergence=convergence, n_maxiters=n_maxiters, logger=logger)
+    logger = getLogger("fmflow.models.empca")
+    model = fm.models.EMPCA(
+        n_components,
+        ch_smooth,
+        optimize_n,
+        initialize,
+        random_seed,
+        convergence=convergence,
+        n_maxiters=n_maxiters,
+        logger=logger,
+    )
 
     mean = np.mean(array, 0) if centering else 0
-    transformed = model.fit_transform(array-mean, weights)
+    transformed = model.fit_transform(array - mean, weights)
     return transformed @ model.components_ + mean
 
 
 @fm.xarrayfunc
-@fm.chunk('array')
-def decomposition(array, n_components=None, decomposer='TruncatedSVD',
-                  centering=True, **kwargs):
+@fm.chunk("array")
+def decomposition(
+    array, n_components=None, decomposer="TruncatedSVD", centering=True, **kwargs
+):
     """Reconstruct an array from decomposed one with a scikit-learn decomposer.
 
     Args:
@@ -115,7 +134,7 @@ def decomposition(array, n_components=None, decomposer='TruncatedSVD',
         >>> result = fm.model.reducedim(array, 'PCA', n_components=2)
 
     """
-    logger = getLogger('fmflow.models.decomposition')
+    logger = getLogger("fmflow.models.decomposition")
 
     AlgorithmClass = getattr(_decomposition, decomposer)
     params = deepcopy(SKPARAMS[decomposer])
@@ -123,11 +142,11 @@ def decomposition(array, n_components=None, decomposer='TruncatedSVD',
     model = AlgorithmClass(n_components, **params)
 
     mean = np.mean(array, 0) if centering else 0
-    transformed = model.fit_transform(array-mean)
+    transformed = model.fit_transform(array - mean)
 
-    if hasattr(model, 'components_'):
+    if hasattr(model, "components_"):
         return transformed @ model.components_ + mean
-    elif hasattr(model, 'inverse_transform'):
+    elif hasattr(model, "inverse_transform"):
         return model.inverse_transform(transformed) + mean
     else:
-        raise ValueError('cannot reconstruct with the spacified algorithm')
+        raise ValueError("cannot reconstruct with the spacified algorithm")

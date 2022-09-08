@@ -1,7 +1,7 @@
 # coding: utf-8
 
 # public items
-__all__ = ['fromnro45m']
+__all__ = ["fromnro45m"]
 
 # standard library
 import json
@@ -21,21 +21,21 @@ from astropy.io import fits
 from tqdm import tqdm
 
 # module constants
-C                = constants.c.value # spped of light in vacuum
-D_NRO45m         = (45.0 * u.m).value # diameter of the NRO45m
-LON_NRO45m       = coordinates.Angle('+138d28m21.2s').deg # longitude of the NRO45m
-LAT_NRO45m       = coordinates.Angle('+35d56m40.9s').deg # latitude of the NRO45m
-EFF_8257D        = 0.92 # exposure / interval time of Agilent 8257D
-IGNORED_KEY      = '^reserve' # reserved[1|4|8]
-CONF_OBSINFO     = get_data('fmflow', 'data/obsinfo.yaml')
-CONF_FMLOLOG     = get_data('fmflow', 'data/nro45m_fmlolog.yaml')
-CONF_BACKEND_COM = get_data('fmflow', 'data/nro45m_backendlog_common.yaml')
-CONF_BACKEND_SAM = get_data('fmflow', 'data/nro45m_backendlog_sam45.yaml')
-CONF_ANTENNA     = get_data('fmflow', 'data/nro45m_antennalog.yaml')
-BAR_FORMAT       = '{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]'
+C = constants.c.value  # spped of light in vacuum
+D_NRO45m = (45.0 * u.m).value  # diameter of the NRO45m
+LON_NRO45m = coordinates.Angle("+138d28m21.2s").deg  # longitude of the NRO45m
+LAT_NRO45m = coordinates.Angle("+35d56m40.9s").deg  # latitude of the NRO45m
+EFF_8257D = 0.92  # exposure / interval time of Agilent 8257D
+IGNORED_KEY = "^reserve"  # reserved[1|4|8]
+CONF_OBSINFO = get_data("fmflow", "data/obsinfo.yaml")
+CONF_FMLOLOG = get_data("fmflow", "data/nro45m_fmlolog.yaml")
+CONF_BACKEND_COM = get_data("fmflow", "data/nro45m_backendlog_common.yaml")
+CONF_BACKEND_SAM = get_data("fmflow", "data/nro45m_backendlog_sam45.yaml")
+CONF_ANTENNA = get_data("fmflow", "data/nro45m_antennalog.yaml")
+BAR_FORMAT = "{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
 
 # functions
-def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder='<'):
+def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder="<"):
     """Read logging data of NRO45m and merge them into a FITS object.
 
     Args:
@@ -61,11 +61,11 @@ def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder='<'):
     # BACKEND and OBSINFO HDUs
     backend = check_backend(backendlog, byteorder)
 
-    if backend == b'SAM45':
+    if backend == b"SAM45":
         hdus.append(read_backendlog_sam45(backendlog, byteorder))
         hdus.insert(1, make_obsinfo_sam45(hdus))
     else:
-        raise ValueError('invalid logging type')
+        raise ValueError("invalid logging type")
 
     # ANTENNA HDU (if any)
     if antennalog is not None:
@@ -97,10 +97,12 @@ def read_fmlolog(fmlolog):
 
     # bintable HDU
     header = fits.Header()
-    header['extname'] = 'FMLOLOG'
-    header['filename'] = str(fmlolog)
+    header["extname"] = "FMLOLOG"
+    header["filename"] = str(fmlolog)
 
-    cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
+    cols = [
+        fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)
+    ]
     return fits.BinTableHDU.from_columns(cols, header)
 
 
@@ -128,25 +130,27 @@ def read_antennalog(antennalog):
     # RA, Dec real
     sind = lambda deg: np.sin(np.deg2rad(deg))
     cosd = lambda deg: np.cos(np.deg2rad(deg))
-    q = -np.arcsin(sind(d['az_prog']) * cosd(LAT_NRO45m) / cosd(d['dec_prog']))
+    q = -np.arcsin(sind(d["az_prog"]) * cosd(LAT_NRO45m) / cosd(d["dec_prog"]))
 
-    ra_error  = -np.cos(q)*d['az_error'] + np.sin(q)*d['el_error']
-    dec_error = +np.sin(q)*d['az_error'] + np.cos(q)*d['el_error']
-    ra_real   = d['ra_prog'] - ra_error
-    dec_real  = d['dec_prog'] - ra_error
+    ra_error = -np.cos(q) * d["az_error"] + np.sin(q) * d["el_error"]
+    dec_error = +np.sin(q) * d["az_error"] + np.cos(q) * d["el_error"]
+    ra_real = d["ra_prog"] - ra_error
+    dec_real = d["dec_prog"] - ra_error
 
     # bintable HDU
     header = fits.Header()
-    header['extname'] = 'ANTENNA'
-    header['filename'] = str(antennalog)
+    header["extname"] = "ANTENNA"
+    header["filename"] = str(antennalog)
 
-    cols = [fits.Column(n, tforms[i], units[i], array=d[n]) for i, n in enumerate(names)]
-    cols.append(fits.Column('az', 'D', 'deg', array=d['az_real']))
-    cols.append(fits.Column('el', 'D', 'deg', array=d['el_real']))
-    cols.append(fits.Column('ra', 'D', 'deg', array=ra_real))
-    cols.append(fits.Column('dec', 'D', 'deg', array=dec_real))
-    cols.append(fits.Column('ra_error', 'D', 'deg', array=ra_error))
-    cols.append(fits.Column('dec_error', 'D', 'deg', array=dec_error))
+    cols = [
+        fits.Column(n, tforms[i], units[i], array=d[n]) for i, n in enumerate(names)
+    ]
+    cols.append(fits.Column("az", "D", "deg", array=d["az_real"]))
+    cols.append(fits.Column("el", "D", "deg", array=d["el_real"]))
+    cols.append(fits.Column("ra", "D", "deg", array=ra_real))
+    cols.append(fits.Column("dec", "D", "deg", array=dec_real))
+    cols.append(fits.Column("ra_error", "D", "deg", array=ra_error))
+    cols.append(fits.Column("dec_error", "D", "deg", array=dec_error))
     return fits.BinTableHDU.from_columns(cols, header)
 
 
@@ -168,15 +172,15 @@ def check_backend(backendlog, byteorder):
     backendlog = Path(backendlog).expanduser()
 
     com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
-    head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
-    ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
+    head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
+    ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
 
     # read backendlog
-    with backendlog.open('rb') as f:
+    with backendlog.open("rb") as f:
         head.read(f)
         ctl.read(f)
 
-    return ctl.data['cbe_type']
+    return ctl.data["cbe_type"]
 
 
 def read_backendlog_sam45(backendlog, byteorder):
@@ -198,18 +202,18 @@ def read_backendlog_sam45(backendlog, byteorder):
 
     com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
     sam = yaml.load(CONF_BACKEND_SAM, Loader=yaml.BaseLoader)
-    head = fm.utils.CStructReader(com['head'], IGNORED_KEY, byteorder)
-    ctl  = fm.utils.CStructReader(com['ctl'], IGNORED_KEY, byteorder)
-    obs  = fm.utils.CStructReader(sam['obs'], IGNORED_KEY, byteorder)
-    dat  = fm.utils.CStructReader(sam['dat'], IGNORED_KEY, byteorder)
+    head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
+    ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
+    obs = fm.utils.CStructReader(sam["obs"], IGNORED_KEY, byteorder)
+    dat = fm.utils.CStructReader(sam["dat"], IGNORED_KEY, byteorder)
 
     def eof(f):
         head.read(f)
         bar.update(head.size)
-        return (head._data['crec_type'][-1][0] == b'ED')
+        return head._data["crec_type"][-1][0] == b"ED"
 
     # read backendlog
-    with backendlog.open('rb') as f:
+    with backendlog.open("rb") as f:
         total = backendlog.stat().st_size
         with tqdm(total=total, bar_format=BAR_FORMAT) as bar:
             eof(f)
@@ -225,71 +229,71 @@ def read_backendlog_sam45(backendlog, byteorder):
 
     # edit data
     data = dat.data
-    data['starttime'] = data.pop('cint_sttm')
-    data['arrayid']   = data.pop('cary_name')
-    data['scantype']  = data.pop('cscan_type')
-    data['arraydata'] = data.pop('fary_data')
+    data["starttime"] = data.pop("cint_sttm")
+    data["arrayid"] = data.pop("cary_name")
+    data["scantype"] = data.pop("cscan_type")
+    data["arraydata"] = data.pop("fary_data")
 
     ## starttime
     p = fm.utils.DatetimeParser()
-    data['starttime'] = np.array([p(t) for t in data['starttime']])
+    data["starttime"] = np.array([p(t) for t in data["starttime"]])
 
     ## scantype (bug?)
-    data['scantype'][data['scantype']==b'ON\x00O'] = b'ON'
-    data['scantype'][data['scantype']==b'R\x00RO'] = b'R'
+    data["scantype"][data["scantype"] == b"ON\x00O"] = b"ON"
+    data["scantype"][data["scantype"] == b"R\x00RO"] = b"R"
 
     ## arraydata
-    usefg    = np.array(obs.data['iary_usefg'], dtype=bool)
-    ifatt    = np.array(obs.data['iary_ifatt'], dtype=float)[usefg]
-    islsb    = np.array(obs.data['csid_type'] == b'LSB')[usefg]
-    arrayids = np.unique(data['arrayid'])
+    usefg = np.array(obs.data["iary_usefg"], dtype=bool)
+    ifatt = np.array(obs.data["iary_ifatt"], dtype=float)[usefg]
+    islsb = np.array(obs.data["csid_type"] == b"LSB")[usefg]
+    arrayids = np.unique(data["arrayid"])
     key = [int(aid[1:]) for aid in arrayids]
     arrayids = arrayids[np.argsort(key)]
 
     for i, arrayid in enumerate(arrayids):
-        flag = (data['arrayid'] == arrayid)
+        flag = data["arrayid"] == arrayid
 
         ## slices of each scantype
-        ons  = fm.utils.slicewhere(flag & (data['scantype'] == b'ON'))
-        rs   = fm.utils.slicewhere(flag & (data['scantype'] == b'R'))
-        skys = fm.utils.slicewhere(flag & (data['scantype'] == b'SKY'))
-        zero = fm.utils.slicewhere(flag & (data['scantype'] == b'ZERO'))[0]
+        ons = fm.utils.slicewhere(flag & (data["scantype"] == b"ON"))
+        rs = fm.utils.slicewhere(flag & (data["scantype"] == b"R"))
+        skys = fm.utils.slicewhere(flag & (data["scantype"] == b"SKY"))
+        zero = fm.utils.slicewhere(flag & (data["scantype"] == b"ZERO"))[0]
 
         ## apply ZERO to ON data
         for on in ons:
-            data['arraydata'][on] -= data['arraydata'][zero]
+            data["arraydata"][on] -= data["arraydata"][zero]
 
         ## apply ZERO and ifatt to R data
         for r in rs:
-            data['arraydata'][r] -= data['arraydata'][zero]
-            data['arraydata'][r] *= 10.0**(ifatt[i]/10.0)
+            data["arraydata"][r] -= data["arraydata"][zero]
+            data["arraydata"][r] *= 10.0 ** (ifatt[i] / 10.0)
 
         ## apply ZERO to SKY data
         for sky in skys:
-            data['arraydata'][sky] -= data['arraydata'][zero]
+            data["arraydata"][sky] -= data["arraydata"][zero]
 
         ## reverse array (if LSB)
         if arrayid in arrayids[islsb]:
-            data['arraydata'][flag] = data['arraydata'][flag,::-1]
+            data["arraydata"][flag] = data["arraydata"][flag, ::-1]
 
     # read and edit formats
-    names  = list(dat.ctypes.keys())
+    names = list(dat.ctypes.keys())
     ctypes = list(dat.ctypes.values())
     shapes = list(dat.shapes.values())
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
-    fmts['starttime'] = 'A26'
-    fmts['arraydata'] = fmts.pop('fary_data')
-    fmts['arrayid']   = fmts.pop('cary_name')
-    fmts['scantype']  = fmts.pop('cscan_type')
+    fmts["starttime"] = "A26"
+    fmts["arraydata"] = fmts.pop("fary_data")
+    fmts["arrayid"] = fmts.pop("cary_name")
+    fmts["scantype"] = fmts.pop("cscan_type")
 
     # bintable HDU
     header = fits.Header()
-    header['extname']  = 'BACKEND'
-    header['filename'] = str(backendlog)
-    header['ctlinfo']  = ctl.jsondata
-    header['obsinfo']  = obs.jsondata
+    header["extname"] = "BACKEND"
+    header["filename"] = str(backendlog)
+    header["ctlinfo"] = ctl.jsondata
+    header["obsinfo"] = obs.jsondata
 
     cols = [fits.Column(key, fmts[key], array=data[key]) for key in data]
     return fits.BinTableHDU.from_columns(cols, header)
@@ -306,52 +310,54 @@ def make_obsinfo_sam45(hdus):
 
     """
     # read info
-    ctlinfo = json.loads(hdus['backend'].header['ctlinfo'])
-    obsinfo = json.loads(hdus['backend'].header['obsinfo'])
-    datinfo = hdus['backend'].data
+    ctlinfo = json.loads(hdus["backend"].header["ctlinfo"])
+    obsinfo = json.loads(hdus["backend"].header["obsinfo"])
+    datinfo = hdus["backend"].data
 
     # bintable HDU
-    N = obsinfo['iary_num']
+    N = obsinfo["iary_num"]
     p = fm.utils.DatetimeParser()
-    flag = np.array(obsinfo['iary_usefg'], dtype=bool)
+    flag = np.array(obsinfo["iary_usefg"], dtype=bool)
 
     fmts = yaml.load(CONF_OBSINFO, Loader=yaml.BaseLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
     header = fits.Header()
-    header['extname']  = 'OBSINFO'
-    header['fitstype'] = 'FMFITSv0'
-    header['telescop'] = 'NRO45m'
-    header['sitelon']  = LON_NRO45m
-    header['sitelat']  = LAT_NRO45m
-    header['date-obs'] = p(obsinfo['clog_id'])[:-3]
-    header['observer'] = obsinfo['cobs_user']
-    header['object']   = obsinfo['cobj_name']
-    header['ra']       = obsinfo['dsrc_pos'][0][0]
-    header['dec']      = obsinfo['dsrc_pos'][1][0]
-    header['equinox']  = float(re.findall('\d+', obsinfo['cepoch'])[0])
+    header["extname"] = "OBSINFO"
+    header["fitstype"] = "FMFITSv0"
+    header["telescop"] = "NRO45m"
+    header["sitelon"] = LON_NRO45m
+    header["sitelat"] = LAT_NRO45m
+    header["date-obs"] = p(obsinfo["clog_id"])[:-3]
+    header["observer"] = obsinfo["cobs_user"]
+    header["object"] = obsinfo["cobj_name"]
+    header["ra"] = obsinfo["dsrc_pos"][0][0]
+    header["dec"] = obsinfo["dsrc_pos"][1][0]
+    header["equinox"] = float(re.findall("\d+", obsinfo["cepoch"])[0])
 
     data = OrderedDict()
-    arrayids = np.unique(datinfo['arrayid'])
+    arrayids = np.unique(datinfo["arrayid"])
     key = [int(aid[1:]) for aid in arrayids]
-    data['arrayid']   = arrayids[np.argsort(key)]
-    data['sideband']  = np.array(obsinfo['csid_type'])[flag]
-    data['frontend']  = np.array(obsinfo['cfe_type'])[flag]
-    data['backend']   = np.tile(ctlinfo['cbe_type'], N)
-    data['offsetaz']  = np.tile(0.0, N) # not implemented yet
-    data['offsetel']  = np.tile(0.0, N) # not implemented yet
-    data['chtotaln']  = np.array(obsinfo['ichannel'])[flag]
-    data['chcenter']  = data['chtotaln']/2 + 0.5
-    data['rfcenter']  = np.array(obsinfo['dcent_freq'])[flag]
-    data['ifcenter']  = np.array(obsinfo['dflif'])[flag]
-    data['ifcenter']  += np.array(obsinfo['dcent_freq'])[flag]
-    data['ifcenter']  -= np.array(obsinfo['dtrk_freq'])[flag]
-    data['chwidth']   = np.array(obsinfo['dbechwid'])[flag]
-    data['bandwidth'] = np.array(obsinfo['dbebw'])[flag]
-    data['interval']  = np.tile(obsinfo['diptim'], N)
-    data['integtime'] = data['interval'] * EFF_8257D
-    data['beamsize']  = np.rad2deg(1.2*C/D_NRO45m) / data['rfcenter']
+    data["arrayid"] = arrayids[np.argsort(key)]
+    data["sideband"] = np.array(obsinfo["csid_type"])[flag]
+    data["frontend"] = np.array(obsinfo["cfe_type"])[flag]
+    data["backend"] = np.tile(ctlinfo["cbe_type"], N)
+    data["offsetaz"] = np.tile(0.0, N)  # not implemented yet
+    data["offsetel"] = np.tile(0.0, N)  # not implemented yet
+    data["chtotaln"] = np.array(obsinfo["ichannel"])[flag]
+    data["chcenter"] = data["chtotaln"] / 2 + 0.5
+    data["rfcenter"] = np.array(obsinfo["dcent_freq"])[flag]
+    data["ifcenter"] = np.array(obsinfo["dflif"])[flag]
+    data["ifcenter"] += np.array(obsinfo["dcent_freq"])[flag]
+    data["ifcenter"] -= np.array(obsinfo["dtrk_freq"])[flag]
+    data["chwidth"] = np.array(obsinfo["dbechwid"])[flag]
+    data["bandwidth"] = np.array(obsinfo["dbebw"])[flag]
+    data["interval"] = np.tile(obsinfo["diptim"], N)
+    data["integtime"] = data["interval"] * EFF_8257D
+    data["beamsize"] = np.rad2deg(1.2 * C / D_NRO45m) / data["rfcenter"]
 
-    cols = [fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)]
+    cols = [
+        fits.Column(n, tforms[i], units[i], array=data[n]) for i, n in enumerate(names)
+    ]
     return fits.BinTableHDU.from_columns(cols, header)

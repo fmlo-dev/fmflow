@@ -2,8 +2,8 @@
 
 # public items
 __all__ = [
-    'PCA',
-    'EMPCA',
+    "PCA",
+    "EMPCA",
 ]
 
 # standard library
@@ -23,8 +23,8 @@ from scipy.signal import savgol_filter
 class PCA(BaseModel):
     def __init__(self, n_components=50, optimize_n=True, *, logger=None):
         params = {
-            'n_components': n_components,
-            'optimize_n': optimize_n,
+            "n_components": n_components,
+            "optimize_n": optimize_n,
         }
         super().__init__(params, logger)
 
@@ -39,11 +39,11 @@ class PCA(BaseModel):
         if self.optimize_n:
             K_opt = self._optimize_K(C, 7)
             if K_opt < self.n_components:
-                C, P = C[:,:K_opt], P[:K_opt]
-                self.logger.info('optimized n_components: {}'.format(K_opt))
+                C, P = C[:, :K_opt], P[:K_opt]
+                self.logger.info("optimized n_components: {}".format(K_opt))
             else:
-                self.logger.warning('optimized n_components exceeds the original')
-                self.logger.warning('the original is used for reconstruction')
+                self.logger.warning("optimized n_components exceeds the original")
+                self.logger.warning("the original is used for reconstruction")
 
         self.components_ = P
         return C
@@ -51,27 +51,36 @@ class PCA(BaseModel):
     @staticmethod
     def _optimize_K(C, level=5):
         npc = np.arange(C.shape[1])
-        lmd = np.log10(C.var(0)) # log eigen values
+        lmd = np.log10(C.var(0))  # log eigen values
 
         def func(x, a, b, c):
-            return a * 2**(-b*x) + c
+            return a * 2 ** (-b * x) + c
 
         popt, pcov = curve_fit(func, npc, lmd)
-        return int(level/popt[1]) + 1
+        return int(level / popt[1]) + 1
 
 
 class EMPCA(BaseModel):
-    def __init__(self, n_components=50, ch_smooth=None, optimize_n=True,
-                 initialize='random', random_seed=None, *, convergence=1e-3,
-                 n_maxiters=300, logger=None):
+    def __init__(
+        self,
+        n_components=50,
+        ch_smooth=None,
+        optimize_n=True,
+        initialize="random",
+        random_seed=None,
+        *,
+        convergence=1e-3,
+        n_maxiters=300,
+        logger=None
+    ):
         params = {
-            'n_components': n_components,
-            'ch_smooth': ch_smooth,
-            'optimize_n': optimize_n,
-            'initialize': initialize,
-            'random_seed': random_seed,
-            'convergence': convergence,
-            'n_maxiters': n_maxiters,
+            "n_components": n_components,
+            "ch_smooth": ch_smooth,
+            "optimize_n": optimize_n,
+            "initialize": initialize,
+            "random_seed": random_seed,
+            "convergence": convergence,
+            "n_maxiters": n_maxiters,
         }
         super().__init__(params, logger)
 
@@ -85,7 +94,7 @@ class EMPCA(BaseModel):
             W = np.asarray(W)
 
         if not X.shape == W.shape:
-            raise ValueError('X and W must have same shapes')
+            raise ValueError("X and W must have same shapes")
 
         # shapes of matrices (for convergence)
         N, D, K = *X.shape, deepcopy(self.n_components)
@@ -100,16 +109,17 @@ class EMPCA(BaseModel):
         np.random.seed(self.random_seed)
 
         C = np.zeros([N, K])
-        if self.initialize == 'random':
+        if self.initialize == "random":
             P = self._orthogonal_from_random(K, D)
-        elif self.initialize == 'svd':
+        elif self.initialize == "svd":
             P = self._orthogonal_from_svd(X, K)
         else:
             raise ValueError(self.initialize)
 
         # convergence
-        cv = fm.utils.Convergence(self.convergence, self.n_maxiters,
-                                  centering=True, raise_exception=True)
+        cv = fm.utils.Convergence(
+            self.convergence, self.n_maxiters, centering=True, raise_exception=True
+        )
 
         # EM algorithm
         try:
@@ -122,17 +132,17 @@ class EMPCA(BaseModel):
                 if (self.ch_smooth is not None) and (self.ch_smooth > 0):
                     P = self._smooth_eigenvectors(P, self.ch_smooth)
         except StopIteration:
-            self.logger.warning('reached maximum iteration')
+            self.logger.warning("reached maximum iteration")
 
         # finally
         if self.optimize_n:
             K_opt = self._optimize_K(C, 7)
             if K_opt < self.n_components:
-                self.logger.info('optimized n_components: {}'.format(K_opt))
-                C, P = C[:,:K_opt], P[:K_opt]
+                self.logger.info("optimized n_components: {}".format(K_opt))
+                C, P = C[:, :K_opt], P[:K_opt]
             else:
-                self.logger.warning('optimized n_components exceeds the original')
-                self.logger.warning('the original is used for reconstruction')
+                self.logger.warning("optimized n_components exceeds the original")
+                self.logger.warning("the original is used for reconstruction")
 
         self.components_ = P
         return C
@@ -161,13 +171,13 @@ class EMPCA(BaseModel):
     @staticmethod
     def _optimize_K(C, level=5):
         npc = np.arange(C.shape[1])
-        lmd = np.log10(C.var(0)) # log eigen values
+        lmd = np.log10(C.var(0))  # log eigen values
 
         def func(x, a, b, c):
-            return a * 2**(-b*x) + c
+            return a * 2 ** (-b * x) + c
 
         popt, pcov = curve_fit(func, npc, lmd)
-        return int(level/popt[1]) + 1
+        return int(level / popt[1]) + 1
 
     @staticmethod
     @jit(nopython=True, cache=True)

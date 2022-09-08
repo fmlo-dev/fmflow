@@ -2,8 +2,8 @@
 
 # public items
 __all__ = [
-    'ongain',
-    'fmgain',
+    "ongain",
+    "fmgain",
 ]
 
 # standard library
@@ -15,10 +15,10 @@ import numpy as np
 
 
 # functions
-@fm.chunk('Pon')
+@fm.chunk("Pon")
 def ongain(Pon, window_length=51, polyorder=3):
-    logger = getLogger('fmflow.models.ongain')
-    model  = fm.models.ONGain(window_length, polyorder, logger=logger)
+    logger = getLogger("fmflow.models.ongain")
+    model = fm.models.ONGain(window_length, polyorder, logger=logger)
     return model.fit(Pon)
 
 

@@ -4,6 +4,7 @@
 class BaseModel(object):
     def __init__(self, params, logger=None):
         import fmflow as fm
+
         self.params = params
         self.logger = logger or fm.logger
         self.logger.debug(self)
@@ -13,8 +14,8 @@ class BaseModel(object):
 
     def __repr__(self):
         clsname = self.__class__.__name__
-        params  = self.params
-        return '{0}({1})'.format(clsname, params)
+        params = self.params
+        return "{0}({1})".format(clsname, params)
 
 
 # submodules
@@ -26,6 +27,7 @@ from .commonmode.classes import *
 from .commonmode.functions import *
 from .gain.classes import *
 from .gain.functions import *
+
 del astrosignal
 del atmosphere
 del commonmode

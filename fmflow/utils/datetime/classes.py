@@ -1,29 +1,27 @@
 # coding: utf-8
 
 # public items
-__all__ = [
-    'DatetimeParser'
-]
+__all__ = ["DatetimeParser"]
 
 # standard library
 from datetime import datetime
 
 # module constants
-ISO_8601 = '%Y-%m-%dT%H:%M:%S.%f'
+ISO_8601 = "%Y-%m-%dT%H:%M:%S.%f"
 PATTERNS = [
-    '%y%m%d%H%M%S',
-    '%y%m%d%H%M%S.',
-    '%y%m%d%H%M%S.%f',
-    '%Y%m%d%H%M%S',
-    '%Y%m%d%H%M%S.',
-    '%Y%m%d%H%M%S.%f',
-    ISO_8601
+    "%y%m%d%H%M%S",
+    "%y%m%d%H%M%S.",
+    "%y%m%d%H%M%S.%f",
+    "%Y%m%d%H%M%S",
+    "%Y%m%d%H%M%S.",
+    "%Y%m%d%H%M%S.%f",
+    ISO_8601,
 ]
 
 
 # classes
 class DatetimeParser(object):
-    def __init__(self, outputiso=True, cutoffsec=True, encoding='utf-8'):
+    def __init__(self, outputiso=True, cutoffsec=True, encoding="utf-8"):
         """Initialize a datetime parser object.
 
         Args:
@@ -37,9 +35,9 @@ class DatetimeParser(object):
 
         """
         self.params = {
-            'outputiso': outputiso,
-            'cutoffsec': cutoffsec,
-            'encoding': encoding
+            "outputiso": outputiso,
+            "cutoffsec": cutoffsec,
+            "encoding": encoding,
         }
         self._pattern = None
 
@@ -70,7 +68,7 @@ class DatetimeParser(object):
             dt = datetime.strptime(dt_string, self._pattern)
 
         if self.cutoffsec:
-            dt_isostring = dt.strftime(ISO_8601)[:-5] + '00000'
+            dt_isostring = dt.strftime(ISO_8601)[:-5] + "00000"
         else:
             dt_isostring = dt.strftime(ISO_8601)
 
@@ -92,4 +90,4 @@ class DatetimeParser(object):
         return self.params[name]
 
     def __repr__(self):
-        return 'DatetimeParser({0})'.format(self.params)
+        return "DatetimeParser({0})".format(self.params)

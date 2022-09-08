@@ -2,9 +2,9 @@
 
 # public items
 __all__ = [
-    'spectrum',
-    'tospectrum',
-    'fromspectrum',
+    "spectrum",
+    "tospectrum",
+    "fromspectrum",
 ]
 
 # dependent packages
@@ -29,12 +29,12 @@ def spectrum(data, chcoords=None, scalarcoords=None, attrs=None, name=None):
 
     """
     # initialize coords with default values
-    spectrum = xr.DataArray(data, dims='ch', attrs=attrs, name=name)
+    spectrum = xr.DataArray(data, dims="ch", attrs=attrs, name=name)
     spectrum.fms._initcoords()
 
     # update coords with input values (if any)
     if chcoords is not None:
-        spectrum.fms.updatecoords(chcoords, 'ch')
+        spectrum.fms.updatecoords(chcoords, "ch")
 
     if scalarcoords is not None:
         spectrum.fms.updatecoords(scalarcoords)

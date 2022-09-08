@@ -1,10 +1,7 @@
 # coding: utf-8
 
 # public items
-__all__ = [
-    'CStructReader',
-    'StructureReader'
-]
+__all__ = ["CStructReader", "StructureReader"]
 
 # standard library
 import json
@@ -63,7 +60,8 @@ class CStructReader(object):
         https://docs.python.jp/3/library/struct.html#module-struct
 
     """
-    def __init__(self, structure, ignored='$.', byteorder='<', encoding='utf-8'):
+
+    def __init__(self, structure, ignored="$.", byteorder="<", encoding="utf-8"):
         """Initialize a C structure reader.
 
         Args:
@@ -79,13 +77,13 @@ class CStructReader(object):
 
         """
         self.params = {
-            'ignored': ignored,
-            'byteorder': byteorder,
-            'encoding': encoding,
+            "ignored": ignored,
+            "byteorder": byteorder,
+            "encoding": encoding,
         }
 
-        self.params['ctypes'], self.params['shapes'] = self._parse(structure)
-        self._data = OrderedDict((name,[]) for name in self.params['ctypes'])
+        self.params["ctypes"], self.params["shapes"] = self._parse(structure)
+        self._data = OrderedDict((name, []) for name in self.params["ctypes"])
         self._unpacker = Struct(self._joinedctypes())
         self.size = self._unpacker.size
 
@@ -115,7 +113,7 @@ class CStructReader(object):
                 continue
 
             _data = self._data[name]
-            datum = np.reshape(_data, [len(_data)]+shape)
+            datum = np.reshape(_data, [len(_data)] + shape)
             if np.prod(datum.shape) == 1:
                 data[name] = np.squeeze(datum).item()
             else:
@@ -132,7 +130,7 @@ class CStructReader(object):
             if type(datum) == bytes:
                 data[name] = datum.decode(encoding)
             elif type(datum) == np.ndarray:
-                if datum.dtype.kind == 'S':
+                if datum.dtype.kind == "S":
                     data[name] = np.char.decode(datum, encoding).tolist()
                 else:
                     data[name] = datum.tolist()
@@ -176,11 +174,11 @@ class CStructReader(object):
         return self.params[name]
 
     def __repr__(self):
-        return 'CStructReader({0})'.format(self.params)
+        return "CStructReader({0})".format(self.params)
 
 
 class StructureReader:
-    def __init__(self, structure, skipname='$.', byteorder='<', encoding='utf-8'):
+    def __init__(self, structure, skipname="$.", byteorder="<", encoding="utf-8"):
         self.skipname = skipname
         self.byteorder = byteorder
         self.encoding = encoding
@@ -193,20 +191,20 @@ class StructureReader:
 
     def read(self, f):
         if self._processed:
-            raise IOError('cannot read after data processing')
+            raise IOError("cannot read after data processing")
 
         bindata = f.read(self.struct.size)
 
         if len(bindata) == 0:
-            raise EOFError('reached the end of file')
+            raise EOFError("reached the end of file")
 
         unpdata = deque(self.struct.unpack(bindata))
 
         for name in self.ctypes:
             N = np.prod(self.shapes[name])
 
-            if re.search('[csp]', self.ctypes[name]):
-                datum = [unpdata.popleft().strip(b'\x00 ') for i in range(N)]
+            if re.search("[csp]", self.ctypes[name]):
+                datum = [unpdata.popleft().strip(b"\x00 ") for i in range(N)]
             else:
                 datum = [unpdata.popleft() for i in range(N)]
 
@@ -225,7 +223,7 @@ class StructureReader:
             shape = (len(self._data[name]), *self.shapes[name])
             datum = np.reshape(self._data[name], shape).squeeze()
 
-            if self.encoding and re.search('[csp]', self.ctypes[name]):
+            if self.encoding and re.search("[csp]", self.ctypes[name]):
                 datum = np.char.decode(datum, self.encoding)
 
             if np.prod(datum.shape) == 1:

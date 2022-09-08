@@ -2,7 +2,7 @@
 
 # public items
 __all__ = [
-    'Convergence',
+    "Convergence",
 ]
 
 # standard library
@@ -17,8 +17,16 @@ from numpy.linalg import norm
 
 # classes
 class Convergence(object):
-    def __init__(self, threshold=1e-3, n_maxiters=300, n_miniters=2,
-                 *, centering=False, reuseable=True, raise_exception=False):
+    def __init__(
+        self,
+        threshold=1e-3,
+        n_maxiters=300,
+        n_miniters=2,
+        *,
+        centering=False,
+        reuseable=True,
+        raise_exception=False
+    ):
         """Determine a convergence of data by monitoring their variation in iterations.
 
         Args:
@@ -32,16 +40,16 @@ class Convergence(object):
 
         """
         self.params = {
-            'threshold': threshold,
-            'n_maxiters': n_maxiters,
-            'n_miniters': n_miniters,
-            'centering': centering,
-            'reuseable': reuseable,
-            'raise_exception': raise_exception,
+            "threshold": threshold,
+            "n_maxiters": n_maxiters,
+            "n_miniters": n_miniters,
+            "centering": centering,
+            "reuseable": reuseable,
+            "raise_exception": raise_exception,
         }
 
         # threshold list
-        if hasattr(threshold, '__len__'):
+        if hasattr(threshold, "__len__"):
             self._thresholds = list(threshold)
         else:
             self._thresholds = [threshold]
@@ -57,7 +65,7 @@ class Convergence(object):
             return self._not_converged()
         elif self.n_iters > self.n_maxiters:
             return self._converged(self.raise_exception)
-        elif not np.any(self.data_new-self.data_old):
+        elif not np.any(self.data_new - self.data_old):
             return self._converged()
         elif not np.any(self.data_old):
             return self._not_converged()
@@ -73,7 +81,7 @@ class Convergence(object):
         except IndexError:
             var = None
 
-        return {'n_iters': self.n_iters, 'variation': var}
+        return {"n_iters": self.n_iters, "variation": var}
 
     def _converged(self, raise_exception=False):
         if self.reuseable:
@@ -81,7 +89,7 @@ class Convergence(object):
             self._set_threshold()
 
         if raise_exception:
-            message = 'reached maximum iteration'
+            message = "reached maximum iteration"
             raise StopIteration(message)
         else:
             return True
@@ -91,7 +99,7 @@ class Convergence(object):
 
     def _get_variation(self):
         med = np.median(self.data_old) if self.centering else 0
-        var = norm(self.data_new-self.data_old) / norm(self.data_old-med)
+        var = norm(self.data_new - self.data_old) / norm(self.data_old - med)
         var = round(Decimal(var), self._ndigits)
         self.variations.append(var)
         return var
@@ -116,6 +124,6 @@ class Convergence(object):
         return str(self.status)
 
     def __repr__(self):
-        cname  = self.__class__.__name__
+        cname = self.__class__.__name__
         params = self.params
-        return '{0}({1})'.format(cname, params)
+        return "{0}({1})".format(cname, params)
