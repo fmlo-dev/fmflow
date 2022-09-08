@@ -1,8 +1,8 @@
 # coding: utf-8
 
 __all__ = [
-    'logger',
-    'setlogger',
+    "logger",
+    "setlogger",
 ]
 
 # standard library
@@ -14,19 +14,19 @@ from pathlib import Path
 import fmflow as fm
 
 # module constants
-DATEFORMAT = '%Y-%m-%d %H:%M:%S'
-LOGFORMAT  = '{asctime} | {levelname:8} | {name}: {message}'
-DEFAULTLEVEL = 'INFO'
+DATEFORMAT = "%Y-%m-%d %H:%M:%S"
+LOGFORMAT = "{asctime} | {levelname:8} | {name}: {message}"
+DEFAULTLEVEL = "INFO"
 
 # default logger
-logger = logging.getLogger('fmflow')
+logger = logging.getLogger("fmflow")
 logger.addHandler(logging.NullHandler())
 logger.propagate = False
 
 
 # classes
 class setlogger(object):
-    def __init__(self, level=None, filename=None, overwrite=False, encoding='utf-8'):
+    def __init__(self, level=None, filename=None, overwrite=False, encoding="utf-8"):
         self.oldhandlers = copy(fm.logger.handlers)
         self.oldlevel = copy(fm.logger.level)
         self.sethandlers(filename, overwrite, encoding)
@@ -41,10 +41,10 @@ class setlogger(object):
             handler = logging.StreamHandler()
         else:
             filename = str(Path(filename).expanduser())
-            mode = 'w' if overwrite else 'a'
+            mode = "w" if overwrite else "a"
             handler = logging.FileHandler(filename, mode, encoding)
 
-        formatter = logging.Formatter(LOGFORMAT, DATEFORMAT, style='{')
+        formatter = logging.Formatter(LOGFORMAT, DATEFORMAT, style="{")
         handler.setFormatter(formatter)
         fm.logger.addHandler(handler)
 

@@ -2,21 +2,21 @@
 
 # public items
 __all__ = [
-    'array',
-    'demodulate',
-    'modulate',
-    'mad',
-    'ones',
-    'zeros',
-    'full',
-    'empty',
-    'ones_like',
-    'zeros_like',
-    'full_like',
-    'empty_like',
-    'save',
-    'load',
-    'chbinning',
+    "array",
+    "demodulate",
+    "modulate",
+    "mad",
+    "ones",
+    "zeros",
+    "full",
+    "empty",
+    "ones_like",
+    "zeros_like",
+    "full_like",
+    "empty_like",
+    "save",
+    "load",
+    "chbinning",
 ]
 
 # standard library
@@ -30,7 +30,7 @@ from astropy import units as u
 from scipy.special import erfinv
 
 # module constants
-MAD_TO_STD = (np.sqrt(2) * erfinv(0.5))**-1
+MAD_TO_STD = (np.sqrt(2) * erfinv(0.5)) ** -1
 
 
 # functions
@@ -50,15 +50,15 @@ def array(data, tcoords=None, chcoords=None, scalarcoords=None, attrs=None, name
 
     """
     # initialize coords with default values
-    array = xr.DataArray(data, dims=('t', 'ch'), attrs=attrs, name=name)
+    array = xr.DataArray(data, dims=("t", "ch"), attrs=attrs, name=name)
     array.fma._initcoords()
 
     # update coords with input values (if any)
     if tcoords is not None:
-        array.fma.updatecoords(tcoords, 't')
+        array.fma.updatecoords(tcoords, "t")
 
     if chcoords is not None:
-        array.fma.updatecoords(chcoords, 'ch')
+        array.fma.updatecoords(chcoords, "ch")
 
     if scalarcoords is not None:
         array.fma.updatecoords(scalarcoords)
@@ -210,9 +210,14 @@ def empty_like(array, dtype=None, keepmeta=True):
 
     """
     if keepmeta:
-        return fm.empty(array.shape, dtype,
-            tcoords=array.fma.tcoords, chcoords=array.fma.chcoords,
-            scalarcoords=array.fma.scalarcoords, attrs=array.attrs, name=array.name
+        return fm.empty(
+            array.shape,
+            dtype,
+            tcoords=array.fma.tcoords,
+            chcoords=array.fma.chcoords,
+            scalarcoords=array.fma.scalarcoords,
+            attrs=array.attrs,
+            name=array.name,
         )
     else:
         return fm.empty(array.shape, dtype)
@@ -283,8 +288,8 @@ def save(dataarray, filename=None):
         else:
             filename = uuid4().hex[:8]
 
-    if not filename.endswith('.nc'):
-        filename += '.nc'
+    if not filename.endswith(".nc"):
+        filename += ".nc"
 
     dataarray.to_netcdf(filename)
 
@@ -306,13 +311,13 @@ def load(filename, copy=True):
         dataarray = xr.open_dataarray(filename)
 
     if dataarray.name is None:
-        dataarray.name = filename.rstrip('.nc')
+        dataarray.name = filename.rstrip(".nc")
 
     for key, val in dataarray.coords.items():
-        if val.dtype.kind == 'S':
-            dataarray[key] = val.astype('U')
+        if val.dtype.kind == "S":
+            dataarray[key] = val.astype("U")
         elif val.dtype == np.int32:
-            dataarray[key] = val.astype('i8')
+            dataarray[key] = val.astype("i8")
 
     return dataarray
 
@@ -328,29 +333,31 @@ def chbinning(array, size=2):
         binarray (xarray.DataArray): An output binned array.
 
     """
-    if set(array.dims) == {'t', 'ch'}:
+    if set(array.dims) == {"t", "ch"}:
         shape = array.shape
-    elif set(array.dims) == {'ch'}:
+    elif set(array.dims) == {"ch"}:
         shape = (1, *array.shape)
 
     if shape[1] % size:
-        raise ValueError('ch shape cannot be divided by size')
+        raise ValueError("ch shape cannot be divided by size")
 
-    binshape = shape[0], int(shape[1]/size)
-    binarray = fm.zeros(binshape, tcoords=array.fma.tcoords, scalarcoords=array.fma.scalarcoords)
+    binshape = shape[0], int(shape[1] / size)
+    binarray = fm.zeros(
+        binshape, tcoords=array.fma.tcoords, scalarcoords=array.fma.scalarcoords
+    )
 
     # binning of data
     binarray.values = array.values.reshape([*binshape, size]).mean(2)
 
     # binning of fsig, fimg
-    binarray['fsig'].values = array['fsig'].values.reshape([binshape[1], size]).mean(1)
-    binarray['fimg'].values = array['fimg'].values.reshape([binshape[1], size]).mean(1)
+    binarray["fsig"].values = array["fsig"].values.reshape([binshape[1], size]).mean(1)
+    binarray["fimg"].values = array["fimg"].values.reshape([binshape[1], size]).mean(1)
 
     # convert fmch (if any)
-    if 'fmch' in array.coords:
-        binarray['fmch'].values = (array['fmch'].values / size).astype(int)
+    if "fmch" in array.coords:
+        binarray["fmch"].values = (array["fmch"].values / size).astype(int)
 
-    if set(array.dims) == {'t', 'ch'}:
+    if set(array.dims) == {"t", "ch"}:
         return binarray.squeeze()
-    elif set(array.dims) == {'ch'}:
+    elif set(array.dims) == {"ch"}:
         return binarray.squeeze().drop(binarray.fma.tcoords.keys())

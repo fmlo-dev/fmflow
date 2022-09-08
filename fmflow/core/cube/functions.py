@@ -2,9 +2,9 @@
 
 # public items
 __all__ = [
-    'cube',
-    'tocube',
-    'fromcube',
+    "cube",
+    "tocube",
+    "fromcube",
 ]
 
 # dependent packages
@@ -14,8 +14,16 @@ import xarray as xr
 
 
 # functions
-def cube(data, chcoords=None, ycoords=None, xcoords=None,
-         datacoords=None, scalarcoords=None, attrs=None, name=None):
+def cube(
+    data,
+    chcoords=None,
+    ycoords=None,
+    xcoords=None,
+    datacoords=None,
+    scalarcoords=None,
+    attrs=None,
+    name=None,
+):
     """Create a cube as an instance of xarray.DataArray with FM accessor.
 
     Args:
@@ -33,21 +41,21 @@ def cube(data, chcoords=None, ycoords=None, xcoords=None,
 
     """
     # initialize coords with default values
-    cube = xr.DataArray(data, dims=('ch', 'y', 'x'), attrs=attrs, name=name)
+    cube = xr.DataArray(data, dims=("ch", "y", "x"), attrs=attrs, name=name)
     cube.fmc._initcoords()
 
     # update coords with input values (if any)
     if chcoords is not None:
-        cube.fmc.updatecoords(chcoords, 'ch')
+        cube.fmc.updatecoords(chcoords, "ch")
 
     if ycoords is not None:
-        cube.fmc.updatecoords(ycoords, 'y')
+        cube.fmc.updatecoords(ycoords, "y")
 
     if xcoords is not None:
-        cube.fmc.updatecoords(xcoords, 'x')
+        cube.fmc.updatecoords(xcoords, "x")
 
     if datacoords is not None:
-        cube.fmc.updatecoords(datacoords, ('ch', 'y', 'x'))
+        cube.fmc.updatecoords(datacoords, ("ch", "y", "x"))
 
     if scalarcoords is not None:
         cube.fmc.updatecoords(scalarcoords)
@@ -55,8 +63,14 @@ def cube(data, chcoords=None, ycoords=None, xcoords=None,
     return cube
 
 
-def tocube(array, weights=None, reverse=False,
-           gridsize=10, gridunit='arcsec', gcf='besselgauss'):
+def tocube(
+    array,
+    weights=None,
+    reverse=False,
+    gridsize=10,
+    gridunit="arcsec",
+    gcf="besselgauss",
+):
     """Create a cube from an array.
 
     Args:
@@ -72,8 +86,7 @@ def tocube(array, weights=None, reverse=False,
         cube (xarray.DataArray): A cube.
 
     """
-    return xr.DataArray.fmc.fromarray(array, weights, reverse,
-                                      gridsize, gridunit, gcf)
+    return xr.DataArray.fmc.fromarray(array, weights, reverse, gridsize, gridunit, gcf)
 
 
 def fromcube(cube, array):

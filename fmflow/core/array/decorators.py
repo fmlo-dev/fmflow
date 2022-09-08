@@ -2,8 +2,8 @@
 
 # public items
 __all__ = [
-    'chunk',
-    'xarrayfunc',
+    "chunk",
+    "xarrayfunc",
 ]
 
 # standard library
@@ -47,6 +47,7 @@ def xarrayfunc(func):
         wrapper (function): A wrapped function.
 
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if any(isinstance(arg, xr.DataArray) for arg in args):
@@ -82,18 +83,19 @@ def chunk(*argnames, concatfunc=None):
         >>> result = func(array)
 
     """
+
     def _chunk(func):
-        depth = [s.function for s in stack()].index('<module>')
+        depth = [s.function for s in stack()].index("<module>")
         f_globals = getframe(depth).f_globals
 
         # original (unwrapped) function
-        orgname = '_original_' + func.__name__
+        orgname = "_original_" + func.__name__
         orgfunc = fm.utils.copy_function(func, orgname)
         f_globals[orgname] = orgfunc
 
         @wraps(func)
         def wrapper(*args, **kwargs):
-            depth = [s.function for s in stack()].index('<module>')
+            depth = [s.function for s in stack()].index("<module>")
             f_globals = getframe(depth).f_globals
 
             # parse args and kwargs
@@ -115,24 +117,24 @@ def chunk(*argnames, concatfunc=None):
             if argnames:
                 length = len(kwargs[argnames[0]])
 
-                if 'numchunk' in kwargs:
-                    n_chunks = kwargs.pop('numchunk')
-                elif 'timechunk' in kwargs:
-                    n_chunks = round(length / kwargs.pop('timechunk'))
-                elif 'numchunk' in f_globals:
-                    n_chunks = f_globals['numchunk']
-                elif 'timechunk' in f_globals:
-                    n_chunks = round(length / f_globals['timechunk'])
+                if "numchunk" in kwargs:
+                    n_chunks = kwargs.pop("numchunk")
+                elif "timechunk" in kwargs:
+                    n_chunks = round(length / kwargs.pop("timechunk"))
+                elif "numchunk" in f_globals:
+                    n_chunks = f_globals["numchunk"]
+                elif "timechunk" in f_globals:
+                    n_chunks = round(length / f_globals["timechunk"])
 
-                if 'n_processes' in kwargs:
-                    n_processes = kwargs.pop('n_processes')
-                elif 'n_processes' in f_globals:
-                    n_processes = f_globals['n_processes']
+                if "n_processes" in kwargs:
+                    n_processes = kwargs.pop("n_processes")
+                elif "n_processes" in f_globals:
+                    n_processes = f_globals["n_processes"]
 
-                if 'multiprocess' in kwargs:
-                    multiprocess = kwargs.pop('multiprocess')
-                elif 'multiprocess' in f_globals:
-                    multiprocess = f_globals['multiprocess']
+                if "multiprocess" in kwargs:
+                    multiprocess = kwargs.pop("multiprocess")
+                elif "multiprocess" in f_globals:
+                    multiprocess = f_globals["multiprocess"]
 
             # make chunked args
             chunks = {}
@@ -165,7 +167,7 @@ def chunk(*argnames, concatfunc=None):
                 return concatfunc(results)
 
             try:
-                return xr.concat(results, 't')
+                return xr.concat(results, "t")
             except TypeError:
                 return np.concatenate(results, 0)
 

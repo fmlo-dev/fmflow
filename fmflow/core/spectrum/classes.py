@@ -14,24 +14,28 @@ import xarray as xr
 from .. import BaseAccessor
 
 # module constants
-CHCOORDS = lambda array: OrderedDict([
-    ('chid',  ('ch', np.zeros(array.shape[0], dtype=int))),
-    ('freq',  ('ch', np.zeros(array.shape[0], dtype=float))),
-    ('noise', ('ch', np.zeros(array.shape[0], dtype=float))),
-])
+CHCOORDS = lambda array: OrderedDict(
+    [
+        ("chid", ("ch", np.zeros(array.shape[0], dtype=int))),
+        ("freq", ("ch", np.zeros(array.shape[0], dtype=float))),
+        ("noise", ("ch", np.zeros(array.shape[0], dtype=float))),
+    ]
+)
 
-SCALARCOORDS = OrderedDict([
-    ('type', BaseAccessor.FMSPECTRUM),
-    ('status', BaseAccessor.DEMODULATED),
-    ('coordsys', 'RADEC'),
-    ('xref', 0.0),
-    ('yref', 0.0),
-    ('chno', 0),
-])
+SCALARCOORDS = OrderedDict(
+    [
+        ("type", BaseAccessor.FMSPECTRUM),
+        ("status", BaseAccessor.DEMODULATED),
+        ("coordsys", "RADEC"),
+        ("xref", 0.0),
+        ("yref", 0.0),
+        ("chno", 0),
+    ]
+)
 
 
 # classes
-@xr.register_dataarray_accessor('fms')
+@xr.register_dataarray_accessor("fms")
 class FMSpectrumAccessor(BaseAccessor):
     def __init__(self, spectrum):
         """Initialize the FM spectrum accessor.
@@ -66,27 +70,27 @@ class FMSpectrumAccessor(BaseAccessor):
             weights = fm.ones_like(array)
 
         if array.fma.ismodulated:
-            array   = fm.demodulate(array, reverse)
+            array = fm.demodulate(array, reverse)
             weights = fm.demodulate(weights, reverse)
         else:
             weights.values[np.isnan(array.values)] = np.nan
 
         with fm.utils.ignore_numpy_errors():
             # weighted mean and square mean
-            mean1 = (weights*array).sum('t') / weights.sum('t')
-            mean2 = (weights*array**2).sum('t') / weights.sum('t')
-            sum_n = (~np.isnan(weights)).sum('t')
+            mean1 = (weights * array).sum("t") / weights.sum("t")
+            mean2 = (weights * array**2).sum("t") / weights.sum("t")
+            sum_n = (~np.isnan(weights)).sum("t")
 
             # noise (weighted std)
-            noise = ((mean2-mean1**2) / sum_n)**0.5
-            noise.values[sum_n.values<=2] = np.inf # edge treatment
+            noise = ((mean2 - mean1**2) / sum_n) ** 0.5
+            noise.values[sum_n.values <= 2] = np.inf  # edge treatment
 
         # coords
         freq = array.fimg if reverse else array.fsig
 
         chcoords = deepcopy(array.fma.chcoords)
         scalarcoords = deepcopy(array.fma.scalarcoords)
-        chcoords.update({'freq': freq.values, 'noise': noise.values})
+        chcoords.update({"freq": freq.values, "noise": noise.values})
 
         return fm.spectrum(mean1.values, chcoords, scalarcoords)
 
@@ -114,10 +118,10 @@ class FMSpectrumAccessor(BaseAccessor):
 
         # check compatibility
         if not np.all(self.chid == array.chid):
-            raise FMSpectrumError('cannot cast the spectrum on the array')
+            raise FMSpectrumError("cannot cast the spectrum on the array")
 
         if not self.chno == array.chno:
-            raise FMSpectrumError('cannot cast the spectrum to the array')
+            raise FMSpectrumError("cannot cast the spectrum to the array")
 
         if ismodulated:
             return fm.modulate(array + self.values)
@@ -138,6 +142,7 @@ class FMSpectrumAccessor(BaseAccessor):
 
 class FMSpectrumError(Exception):
     """Error class of FM spectrum."""
+
     def __init__(self, message):
         self.message = message
 

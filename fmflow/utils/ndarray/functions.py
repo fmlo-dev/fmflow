@@ -2,13 +2,13 @@
 
 # public items
 __all__ = [
-    'fmgf',
-    'gaussian',
-    'lorentzian',
-    'mad',
-    'pseudovoigt',
-    'rollrows',
-    'slicewhere',
+    "fmgf",
+    "gaussian",
+    "lorentzian",
+    "mad",
+    "pseudovoigt",
+    "rollrows",
+    "slicewhere",
 ]
 
 # standard library
@@ -42,22 +42,22 @@ def fmgf(array, sigma):
 
     # digitizing
     m = 101
-    dy = 6.0*mad(y) / m
-    ybin = np.arange(np.min(y)-5*dy, np.max(y)+5*dy+dy, dy)
+    dy = 6.0 * mad(y) / m
+    ybin = np.arange(np.min(y) - 5 * dy, np.max(y) + 5 * dy + dy, dy)
     z = np.zeros([len(ybin), len(x)])
     z[np.digitize(y, ybin), x] = 1.0
 
     # filtering
-    g = partial(ndimage.filters.gaussian_filter, sigma=(0,sigma))
+    g = partial(ndimage.filters.gaussian_filter, sigma=(0, sigma))
     c = partial(ndimage.filters.convolve1d, weights=np.ones(m), axis=0)
     zf = c(c(c(g(z))))
 
     # estimates
-    ym1, y0, yp1 = [ybin[np.argmax(zf,0)+i] for i in (-1,0,1)]
-    zm1, z0, zp1 = [zf[np.argmax(zf,0)+i, x] for i in (-1,0,1)]
-    t = (zm1-z0) / (zm1-2*z0+zp1)
+    ym1, y0, yp1 = [ybin[np.argmax(zf, 0) + i] for i in (-1, 0, 1)]
+    zm1, z0, zp1 = [zf[np.argmax(zf, 0) + i, x] for i in (-1, 0, 1)]
+    t = (zm1 - z0) / (zm1 - 2 * z0 + zp1)
 
-    filtered = yg + ((1-t)**2)*ym1 + (2*t*(1-t))*y0 + (t**2)*yp1
+    filtered = yg + ((1 - t) ** 2) * ym1 + (2 * t * (1 - t)) * y0 + (t**2) * yp1
     return filtered
 
 
@@ -76,7 +76,7 @@ def gaussian(x, x0=0.0, fwhm=1.0, ampl=1.0):
         y (numpy.ndarray): An output 1D Gaussian.
 
     """
-    return ampl * np.exp(-4*np.log(2)*((x-x0)/fwhm)**2)
+    return ampl * np.exp(-4 * np.log(2) * ((x - x0) / fwhm) ** 2)
 
 
 def lorentzian(x, x0=0.0, fwhm=1.0, ampl=1.0):
@@ -94,7 +94,7 @@ def lorentzian(x, x0=0.0, fwhm=1.0, ampl=1.0):
         y (numpy.ndarray): An output 1D Lorentzian.
 
     """
-    return ampl * (1+4*((x-x0)/fwhm)**2)**(-1)
+    return ampl * (1 + 4 * ((x - x0) / fwhm) ** 2) ** (-1)
 
 
 def mad(array, axis=None, keepdims=False):
@@ -133,9 +133,11 @@ def pseudovoigt(x, x0=0.0, fwhm=1.0, ampl=1.0, frac=0.5):
 
     """
     if not 0 <= frac <= 1:
-        raise ValueError('frac must be 0 <= frac <= 1')
+        raise ValueError("frac must be 0 <= frac <= 1")
 
-    return frac*gaussian(x, x0, fwhm, ampl) + (1-frac)*lorentzian(x, x0, fwhm, ampl)
+    return frac * gaussian(x, x0, fwhm, ampl) + (1 - frac) * lorentzian(
+        x, x0, fwhm, ampl
+    )
 
 
 def rollrows(array, shifts):
@@ -159,9 +161,9 @@ def rollrows(array, shifts):
     if shifts.ndim < 1:
         shifts = np.tile(shifts, array.shape[0])
 
-    rows, cols = np.ogrid[:array.shape[0], :array.shape[1]]
-    cols = cols - (shifts%array.shape[1])[:,np.newaxis]
-    cols[cols<0] += array.shape[1]
+    rows, cols = np.ogrid[: array.shape[0], : array.shape[1]]
+    cols = cols - (shifts % array.shape[1])[:, np.newaxis]
+    cols[cols < 0] += array.shape[1]
     return array[rows, cols]
 
 
