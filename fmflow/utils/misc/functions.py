@@ -12,7 +12,6 @@ __all__ = [
 import tkinter
 from contextlib import contextmanager
 from tkinter.filedialog import askopenfilename
-from types import CodeType, FunctionType
 
 # dependent packages
 import numpy as np
@@ -31,29 +30,10 @@ def copy_function(func, name=None):
         newfunc (function): A new function with different name.
 
     """
-    code = func.__code__
-    newname = name or func.__name__
-    newcode = CodeType(
-        code.co_argcount,
-        code.co_kwonlyargcount,
-        code.co_nlocals,
-        code.co_stacksize,
-        code.co_flags,
-        code.co_code,
-        code.co_consts,
-        code.co_names,
-        code.co_varnames,
-        code.co_filename,
-        newname,
-        code.co_firstlineno,
-        code.co_lnotab,
-        code.co_freevars,
-        code.co_cellvars,
-    )
-    newfunc = FunctionType(
-        newcode,
+    newfunc = type(func)(
+        func.__code__,
         func.__globals__,
-        newname,
+        name or func.__name__,
         func.__defaults__,
         func.__closure__,
     )
