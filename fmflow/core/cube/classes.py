@@ -16,7 +16,7 @@ import xarray as xr
 from .. import BaseAccessor
 from astropy import units as u
 from scipy.interpolate import interp1d
-from scipy.ndimage.interpolation import map_coordinates
+from scipy.ndimage import map_coordinates
 from scipy.special import j1
 
 # module constants
