@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+
+title: "fmflow"
+abstract: "Data analysis package for FMLO"
+version: 0.2.7
+date-released: 2019-09-18
+license: "MIT"
+doi: "10.5281/zenodo.3433962"
+url: "https://github.com/fmlo-dev/fmflow"
+authors:
+  - given-names: "Akio"
+    family-names: "Taniguchi"
+    affiliation: "Nagoya University"
+    orcid: "https://orcid.org/0000-0002-9695-6183"
