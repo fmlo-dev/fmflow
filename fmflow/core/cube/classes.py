@@ -272,6 +272,11 @@ class FMCubeAccessor(BaseAccessor):
         """Grid convolution function of Gaussian."""
         return np.exp(-((r / a) ** 2))
 
+    @staticmethod
+    def gcf_pillbox(x, y):
+        """Grid convolution function of Pillbox."""
+        return ((np.abs(x) <= 0.5) & (np.abs(y) <= 0.5)).astype(float)
+
     def _initcoords(self):
         """Initialize coords with default values.
 
