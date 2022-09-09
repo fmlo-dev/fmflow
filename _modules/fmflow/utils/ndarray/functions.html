@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fmflow.utils.ndarray.functions &#8212; Python  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+    <img src="../../../../_static/logo-light.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../_static/logo-dark.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../index.html">
+  Home
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../_apidoc/fmflow.html">
+  Package guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/fmlo-dev/fmflow/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/astropengu_in/" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <h1>Source code for fmflow.utils.ndarray.functions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="c1"># public items</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;fmgf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gaussian&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;lorentzian&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mad&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pseudovoigt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rollrows&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;slicewhere&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># standard library</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1"># dependent packages</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
+
+
+<span class="c1"># functions</span>
+<div class="viewcode-block" id="fmgf"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.fmgf">[docs]</a><span class="k">def</span> <span class="nf">fmgf</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Apply the FMGF (Fast M-estimation based Gaussian Filter) to a 1D array.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (numpy.ndarray): A 1D array.</span>
+<span class="sd">        sigma (int): Standard deviation for Gaussian kernel.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        filtered (numpy.ndarray): A 1D array to which the FMGF is applied.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        Journal of the Japan Society for Precision Engineering Vol.76 (2010) No.6 P684-688</span>
+<span class="sd">        A Proposal of Robust Gaussian Filter by Using Fast M-Estimation Method</span>
+<span class="sd">        http://doi.org/10.2493/jjspe.76.684</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)),</span> <span class="n">array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">yg</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">gaussian_filter</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">-=</span> <span class="n">yg</span>
+
+    <span class="c1"># digitizing</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">101</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">mad</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">m</span>
+    <span class="n">ybin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">dy</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">ybin</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+    <span class="n">z</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">ybin</span><span class="p">),</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="c1"># filtering</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">gaussian_filter</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="p">))</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">convolve1d</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">zf</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">g</span><span class="p">(</span><span class="n">z</span><span class="p">))))</span>
+
+    <span class="c1"># estimates</span>
+    <span class="n">ym1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">yp1</span> <span class="o">=</span> <span class="p">[</span><span class="n">ybin</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">zf</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">zm1</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">zp1</span> <span class="o">=</span> <span class="p">[</span><span class="n">zf</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">zf</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">zm1</span> <span class="o">-</span> <span class="n">z0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">zm1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">z0</span> <span class="o">+</span> <span class="n">zp1</span><span class="p">)</span>
+
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">yg</span> <span class="o">+</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">ym1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="n">y0</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">yp1</span>
+    <span class="k">return</span> <span class="n">filtered</span></div>
+
+
+<div class="viewcode-block" id="gaussian"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.gaussian">[docs]</a><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ampl</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return Gaussian with given parameters.</span>
+
+<span class="sd">    y = ampl * exp(-4ln2 * (x-x0)^2 / fwhm^2)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (numpy.ndarray): An input 1D array.</span>
+<span class="sd">        x0 (float): Center of the Gaussian.</span>
+<span class="sd">        fwhm (float): FWHM of the Gaussian.</span>
+<span class="sd">        ampl (float): Amplitude of the Gaussian.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        y (numpy.ndarray): An output 1D Gaussian.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ampl</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">/</span> <span class="n">fwhm</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="lorentzian"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.lorentzian">[docs]</a><span class="k">def</span> <span class="nf">lorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ampl</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return Lorentzian with given parameters.</span>
+
+<span class="sd">    y = ampl / (1 + 4(x-x0)^2 / fwhm^2)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (numpy.ndarray): An input 1D array.</span>
+<span class="sd">        x0 (float): Center of the Lorentzian.</span>
+<span class="sd">        fwhm (float): FWHM of the Lorentzian.</span>
+<span class="sd">        ampl (float): Amplitude of the Lorentzian.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        y (numpy.ndarray): An output 1D Lorentzian.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ampl</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span> <span class="o">/</span> <span class="n">fwhm</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mad"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.mad">[docs]</a><span class="k">def</span> <span class="nf">mad</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compute the median absolute deviation (MAD) along the given axis.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (numpy.ndarray): An input array.</span>
+<span class="sd">        axis (int, optional): Axis along which the MADs are computed.</span>
+<span class="sd">            The default is to compute the MAD along a flattened version of the array.</span>
+<span class="sd">        keepdims (bool, optional): If True, the axes which are reduced are left</span>
+<span class="sd">            in the result as dimensions with size one.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        mad (numpy.ndarray): A new array holding the result.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">mad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">ad</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="n">keepdims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mad</span></div>
+
+
+<div class="viewcode-block" id="pseudovoigt"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.pseudovoigt">[docs]</a><span class="k">def</span> <span class="nf">pseudovoigt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ampl</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">frac</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return Pseudo-Voigt with given parameters.</span>
+
+<span class="sd">    y = frac * gaussian(x, x0, fwhm) + (1-frac) * lorentzian(x, x0, fwhm)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (numpy.ndarray): An input 1D array.</span>
+<span class="sd">        x0 (float): Center of the Pseudo-Voigt.</span>
+<span class="sd">        fwhm (float): FWHM of the Pseudo-Voigt.</span>
+<span class="sd">        ampl (float): Amplitude of the Pseudo-Voigt.</span>
+<span class="sd">        frac (float): Fraction of Gaussian and Lorentzian. Must be 0 &lt;= frac &lt;= 1.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        y (numpy.ndarray): An output 1D Pseudo-Voigt.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">frac</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;frac must be 0 &lt;= frac &lt;= 1&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">frac</span> <span class="o">*</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">fwhm</span><span class="p">,</span> <span class="n">ampl</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">frac</span><span class="p">)</span> <span class="o">*</span> <span class="n">lorentzian</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">fwhm</span><span class="p">,</span> <span class="n">ampl</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rollrows"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.rollrows">[docs]</a><span class="k">def</span> <span class="nf">rollrows</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">shifts</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Roll 2D array elements of each row by a given shifts.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (numpy.ndarray): A 2D array.</span>
+<span class="sd">        shifts (int of list of int): The number(s) of places</span>
+<span class="sd">            by which elements of each row are shifted.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array (numpy.ndarray): An output rolled array.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+    <span class="n">shifts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">shifts</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">shifts</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">shifts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">shifts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">shifts</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ogrid</span><span class="p">[:</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">cols</span> <span class="o">-</span> <span class="p">(</span><span class="n">shifts</span> <span class="o">%</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">cols</span><span class="p">[</span><span class="n">cols</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="slicewhere"><a class="viewcode-back" href="../../../../_apidoc/fmflow.utils.html#fmflow.utils.slicewhere">[docs]</a><span class="k">def</span> <span class="nf">slicewhere</span><span class="p">(</span><span class="n">condition</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return slices of regions that fulfill condition.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; cond = [False, True, True, False, False, True, False]</span>
+<span class="sd">        &gt;&gt;&gt; fm.utils.slicewhere(cond)</span>
+<span class="sd">        [slice(1L, 3L, None), slice(5L, 6L, None)]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        condition (numpy.ndarray): An array of booleans.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        slices (list of slice): List of slice objects.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">regions</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">find_objects</span><span class="p">(</span><span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">condition</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">]</span></div>
+</pre></div>
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2017-2022 Akio Taniguchi.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fmflow.fits.aste.functions &#8212; Python  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+    <img src="../../../../_static/logo-light.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../_static/logo-dark.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../index.html">
+  Home
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../_apidoc/fmflow.html">
+  Package guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/fmlo-dev/fmflow/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/astropengu_in/" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <h1>Source code for fmflow.fits.aste.functions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="c1"># public items</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fromaste&quot;</span><span class="p">]</span>
+
+<span class="c1"># standard library</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">pkgutil</span> <span class="kn">import</span> <span class="n">get_data</span>
+
+<span class="c1"># dependent packages</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">fmflow</span> <span class="k">as</span> <span class="nn">fm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">coordinates</span>
+<span class="kn">from</span> <span class="nn">astropy</span> <span class="kn">import</span> <span class="n">units</span> <span class="k">as</span> <span class="n">u</span>
+<span class="kn">from</span> <span class="nn">astropy.io</span> <span class="kn">import</span> <span class="n">fits</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="c1"># module constants</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># spped of light in vacuum</span>
+<span class="n">D_ASTE</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">*</span> <span class="n">u</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># diameter of the ASTE</span>
+<span class="n">LON_ASTE</span> <span class="o">=</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">Angle</span><span class="p">(</span><span class="s2">&quot;-67d42m11.89525s&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">deg</span>  <span class="c1"># longitude of the ASTE</span>
+<span class="n">LAT_ASTE</span> <span class="o">=</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">Angle</span><span class="p">(</span><span class="s2">&quot;-22d58m17.69447s&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">deg</span>  <span class="c1"># latitude of the ASTE</span>
+<span class="n">EFF_8257D</span> <span class="o">=</span> <span class="mf">0.92</span>  <span class="c1"># exposure / interval time of Agilent 8257D</span>
+<span class="n">IGNORED_KEY</span> <span class="o">=</span> <span class="s2">&quot;^[a-z]dmy([^_]|$)&quot;</span>  <span class="c1"># cdmy, cdmy2, ..., except for idmy_flag</span>
+<span class="n">CONF_OBSINFO</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;fmflow&quot;</span><span class="p">,</span> <span class="s2">&quot;data/obsinfo.yaml&quot;</span><span class="p">)</span>
+<span class="n">CONF_FMLOLOG</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;fmflow&quot;</span><span class="p">,</span> <span class="s2">&quot;data/aste_fmlolog.yaml&quot;</span><span class="p">)</span>
+<span class="n">CONF_BACKEND_COM</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;fmflow&quot;</span><span class="p">,</span> <span class="s2">&quot;data/aste_backendlog_common.yaml&quot;</span><span class="p">)</span>
+<span class="n">CONF_BACKEND_MAC</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;fmflow&quot;</span><span class="p">,</span> <span class="s2">&quot;data/aste_backendlog_mac.yaml&quot;</span><span class="p">)</span>
+<span class="n">CONF_ANTENNA</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;fmflow&quot;</span><span class="p">,</span> <span class="s2">&quot;data/aste_antennalog.yaml&quot;</span><span class="p">)</span>
+<span class="n">BAR_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{l_bar}{bar}</span><span class="s2">| </span><span class="si">{n_fmt}</span><span class="s2">/</span><span class="si">{total_fmt}</span><span class="s2"> [</span><span class="si">{elapsed}</span><span class="s2">&lt;</span><span class="si">{remaining}</span><span class="s2">]&quot;</span>
+
+
+<span class="c1"># functions</span>
+<div class="viewcode-block" id="fromaste"><a class="viewcode-back" href="../../../../_apidoc/fmflow.fits.html#fmflow.fits.fromaste">[docs]</a><span class="k">def</span> <span class="nf">fromaste</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">,</span> <span class="n">backendlog</span><span class="p">,</span> <span class="n">antennalog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s2">&quot;&lt;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read logging data of ASTE and merge them into a FITS object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fmlolog (str): File name of FMLO logging.</span>
+<span class="sd">        backendlog (str): File name of backend logging.</span>
+<span class="sd">        antennalog (str): File name of antenna logging (optional).</span>
+<span class="sd">        byteorder (str): format string that represents byte order</span>
+<span class="sd">            of the backendlog. Default is &#39;&lt;&#39; (little-endian).</span>
+<span class="sd">            If the data in the returned FITS seems to be wrong,</span>
+<span class="sd">            try to spacify &#39;&gt;&#39; (big-endian).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        hdus (HDUlist): HDU list containing the merged data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># PRIMARY HDU</span>
+    <span class="n">hdus</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span><span class="p">()</span>
+    <span class="n">hdus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">())</span>
+
+    <span class="c1"># FMLOINFO HDU</span>
+    <span class="n">hdus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">read_fmlolog</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">))</span>
+
+    <span class="c1"># BACKEND and OBSINFO HDUs</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="n">check_backend</span><span class="p">(</span><span class="n">backendlog</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">backend</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;AC45&quot;</span><span class="p">:</span>
+        <span class="n">hdus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">read_backendlog_mac</span><span class="p">(</span><span class="n">backendlog</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">))</span>
+        <span class="n">hdus</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_obsinfo_mac</span><span class="p">(</span><span class="n">hdus</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">backend</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;FFX&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;WHSF logging is not supported yet&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid logging type&quot;</span><span class="p">)</span>
+
+    <span class="c1"># ANTENNA HDU (if any)</span>
+    <span class="k">if</span> <span class="n">antennalog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hdus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">read_antennalog</span><span class="p">(</span><span class="n">antennalog</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">hdus</span></div>
+
+
+<span class="k">def</span> <span class="nf">read_fmlolog</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read a FMLO logging of ASTE.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fmlolog (str): File name of FMLO logging.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        hdu (BinTableHDU): HDU containing the read FMLO logging.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># path</span>
+    <span class="n">fmlolog</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+    <span class="c1"># read fmlolog</span>
+    <span class="n">fmts</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_FMLOLOG</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">names</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">fmts</span><span class="p">)))</span>
+    <span class="n">tforms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dtype_to_tform</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">))</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DatetimeParser</span><span class="p">()}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">)),</span> <span class="n">skip_header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">converters</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="c1"># bintable HDU</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;extname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;FMLOLOG&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fmlolog</span><span class="p">)</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">tforms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">units</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">array</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">read_antennalog</span><span class="p">(</span><span class="n">antennalog</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read an antenna logging of ASTE.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        antennalog (str): File name of antenna logging.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        hdu (BinTableHDU): HDU containing the read antenna logging.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># path</span>
+    <span class="n">antennalog</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">antennalog</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+    <span class="c1"># read antennalog</span>
+    <span class="n">fmts</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_ANTENNA</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">names</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">fmts</span><span class="p">)))</span>
+    <span class="n">tforms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dtype_to_tform</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">))</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DatetimeParser</span><span class="p">()}</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">antennalog</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">)),</span> <span class="n">skip_header</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">converters</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="c1"># RA, Dec real</span>
+    <span class="n">sind</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">deg</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">deg</span><span class="p">))</span>
+    <span class="n">cosd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">deg</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">deg</span><span class="p">))</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">sind</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;az_prog&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">cosd</span><span class="p">(</span><span class="n">LAT_ASTE</span><span class="p">)</span> <span class="o">/</span> <span class="n">cosd</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;dec_prog&quot;</span><span class="p">]))</span>
+
+    <span class="n">ra_error</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;az_error&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;el_error&quot;</span><span class="p">]</span>
+    <span class="n">dec_error</span> <span class="o">=</span> <span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;az_error&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;el_error&quot;</span><span class="p">]</span>
+    <span class="n">ra_real</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;ra_prog&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ra_error</span>
+    <span class="n">dec_real</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;dec_prog&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ra_error</span>
+
+    <span class="c1"># bintable HDU</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;extname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ANTENNA&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">antennalog</span><span class="p">)</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">tforms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">units</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">array</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;az&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;az_real&quot;</span><span class="p">]))</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;el&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;el_real&quot;</span><span class="p">]))</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;ra&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">ra_real</span><span class="p">))</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;dec&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">dec_real</span><span class="p">))</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;ra_error&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">ra_error</span><span class="p">))</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s2">&quot;dec_error&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="n">dec_error</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">check_backend</span><span class="p">(</span><span class="n">backendlog</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check backend type from a backend logging of ASTE.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        backendlog (str): File name of backend logging.</span>
+<span class="sd">        byteorder (str): format string that represents byte order</span>
+<span class="sd">            of the backendlog. Default is &#39;&lt;&#39; (little-endian).</span>
+<span class="sd">            If the data in the returned FITS seems to be wrong,</span>
+<span class="sd">            try to spacify &#39;&gt;&#39; (big-endian).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        backend (str): Backend type.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># path</span>
+    <span class="n">backendlog</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">backendlog</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+    <span class="n">com</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_BACKEND_COM</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">com</span><span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+    <span class="n">ctl</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">com</span><span class="p">[</span><span class="s2">&quot;ctl&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+
+    <span class="c1"># read backendlog</span>
+    <span class="k">with</span> <span class="n">backendlog</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">head</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">ctl</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ctl</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cbe_type&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">read_backendlog_mac</span><span class="p">(</span><span class="n">backendlog</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read a backend logging of ASTE/MAC.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        backendlog (str): File name of backend logging.</span>
+<span class="sd">        byteorder (str): format string that represents byte order</span>
+<span class="sd">            of the backendlog. Default is &#39;&lt;&#39; (little-endian).</span>
+<span class="sd">            If the data in the returned FITS seems to be wrong,</span>
+<span class="sd">            try to spacify &#39;&gt;&#39; (big-endian).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        hdu (BinTableHDU): HDU containing the read backend logging.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># path</span>
+    <span class="n">backendlog</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">backendlog</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+
+    <span class="n">com</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_BACKEND_COM</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">mac</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_BACKEND_MAC</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">com</span><span class="p">[</span><span class="s2">&quot;head&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+    <span class="n">ctl</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">com</span><span class="p">[</span><span class="s2">&quot;ctl&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+    <span class="n">obs</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">mac</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+    <span class="n">dat</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">CStructReader</span><span class="p">(</span><span class="n">mac</span><span class="p">[</span><span class="s2">&quot;dat&quot;</span><span class="p">],</span> <span class="n">IGNORED_KEY</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">eof</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+        <span class="n">head</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s2">&quot;crec_type&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;ED&quot;</span>
+
+    <span class="c1"># read backendlog</span>
+    <span class="k">with</span> <span class="n">backendlog</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">backendlog</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_size</span>
+        <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">total</span><span class="p">,</span> <span class="n">bar_format</span><span class="o">=</span><span class="n">BAR_FORMAT</span><span class="p">)</span> <span class="k">as</span> <span class="n">bar</span><span class="p">:</span>
+            <span class="n">eof</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">ctl</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ctl</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">eof</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">obs</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">eof</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+                <span class="n">dat</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="c1"># edit data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dat</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cint_sttm&quot;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cary_name&quot;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cscan_type&quot;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;iary_data&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="c1">## starttime</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DatetimeParser</span><span class="p">()</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">p</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]])</span>
+
+    <span class="c1">## scantype (bug?)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;R</span><span class="se">\x00</span><span class="s2">RO&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;R&quot;</span>
+
+    <span class="c1">## arraydata</span>
+    <span class="n">usefg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;iary_usefg&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">isusb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;csid_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;USB&quot;</span><span class="p">)[</span><span class="n">usefg</span><span class="p">]</span>
+    <span class="n">arrayids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">])</span>
+
+    <span class="c1">## apply scaling factor and offset</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">]</span> <span class="o">*=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dary_scf&quot;</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dary_offset&quot;</span><span class="p">][:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arrayid</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arrayids</span><span class="p">):</span>
+        <span class="n">flag</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">arrayid</span>
+
+        <span class="c1">## slices of each scantype</span>
+        <span class="n">ons</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">slicewhere</span><span class="p">(</span><span class="n">flag</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;ON&quot;</span><span class="p">))</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">slicewhere</span><span class="p">(</span><span class="n">flag</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;R&quot;</span><span class="p">))</span>
+        <span class="n">skys</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">slicewhere</span><span class="p">(</span><span class="n">flag</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;SKY&quot;</span><span class="p">))</span>
+        <span class="n">zero</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">slicewhere</span><span class="p">(</span><span class="n">flag</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;ZERO&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1">## apply ZERO and coeff. to ON data</span>
+        <span class="k">for</span> <span class="n">on</span> <span class="ow">in</span> <span class="n">ons</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">on</span><span class="p">]</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">zero</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">on</span><span class="p">]</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;dalpha&quot;</span><span class="p">][</span><span class="n">on</span><span class="p">])</span>
+
+        <span class="c1">## apply ZERO and coeff. to R data</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">sky</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rs</span><span class="p">,</span> <span class="n">skys</span><span class="p">):</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">zero</span><span class="p">]</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">*=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;dbeta&quot;</span><span class="p">][</span><span class="n">sky</span><span class="p">]</span>
+
+        <span class="c1">## apply ZERO to SKY data</span>
+        <span class="k">for</span> <span class="n">sky</span> <span class="ow">in</span> <span class="n">skys</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">sky</span><span class="p">]</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">zero</span><span class="p">]</span>
+
+        <span class="c1">## reverse array (if USB)</span>
+        <span class="k">if</span> <span class="n">arrayid</span> <span class="ow">in</span> <span class="n">arrayids</span><span class="p">[</span><span class="n">isusb</span><span class="p">]:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">flag</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">][</span><span class="n">flag</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># read and edit formats</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">ctypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">shapes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dat</span><span class="o">.</span><span class="n">shapes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">tforms</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">ctype_to_tform</span><span class="p">,</span> <span class="n">ctypes</span><span class="p">,</span> <span class="n">shapes</span><span class="p">)</span>
+    <span class="n">fmts</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">tforms</span><span class="p">))</span>
+
+    <span class="n">num</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">fmts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;iary_data&quot;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fmts</span><span class="p">[</span><span class="s2">&quot;arraydata&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">E&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">fmts</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;A26&quot;</span>
+    <span class="n">fmts</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fmts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cary_name&quot;</span><span class="p">)</span>
+    <span class="n">fmts</span><span class="p">[</span><span class="s2">&quot;scantype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fmts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;cscan_type&quot;</span><span class="p">)</span>
+
+    <span class="c1"># bintable HDU</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;extname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;BACKEND&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">backendlog</span><span class="p">)</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;ctlinfo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctl</span><span class="o">.</span><span class="n">jsondata</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;obsinfo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">jsondata</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">fmts</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">array</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">make_obsinfo_mac</span><span class="p">(</span><span class="n">hdus</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a OBSINFO HDU of ASTE/MAC.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        hdus (HDUList): FITS object containing FMLOINFO, BACKEND HDUs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        hdu (BinTableHDU): OBSINFO HDU containing the formatted observational info.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># read info</span>
+    <span class="n">ctlinfo</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">hdus</span><span class="p">[</span><span class="s2">&quot;backend&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;ctlinfo&quot;</span><span class="p">])</span>
+    <span class="n">obsinfo</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">hdus</span><span class="p">[</span><span class="s2">&quot;backend&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;obsinfo&quot;</span><span class="p">])</span>
+    <span class="n">datinfo</span> <span class="o">=</span> <span class="n">hdus</span><span class="p">[</span><span class="s2">&quot;backend&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+    <span class="c1"># bintable HDU</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;iary_num&quot;</span><span class="p">]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">DatetimeParser</span><span class="p">()</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;iary_usefg&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+    <span class="n">fmts</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">CONF_OBSINFO</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">BaseLoader</span><span class="p">)</span>
+    <span class="n">names</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">fmts</span><span class="p">)))</span>
+    <span class="n">tforms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">fm</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">dtype_to_tform</span><span class="p">,</span> <span class="n">dtypes</span><span class="p">))</span>
+
+    <span class="n">header</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;extname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;OBSINFO&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;fitstype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;FMFITSv0&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;telescop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ASTE&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;sitelon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LON_ASTE</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;sitelat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LAT_ASTE</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;date-obs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;clog_id&quot;</span><span class="p">])[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;observer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;cobs_user&quot;</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;cobj_name&quot;</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;ra&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dsrc_pos&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;dec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dsrc_pos&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;equinox&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;cepoch&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">datinfo</span><span class="p">[</span><span class="s2">&quot;arrayid&quot;</span><span class="p">])</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sideband&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;csid_type&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;frontend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;cfe_type&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;backend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ctlinfo</span><span class="p">[</span><span class="s2">&quot;cbe_type&quot;</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;offsetaz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>  <span class="c1"># not implemented yet</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;offsetel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>  <span class="c1"># not implemented yet</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;chtotaln&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;ichanel&quot;</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;chcenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;chtotaln&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;rfcenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dcent_freq&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ifcenter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dflif&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ifcenter&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dcent_freq&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;ifcenter&quot;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dtrk_freq&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;chwidth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dbechwid&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;bandwidth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;dbebw&quot;</span><span class="p">])[</span><span class="n">flag</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;interval&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">obsinfo</span><span class="p">[</span><span class="s2">&quot;diptim&quot;</span><span class="p">],</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;integtime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;interval&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">EFF_8257D</span>
+    <span class="n">data</span><span class="p">[</span><span class="s2">&quot;beamsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">C</span> <span class="o">/</span> <span class="n">D_ASTE</span><span class="p">)</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;rfcenter&quot;</span><span class="p">]</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">tforms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">units</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">array</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+</pre></div>
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2017-2022 Akio Taniguchi.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

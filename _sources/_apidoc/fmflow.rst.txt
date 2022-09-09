@@ -1,0 +1,22 @@
+fmflow package
+==============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   fmflow.core
+   fmflow.fits
+   fmflow.logging
+   fmflow.models
+   fmflow.utils
+
+Module contents
+---------------
+
+.. automodule:: fmflow
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>fmflow.models package &#8212; Python  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmflow.utils package" href="fmflow.utils.html" />
+    <link rel="prev" title="fmflow.logging package" href="fmflow.logging.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img src="../_static/logo-light.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo-dark.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Home
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="fmflow.html">
+  Package guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/fmlo-dev/fmflow/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/astropengu_in/" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.core.html">
+   fmflow.core package
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="fmflow.fits.html">
+   fmflow.fits package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fmflow.fits.functions.html">
+     fmflow.fits.functions module
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.logging.html">
+   fmflow.logging package
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   fmflow.models package
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.utils.html">
+   fmflow.utils package
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-fmflow.models">
+   Module contents
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="fmflow-models-package">
+<h1>fmflow.models package<a class="headerlink" href="#fmflow-models-package" title="Permalink to this heading">#</a></h1>
+<section id="module-fmflow.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmflow.models" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.AstroLines">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AstroLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cutoff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despiking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconvolution_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtraction_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/astrosignal/classes.html#AstroLines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.AstroLines" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.AstroLines.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/astrosignal/classes.html#AstroLines.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.AstroLines.fit" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AtmosLines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snr_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/classes.html#AtmosLines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.AtmosLines" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.amconfig">
+<span class="sig-name descname"><span class="pre">amconfig</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'f</span> <span class="pre">{fmin}</span> <span class="pre">GHz</span> <span class="pre">{fmax}</span> <span class="pre">GHz</span> <span class="pre">{fstep}</span> <span class="pre">GHz\noutput</span> <span class="pre">f</span> <span class="pre">GHz</span> <span class="pre">tau</span> <span class="pre">Tb</span> <span class="pre">K\n\nza</span> <span class="pre">0</span> <span class="pre">deg\ntol</span> <span class="pre">0\nNscale</span> <span class="pre">h2o</span> <span class="pre">0\nT0</span> <span class="pre">2.7</span> <span class="pre">K\n\nlayer\nPbase</span> <span class="pre">{Pbase}</span> <span class="pre">mbar\nTbase</span> <span class="pre">{Tbase}</span> <span class="pre">K\ncolumn</span> <span class="pre">o3</span> <span class="pre">vmr</span> <span class="pre">{O3col}\n'</span></em><a class="headerlink" href="#fmflow.models.AtmosLines.amconfig" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.amfreqs">
+<span class="sig-name descname"><span class="pre">amfreqs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#fmflow.models.AtmosLines.amfreqs" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.amlayers">
+<span class="sig-name descname"><span class="pre">amlayers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[{'Pbase':</span> <span class="pre">'0.1',</span> <span class="pre">'Tbase':</span> <span class="pre">'221.1',</span> <span class="pre">'O3col':</span> <span class="pre">'1.74e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'0.3',</span> <span class="pre">'Tbase':</span> <span class="pre">'243.3',</span> <span class="pre">'O3col':</span> <span class="pre">'1.64e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'0.4',</span> <span class="pre">'Tbase':</span> <span class="pre">'249.4',</span> <span class="pre">'O3col':</span> <span class="pre">'1.62e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'0.5',</span> <span class="pre">'Tbase':</span> <span class="pre">'254.9',</span> <span class="pre">'O3col':</span> <span class="pre">'1.81e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'0.7',</span> <span class="pre">'Tbase':</span> <span class="pre">'262.8',</span> <span class="pre">'O3col':</span> <span class="pre">'2.12e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'1',</span> <span class="pre">'Tbase':</span> <span class="pre">'265.8',</span> <span class="pre">'O3col':</span> <span class="pre">'2.66e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'2',</span> <span class="pre">'Tbase':</span> <span class="pre">'256.4',</span> <span class="pre">'O3col':</span> <span class="pre">'3.99e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'3',</span> <span class="pre">'Tbase':</span> <span class="pre">'248.9',</span> <span class="pre">'O3col':</span> <span class="pre">'5.83e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'4',</span> <span class="pre">'Tbase':</span> <span class="pre">'244.3',</span> <span class="pre">'O3col':</span> <span class="pre">'7.19e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'5',</span> <span class="pre">'Tbase':</span> <span class="pre">'240.5',</span> <span class="pre">'O3col':</span> <span class="pre">'8.00e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'7',</span> <span class="pre">'Tbase':</span> <span class="pre">'234.8',</span> <span class="pre">'O3col':</span> <span class="pre">'8.51e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'10',</span> <span class="pre">'Tbase':</span> <span class="pre">'230.0',</span> <span class="pre">'O3col':</span> <span class="pre">'8.71e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'20',</span> <span class="pre">'Tbase':</span> <span class="pre">'221.7',</span> <span class="pre">'O3col':</span> <span class="pre">'7.69e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'30',</span> <span class="pre">'Tbase':</span> <span class="pre">'216.5',</span> <span class="pre">'O3col':</span> <span class="pre">'5.52e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'40',</span> <span class="pre">'Tbase':</span> <span class="pre">'212.4',</span> <span class="pre">'O3col':</span> <span class="pre">'3.53e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'50',</span> <span class="pre">'Tbase':</span> <span class="pre">'208.9',</span> <span class="pre">'O3col':</span> <span class="pre">'2.20e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'70',</span> <span class="pre">'Tbase':</span> <span class="pre">'200.4',</span> <span class="pre">'O3col':</span> <span class="pre">'1.16e-06'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'100',</span> <span class="pre">'Tbase':</span> <span class="pre">'197.8',</span> <span class="pre">'O3col':</span> <span class="pre">'3.92e-07'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'150',</span> <span class="pre">'Tbase':</span> <span class="pre">'207.4',</span> <span class="pre">'O3col':</span> <span class="pre">'1.14e-07'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'200',</span> <span class="pre">'Tbase':</span> <span class="pre">'219.4',</span> <span class="pre">'O3col':</span> <span class="pre">'6.18e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'250',</span> <span class="pre">'Tbase':</span> <span class="pre">'230.4',</span> <span class="pre">'O3col':</span> <span class="pre">'5.02e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'300',</span> <span class="pre">'Tbase':</span> <span class="pre">'239.9',</span> <span class="pre">'O3col':</span> <span class="pre">'4.70e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'350',</span> <span class="pre">'Tbase':</span> <span class="pre">'247.9',</span> <span class="pre">'O3col':</span> <span class="pre">'4.58e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'400',</span> <span class="pre">'Tbase':</span> <span class="pre">'254.9',</span> <span class="pre">'O3col':</span> <span class="pre">'4.52e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'450',</span> <span class="pre">'Tbase':</span> <span class="pre">'261.2',</span> <span class="pre">'O3col':</span> <span class="pre">'4.47e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'500',</span> <span class="pre">'Tbase':</span> <span class="pre">'266.8',</span> <span class="pre">'O3col':</span> <span class="pre">'4.39e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'550',</span> <span class="pre">'Tbase':</span> <span class="pre">'271.8',</span> <span class="pre">'O3col':</span> <span class="pre">'4.30e-08'},</span> <span class="pre">{'Pbase':</span> <span class="pre">'554',</span> <span class="pre">'Tbase':</span> <span class="pre">'272.2',</span> <span class="pre">'O3col':</span> <span class="pre">'4.24e-08'}]</span></em><a class="headerlink" href="#fmflow.models.AtmosLines.amlayers" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.amtaus">
+<span class="sig-name descname"><span class="pre">amtaus</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#fmflow.models.AtmosLines.amtaus" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.amtbs">
+<span class="sig-name descname"><span class="pre">amtbs</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#fmflow.models.AtmosLines.amtbs" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vrad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/classes.html#AtmosLines.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.AtmosLines.fit" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.AtmosLines.generate">
+<span class="sig-name descname"><span class="pre">generate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">freq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vrad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/classes.html#AtmosLines.generate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.AtmosLines.generate" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.BaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models.html#BaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.BaseModel" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.EMPCA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EMPCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#EMPCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.EMPCA" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.EMPCA.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">W</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#EMPCA.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.EMPCA.fit_transform" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.models.FMGain">
+<span class="sig-name descname"><span class="pre">FMGain</span></span><a class="headerlink" href="#fmflow.models.FMGain" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#fmflow.models.ONGain" title="fmflow.models.gain.classes.ONGain"><code class="xref py py-class docutils literal notranslate"><span class="pre">ONGain</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.ONGain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ONGain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">51</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polyorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.ONGain" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.ONGain.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Pon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.ONGain.fit" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.ONGain.to_ilogG">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_ilogG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logG</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain.to_ilogG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.ONGain.to_ilogG" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.ONGain.to_logG">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_logG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ilogG</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/classes.html#ONGain.to_logG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.ONGain.to_logG" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.models.PCA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PCA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#PCA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.PCA" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fmflow.models.BaseModel" title="fmflow.models.BaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.models.PCA.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/classes.html#PCA.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.PCA.fit_transform" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.astrolines">
+<span class="sig-name descname"><span class="pre">astrolines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spectrum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cutoff'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">despiking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconvolution_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subtraction_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/astrosignal/functions.html#astrolines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.astrolines" title="Permalink to this definition">#</a></dt>
+<dd><p>Model astrolines by cutoff-and-fitting method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – </p></li>
+<li><p><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>mode</strong> (<em>str</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>freqlim</strong> (<em>list of float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>function</strong> (<em>str</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>despiking</strong> (<em>bool</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>snr_threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>deconvolution_width</strong> (<em>float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>subtraction_gain</strong> (<em>float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>convergence</strong> (<em>float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>n_maxiters</strong> (<em>int</em><em>, </em><em>optional</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>model (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.atmoslines">
+<span class="sig-name descname"><span class="pre">atmoslines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spectrum'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snr_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/functions.html#atmoslines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.atmoslines" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.computeam">
+<span class="sig-name descname"><span class="pre">computeam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/atmosphere/functions.html#computeam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.computeam" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.decomposition">
+<span class="sig-name descname"><span class="pre">decomposition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decomposer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'TruncatedSVD'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/functions.html#decomposition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.decomposition" title="Permalink to this definition">#</a></dt>
+<dd><p>Reconstruct an array from decomposed one with a scikit-learn decomposer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</p></li>
+<li><p><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</p></li>
+<li><p><strong>decomposer</strong> (<em>str</em>) – A name of algorithm provided by sklearn.decomposition.</p></li>
+<li><p><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
+<cite>array</cite> before decomposition and then added to the reconstructed one.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters for the spacified algorithm such as
+<cite>n_components</cite> and for the timechunk calculation such as
+<cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An output reconstructed array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>To reconstruct an array from top two principal components:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">reducedim</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="s1">&#39;PCA&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.empca">
+<span class="sig-name descname"><span class="pre">empca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_maxiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/functions.html#empca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.empca" title="Permalink to this definition">#</a></dt>
+<dd><p>Reconstruct an array from decomposed one with EMPCA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</p></li>
+<li><p><strong>weights</strong> (<em>xarray.DataArray</em>) – A weight array. The shape must be same as <cite>array</cite>.</p></li>
+<li><p><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</p></li>
+<li><p><strong>ch_smooth</strong> (<em>int</em>) – A length of the filter window for smoothing eigenvectors.
+It must be a positive odd integer.</p></li>
+<li><p><strong>optimize_n</strong> (<em>bool</em>) – If True, <cite>n_components</cite> used for reconstruction is
+optimized by an exponential fitting of eigen values of EMPCA.</p></li>
+<li><p><strong>initialize</strong> (<em>string</em>) – A method of initializing eigenvectors.
+Options are <cite>random</cite> (random orthogonal matrix) and <cite>svd</cite>
+(orthogonal matrix from singular value decomposition).</p></li>
+<li><p><strong>random_seed</strong> (<em>int</em>) – random seed values used for the initial state.</p></li>
+<li><p><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
+<cite>array</cite> before computing EMPCA and then added to the reconstructed one.</p></li>
+<li><p><strong>convergence</strong> (<em>float</em>) – A convergence threshold.
+See <cite>fmflow.utils.Convergence</cite> for more detail.</p></li>
+<li><p><strong>n_maxiters</strong> (<em>int</em>) – A number of maximum iterations of the EM step.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters for the timechunk calculation such as
+<cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An output reconstructed array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.fmgain">
+<span class="sig-name descname"><span class="pre">fmgain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Pon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">51</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polyorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fmflow.models.fmgain" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.ongain">
+<span class="sig-name descname"><span class="pre">ongain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Pon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">51</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polyorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/gain/functions.html#ongain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.ongain" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.models.pca">
+<span class="sig-name descname"><span class="pre">pca</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centering</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/models/commonmode/functions.html#pca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.models.pca" title="Permalink to this definition">#</a></dt>
+<dd><p>Reconstruct an array from decomposed one with PCA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An input array to be decomposed.</p></li>
+<li><p><strong>n_components</strong> (<em>int</em>) – A number of components to keep.</p></li>
+<li><p><strong>optimize_n</strong> (<em>bool</em>) – If True, <cite>n_components</cite> used for reconstruction is
+optimized by an exponential fitting of eigen values of PCA.</p></li>
+<li><p><strong>centering</strong> (<em>bool</em>) – If True, mean vector along time axis is subtracted from
+<cite>array</cite> before computing PCA and then added to the reconstructed one.</p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Parameters for the timechunk calculation such as
+<cite>timechunk</cite>, <cite>n_processes</cite>. See <cite>fmflow.timechunk</cite> for more detail.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An output reconstructed array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="fmflow.logging.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">fmflow.logging package</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="fmflow.utils.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">fmflow.utils package</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2017-2022 Akio Taniguchi.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

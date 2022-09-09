@@ -1,0 +1,18 @@
+fmflow.fits package
+===================
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   fmflow.fits.functions
+
+Module contents
+---------------
+
+.. automodule:: fmflow.fits
+   :members:
+   :undoc-members:
+   :show-inheritance:

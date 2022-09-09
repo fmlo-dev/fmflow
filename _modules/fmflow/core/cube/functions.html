@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fmflow.core.cube.functions &#8212; Python  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+    <img src="../../../../_static/logo-light.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../../../../_static/logo-dark.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../index.html">
+  Home
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../../_apidoc/fmflow.html">
+  Package guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/fmlo-dev/fmflow/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/astropengu_in/" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <h1>Source code for fmflow.core.cube.functions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+
+<span class="c1"># public items</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;cube&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tocube&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fromcube&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="c1"># dependent packages</span>
+<span class="kn">import</span> <span class="nn">fmflow</span> <span class="k">as</span> <span class="nn">fm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+
+
+<span class="c1"># functions</span>
+<div class="viewcode-block" id="cube"><a class="viewcode-back" href="../../../../_apidoc/fmflow.html#fmflow.cube">[docs]</a><span class="k">def</span> <span class="nf">cube</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">chcoords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">ycoords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">xcoords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">datacoords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">scalarcoords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">attrs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a cube as an instance of xarray.DataArray with FM accessor.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (numpy.ndarray): A 3D (channel) array.</span>
+<span class="sd">        chcoords (dict, optional): A dictionary of arrays that label channel axis.</span>
+<span class="sd">        ycoords (dict, optional): A dictionary of arrays that label y axis.</span>
+<span class="sd">        xcoords (dict, optional): A dictionary of arrays that label x axis.</span>
+<span class="sd">        datacoords (dict, optional): A dictionary of values that label all axes.</span>
+<span class="sd">        scalarcoords (dict, optional): A dictionary of values that don&#39;t label any axes.</span>
+<span class="sd">        attrs (dict, optional): A dictionary of attributes to add to the instance.</span>
+<span class="sd">        name (str, optional): A string that names the instance.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        cube (xarray.DataArray): A cube.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize coords with default values</span>
+    <span class="n">cube</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ch&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">attrs</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">_initcoords</span><span class="p">()</span>
+
+    <span class="c1"># update coords with input values (if any)</span>
+    <span class="k">if</span> <span class="n">chcoords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">updatecoords</span><span class="p">(</span><span class="n">chcoords</span><span class="p">,</span> <span class="s2">&quot;ch&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ycoords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">updatecoords</span><span class="p">(</span><span class="n">ycoords</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">xcoords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">updatecoords</span><span class="p">(</span><span class="n">xcoords</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">datacoords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">updatecoords</span><span class="p">(</span><span class="n">datacoords</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;ch&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">scalarcoords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">updatecoords</span><span class="p">(</span><span class="n">scalarcoords</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cube</span></div>
+
+
+<div class="viewcode-block" id="tocube"><a class="viewcode-back" href="../../../../_apidoc/fmflow.html#fmflow.tocube">[docs]</a><span class="k">def</span> <span class="nf">tocube</span><span class="p">(</span>
+    <span class="n">array</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">gridsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">gridunit</span><span class="o">=</span><span class="s2">&quot;arcsec&quot;</span><span class="p">,</span>
+    <span class="n">gcf</span><span class="o">=</span><span class="s2">&quot;besselgauss&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a cube from an array.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        array (xarray.DataArray): An array.</span>
+<span class="sd">        weights (xarray.DataArray, optional): A weight array.</span>
+<span class="sd">        reverse (bool, optional): If True, the array is reverse-demodulated</span>
+<span class="sd">            (i.e. -1 * fmch is used for demodulation). Default is False.</span>
+<span class="sd">        gridsize (float, optional): Grid size in units of `gridunit`.</span>
+<span class="sd">        gridunit (str, optional): Grid unit of `gridsize`.</span>
+<span class="sd">        gcf (str, optional): Grid convolution function.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        cube (xarray.DataArray): A cube.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">gridsize</span><span class="p">,</span> <span class="n">gridunit</span><span class="p">,</span> <span class="n">gcf</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fromcube"><a class="viewcode-back" href="../../../../_apidoc/fmflow.html#fmflow.fromcube">[docs]</a><span class="k">def</span> <span class="nf">fromcube</span><span class="p">(</span><span class="n">cube</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an array filled with the cube.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cube (xarray.DataArray): A cube to be cast.</span>
+<span class="sd">        array (xarray.DataArray): An array whose shape the cube is cast on.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        array (xarray.DataArray): An array filled with the cube.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cube</span><span class="o">.</span><span class="n">fmc</span><span class="o">.</span><span class="n">toarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span></div>
+</pre></div>
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2017-2022 Akio Taniguchi.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

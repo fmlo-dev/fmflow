@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>fmflow package &#8212; Python  documentation</title>
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fmflow.core package" href="fmflow.core.html" />
+    <link rel="prev" title="fmflow" href="../index.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img src="../_static/logo-light.svg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/logo-dark.svg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Home
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="current reference internal nav-link" href="#">
+  Package guide
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/fmlo-dev/fmflow/" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/astropengu_in/" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.core.html">
+   fmflow.core package
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="fmflow.fits.html">
+   fmflow.fits package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fmflow.fits.functions.html">
+     fmflow.fits.functions module
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.logging.html">
+   fmflow.logging package
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.models.html">
+   fmflow.models package
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="fmflow.utils.html">
+   fmflow.utils package
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#subpackages">
+   Subpackages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-fmflow">
+   Module contents
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="fmflow-package">
+<h1>fmflow package<a class="headerlink" href="#fmflow-package" title="Permalink to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.core.html">fmflow.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.core.html#module-fmflow.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.fits.html">fmflow.fits package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.fits.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fmflow.fits.functions.html">fmflow.fits.functions module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.fits.html#module-fmflow.fits">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.logging.html">fmflow.logging package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.logging.html#module-fmflow.logging">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.models.html">fmflow.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.models.html#module-fmflow.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fmflow.utils.html">fmflow.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fmflow.utils.html#module-fmflow.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-fmflow">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fmflow" title="Permalink to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseAccessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.BaseAccessor" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.DEMODULATED">
+<span class="sig-name descname"><span class="pre">DEMODULATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DEMODULATED'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.DEMODULATED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.DEMODULATED_R">
+<span class="sig-name descname"><span class="pre">DEMODULATED_R</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DEMODULATED_R'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.DEMODULATED_R" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.FMARRAY">
+<span class="sig-name descname"><span class="pre">FMARRAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FMARRAY'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.FMARRAY" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.FMCUBE">
+<span class="sig-name descname"><span class="pre">FMCUBE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FMCUBE'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.FMCUBE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.FMSPECTRUM">
+<span class="sig-name descname"><span class="pre">FMSPECTRUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'FMSPECTRUM'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.FMSPECTRUM" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.MODULATED">
+<span class="sig-name descname"><span class="pre">MODULATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'MODULATED'</span></em><a class="headerlink" href="#fmflow.BaseAccessor.MODULATED" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.datacoords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datacoords</span></span><a class="headerlink" href="#fmflow.BaseAccessor.datacoords" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of arrays that label full axes of the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.dimcoords">
+<span class="sig-name descname"><span class="pre">dimcoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor.dimcoords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.BaseAccessor.dimcoords" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of values that label <cite>dim</cite> axis.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.isdemodulated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isdemodulated</span></span><a class="headerlink" href="#fmflow.BaseAccessor.isdemodulated" title="Permalink to this definition">#</a></dt>
+<dd><p>Whether the array is demodulated (regardless of reverse).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.isdemodulated_r">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isdemodulated_r</span></span><a class="headerlink" href="#fmflow.BaseAccessor.isdemodulated_r" title="Permalink to this definition">#</a></dt>
+<dd><p>Whether the array is reverse-demodulated.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.ismodulated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ismodulated</span></span><a class="headerlink" href="#fmflow.BaseAccessor.ismodulated" title="Permalink to this definition">#</a></dt>
+<dd><p>Whether the array is modulated.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.scalarcoords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scalarcoords</span></span><a class="headerlink" href="#fmflow.BaseAccessor.scalarcoords" title="Permalink to this definition">#</a></dt>
+<dd><p>A dictionary of values that don’t label any axes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.BaseAccessor.updatecoords">
+<span class="sig-name descname"><span class="pre">updatecoords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coords</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core.html#BaseAccessor.updatecoords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.BaseAccessor.updatecoords" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.array">
+<span class="sig-name descname"><span class="pre">array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.array" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array as an instance of xarray.DataArray with FM array accessor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – A 2D (time x channel) array.</p></li>
+<li><p><strong>tcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label time axis.</p></li>
+<li><p><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label channel axis.</p></li>
+<li><p><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of values that don’t label any axes.</p></li>
+<li><p><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of attributes to add to the instance.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – A string that names the instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.chbinning">
+<span class="sig-name descname"><span class="pre">chbinning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#chbinning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.chbinning" title="Permalink to this definition">#</a></dt>
+<dd><p>Binning an array along ch axis with given size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An input array.</p></li>
+<li><p><strong>size</strong> (<em>int</em>) – Ch length of a bin.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An output binned array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>binarray (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.chunk">
+<span class="sig-name descname"><span class="pre">chunk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">argnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concatfunc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/decorators.html#chunk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.chunk" title="Permalink to this definition">#</a></dt>
+<dd><p>Make a function compatible with multicore chunk processing.</p>
+<p>This function is intended to be used as a decorator like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@fm</span><span class="o">.</span><span class="n">chunk</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># do something</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">newarray</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">timechunk</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or you can set a global chunk parameter outside the function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timechunk</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.cube">
+<span class="sig-name descname"><span class="pre">cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ycoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datacoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#cube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.cube" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a cube as an instance of xarray.DataArray with FM accessor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – A 3D (channel) array.</p></li>
+<li><p><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label channel axis.</p></li>
+<li><p><strong>ycoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label y axis.</p></li>
+<li><p><strong>xcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label x axis.</p></li>
+<li><p><strong>datacoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of values that label all axes.</p></li>
+<li><p><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of values that don’t label any axes.</p></li>
+<li><p><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of attributes to add to the instance.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – A string that names the instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A cube.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cube (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.demodulate">
+<span class="sig-name descname"><span class="pre">demodulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#demodulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.demodulate" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a demodulated array from the modulated one.</p>
+<p>This function is only available when the array is modulated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – A modulated array.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A demodulated array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.empty">
+<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#empty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.empty" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array of given shape and type, without initializing entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>sequence of ints</em>) – 2D shape of the array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – The desired data-type for the array.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Other arguments of the array (<a href="#id1"><span class="problematic" id="id2">*</span></a>coords, attrs, and name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array without initializing entries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.empty_like">
+<span class="sig-name descname"><span class="pre">empty_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepmeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#empty_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.empty_like" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array of empty with the same shape and type as the input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – The shape and data-type of it define
+these same attributes of the output array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – If spacified, this function overrides
+the data-type of the output array.</p></li>
+<li><p><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether <a href="#id3"><span class="problematic" id="id4">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array without initializing entries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.fromcube">
+<span class="sig-name descname"><span class="pre">fromcube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#fromcube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.fromcube" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array filled with the cube.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cube</strong> (<em>xarray.DataArray</em>) – A cube to be cast.</p></li>
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An array whose shape the cube is cast on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array filled with the cube.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.fromspectrum">
+<span class="sig-name descname"><span class="pre">fromspectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spectrum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#fromspectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.fromspectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array filled with the spectrum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spectrum</strong> (<em>xarray.DataArray</em>) – A spectrum to be cast.</p></li>
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An array whose shape the spectrum is cast on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array filled with the spectrum.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.full">
+<span class="sig-name descname"><span class="pre">full</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#full"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.full" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with <cite>fill_value</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>sequence of ints</em>) – 2D shape of the array.</p></li>
+<li><p><strong>fill_value</strong> (<em>scalar</em><em> or </em><em>numpy.ndarray</em>) – Fill value or array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – The desired data-type for the array.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Other arguments of the array (<a href="#id5"><span class="problematic" id="id6">*</span></a>coords, attrs, and name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array filled with <cite>fill_value</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.full_like">
+<span class="sig-name descname"><span class="pre">full_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepmeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#full_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.full_like" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array of <cite>fill_value</cite> with the same shape and type as the input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – The shape and data-type of it define
+these same attributes of the output array.</p></li>
+<li><p><strong>fill_value</strong> (<em>scalar</em><em> or </em><em>numpy.ndarray</em><em> or </em><em>xarray.DataArray</em>) – Fill value or array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – If spacified, this function overrides
+the data-type of the output array.</p></li>
+<li><p><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether <a href="#id7"><span class="problematic" id="id8">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array filled with <cite>fill_value</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.load" title="Permalink to this definition">#</a></dt>
+<dd><p>Load a dataarray from a NetCDF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – A file name (<a href="#id9"><span class="problematic" id="id10">*</span></a>.nc).</p></li>
+<li><p><strong>copy</strong> (<em>bool</em>) – If True, dataarray is copied in memory. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A loaded dataarray.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dataarray (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.mad">
+<span class="sig-name descname"><span class="pre">mad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#mad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.mad" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the median absolute deviation (MAD) along the given dim or axis.</p>
+<p>Only one of the <cite>dim</cite> and <cite>axis</cite> arguments can be supplied.
+If neither are supplied, then mad will be calculated over axes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An input array.</p></li>
+<li><p><strong>dim</strong> (<em>str</em><em>, </em><em>optional</em>) – Dim along which the MADs are computed.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Axis along which the MADs are computed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array of the MAD.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mad (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.modulate">
+<span class="sig-name descname"><span class="pre">modulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#modulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.modulate" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array from the demodulated one.</p>
+<p>This function is only available when the array is demodulated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>array</strong> (<em>xarray.DataArray</em>) – A demodulated array.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.ones">
+<span class="sig-name descname"><span class="pre">ones</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#ones"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.ones" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with ones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>sequence of ints</em>) – 2D shape of the array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – The desired data-type for the array.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Other arguments of the array (<a href="#id11"><span class="problematic" id="id12">*</span></a>coords, attrs, and name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array filled with ones.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.ones_like">
+<span class="sig-name descname"><span class="pre">ones_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepmeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#ones_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.ones_like" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array of ones with the same shape and type as the input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – The shape and data-type of it define
+these same attributes of the output array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – If spacified, this function overrides
+the data-type of the output array.</p></li>
+<li><p><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether <a href="#id13"><span class="problematic" id="id14">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array filled with ones.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.save" title="Permalink to this definition">#</a></dt>
+<dd><p>Save a dataarray to a NetCDF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataarray</strong> (<em>xarray.DataArray</em>) – A dataarray to be saved.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – A filename (used as &lt;filename&gt;.nc).
+If not spacified, random 8-character name will be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fmflow.setlogger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setlogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.setlogger" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.setlogger.sethandlers">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sethandlers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger.sethandlers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.setlogger.sethandlers" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fmflow.setlogger.setlevel">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setlevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/logging.html#setlogger.setlevel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.setlogger.setlevel" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.spectrum">
+<span class="sig-name descname"><span class="pre">spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalarcoords</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#spectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.spectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a spectrum as an instance of xarray.DataArray with FM spectrum accessor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – A 1D (channel) array.</p></li>
+<li><p><strong>chcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of arrays that label channel axis.</p></li>
+<li><p><strong>scalarcoords</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of values that don’t label any axes.</p></li>
+<li><p><strong>attrs</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of attributes to add to the instance.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – A string that names the instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A spectrum.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>spectrum (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.tocube">
+<span class="sig-name descname"><span class="pre">tocube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridunit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'arcsec'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'besselgauss'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/cube/functions.html#tocube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.tocube" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a cube from an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An array.</p></li>
+<li><p><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) – A weight array.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</p></li>
+<li><p><strong>gridsize</strong> (<em>float</em><em>, </em><em>optional</em>) – Grid size in units of <cite>gridunit</cite>.</p></li>
+<li><p><strong>gridunit</strong> (<em>str</em><em>, </em><em>optional</em>) – Grid unit of <cite>gridsize</cite>.</p></li>
+<li><p><strong>gcf</strong> (<em>str</em><em>, </em><em>optional</em>) – Grid convolution function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A cube.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cube (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.tospectrum">
+<span class="sig-name descname"><span class="pre">tospectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/spectrum/functions.html#tospectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.tospectrum" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a spectrum from an array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – An array.</p></li>
+<li><p><strong>weights</strong> (<em>xarray.DataArray</em><em>, </em><em>optional</em>) – A weight array.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the array is reverse-demodulated
+(i.e. -1 * fmch is used for demodulation). Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A spectrum.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>spectrum (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.xarrayfunc">
+<span class="sig-name descname"><span class="pre">xarrayfunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/decorators.html#xarrayfunc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.xarrayfunc" title="Permalink to this definition">#</a></dt>
+<dd><p>Make a function compatible with xarray.DataArray.</p>
+<p>This function is intended to be used as a decorator like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@fm</span><span class="o">.</span><span class="n">xarrayfunc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># do something</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">newarray</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>function</em>) – A function to be wrapped. The first argument
+of the function must be an array to be processed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A wrapped function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>wrapper (function)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.zeros">
+<span class="sig-name descname"><span class="pre">zeros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#zeros"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.zeros" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a modulated array of given shape and type, filled with zeros.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> (<em>sequence of ints</em>) – 2D shape of the array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – The desired data-type for the array.</p></li>
+<li><p><strong>kwargs</strong> (<em>optional</em>) – Other arguments of the array (<a href="#id15"><span class="problematic" id="id16">*</span></a>coords, attrs, and name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A modulated array filled with zeros.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fmflow.zeros_like">
+<span class="sig-name descname"><span class="pre">zeros_like</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keepmeta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fmflow/core/array/functions.html#zeros_like"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fmflow.zeros_like" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array of zeros with the same shape and type as the input array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>xarray.DataArray</em>) – The shape and data-type of it define
+these same attributes of the output array.</p></li>
+<li><p><strong>dtype</strong> (<em>data-type</em><em>, </em><em>optional</em>) – If spacified, this function overrides
+the data-type of the output array.</p></li>
+<li><p><strong>keepmeta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether <a href="#id17"><span class="problematic" id="id18">*</span></a>coords, attrs, and name of the input
+array are kept in the output one. Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An array filled with zeros.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array (xarray.DataArray)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../index.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">fmflow</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="fmflow.core.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">fmflow.core package</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright 2017-2022 Akio Taniguchi.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>
