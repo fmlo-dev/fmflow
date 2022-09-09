@@ -126,11 +126,18 @@ class FMCubeAccessor(BaseAccessor):
         array_1[isnan] = 0
         array_2[isnan] = 0
 
-        gcf = getattr(cls, "gcf_{}".format(gcf))
-        cube_n = cls.convolve(array_n, gcf, **gridparams)
-        cube_w = cls.convolve(array_w, gcf, **gridparams)
-        cube_1 = cls.convolve(array_1, gcf, **gridparams)
-        cube_2 = cls.convolve(array_2, gcf, **gridparams)
+        if gcf == "pillbox":
+            gcf = getattr(cls, f"gcf_{gcf}")
+            cube_n = cls.convolve_xy(array_n, gcf, **gridparams)
+            cube_w = cls.convolve_xy(array_w, gcf, **gridparams)
+            cube_1 = cls.convolve_xy(array_1, gcf, **gridparams)
+            cube_2 = cls.convolve_xy(array_2, gcf, **gridparams)
+        else:
+            gcf = getattr(cls, f"gcf_{gcf}")
+            cube_n = cls.convolve_r(array_n, gcf, **gridparams)
+            cube_w = cls.convolve_r(array_w, gcf, **gridparams)
+            cube_1 = cls.convolve_r(array_1, gcf, **gridparams)
+            cube_2 = cls.convolve_r(array_2, gcf, **gridparams)
 
         with fm.utils.ignore_numpy_errors():
             # weighted mean and squared mean
@@ -239,7 +246,7 @@ class FMCubeAccessor(BaseAccessor):
         }
 
     @staticmethod
-    def convolve(array, gcf, y, x, sy, sx, gy, gx, gs, mgy, mgx):
+    def convolve_r(array, gcf, y, x, sy, sx, gy, gx, gs, mgy, mgx):
         """Convolve NumPy array to cube according to grid parameters."""
         cube = np.zeros((len(gy), len(gx), array.shape[1]))
 
@@ -251,6 +258,22 @@ class FMCubeAccessor(BaseAccessor):
             r /= gs
 
             cube[syx] += np.multiply.outer(gcf(r), array[i])
+
+        return cube.transpose(2, 0, 1)
+
+    @staticmethod
+    def convolve_xy(array, gcf, y, x, sy, sx, gy, gx, gs, mgy, mgx):
+        """Convolve NumPy array to cube according to grid parameters."""
+        cube = np.zeros((len(gy), len(gx), array.shape[1]))
+
+        for i in range(len(array)):
+            syx = sy[i], sx[i]
+            y_ = mgy[syx] - y[i]
+            x_ = mgx[syx] - x[i]
+            y_ /= gs
+            x_ /= gs
+
+            cube[syx] += np.multiply.outer(gcf(x_, y_), array[i])
 
         return cube.transpose(2, 0, 1)
 
@@ -271,6 +294,11 @@ class FMCubeAccessor(BaseAccessor):
     def gcf_gauss(r, a=1.00):
         """Grid convolution function of Gaussian."""
         return np.exp(-((r / a) ** 2))
+
+    @staticmethod
+    def gcf_pillbox(x, y):
+        """Grid convolution function of Pillbox."""
+        return ((np.abs(x) <= 0.5) & (np.abs(y) <= 0.5)).astype(float)
 
     def _initcoords(self):
         """Initialize coords with default values.
