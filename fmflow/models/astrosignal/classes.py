@@ -14,7 +14,8 @@ import numpy as np
 from .. import BaseModel
 from scipy.interpolate import interp1d
 from scipy.optimize import curve_fit, OptimizeWarning
-from scipy.signal import convolve, gaussian, savgol_filter
+from scipy.signal import convolve, savgol_filter
+from scipy.signal.windows import gaussian
 
 warnings.simplefilter("ignore", OptimizeWarning)
 

@@ -34,6 +34,7 @@ CONF_BACKEND_SAM = get_data("fmflow", "data/nro45m_backendlog_sam45.yaml")
 CONF_ANTENNA = get_data("fmflow", "data/nro45m_antennalog.yaml")
 BAR_FORMAT = "{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
 
+
 # functions
 def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder="<"):
     """Read logging data of NRO45m and merge them into a FITS object.
@@ -88,7 +89,7 @@ def read_fmlolog(fmlolog):
     fmlolog = Path(fmlolog).expanduser()
 
     # read fmlolog
-    fmts = yaml.load(CONF_FMLOLOG, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_FMLOLOG, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -120,7 +121,7 @@ def read_antennalog(antennalog):
     antennalog = Path(antennalog).expanduser()
 
     # read antennalog
-    fmts = yaml.load(CONF_ANTENNA, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_ANTENNA, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -171,7 +172,7 @@ def check_backend(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.SafeLoader)
     head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
     ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
 
@@ -200,8 +201,8 @@ def read_backendlog_sam45(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
-    sam = yaml.load(CONF_BACKEND_SAM, Loader=yaml.BaseLoader)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.SafeLoader)
+    sam = yaml.load(CONF_BACKEND_SAM, Loader=yaml.SafeLoader)
     head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
     ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
     obs = fm.utils.CStructReader(sam["obs"], IGNORED_KEY, byteorder)
@@ -255,6 +256,7 @@ def read_backendlog_sam45(backendlog, byteorder):
 
         ## slices of each scantype
         ons = fm.utils.slicewhere(flag & (data["scantype"] == b"ON"))
+        offs = fm.utils.slicewhere(flag & (data["scantype"] == b"OFF"))
         rs = fm.utils.slicewhere(flag & (data["scantype"] == b"R"))
         skys = fm.utils.slicewhere(flag & (data["scantype"] == b"SKY"))
         zero = fm.utils.slicewhere(flag & (data["scantype"] == b"ZERO"))[0]
@@ -262,6 +264,10 @@ def read_backendlog_sam45(backendlog, byteorder):
         ## apply ZERO to ON data
         for on in ons:
             data["arraydata"][on] -= data["arraydata"][zero]
+
+        ## apply ZERO to OFF data
+        for off in offs:
+            data["arraydata"][off] -= data["arraydata"][zero]
 
         ## apply ZERO and ifatt to R data
         for r in rs:
@@ -319,7 +325,7 @@ def make_obsinfo_sam45(hdus):
     p = fm.utils.DatetimeParser()
     flag = np.array(obsinfo["iary_usefg"], dtype=bool)
 
-    fmts = yaml.load(CONF_OBSINFO, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_OBSINFO, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 

@@ -12,9 +12,13 @@ PATTERNS = [
     "%y%m%d%H%M%S",
     "%y%m%d%H%M%S.",
     "%y%m%d%H%M%S.%f",
+    "%y%m%d%H%M%S\x00",
+    "%y%m%d%H%M%S\x00%f",
     "%Y%m%d%H%M%S",
     "%Y%m%d%H%M%S.",
     "%Y%m%d%H%M%S.%f",
+    "%Y%m%d%H%M%S\x00",
+    "%Y%m%d%H%M%S\x00%f",
     ISO_8601,
 ]
 
