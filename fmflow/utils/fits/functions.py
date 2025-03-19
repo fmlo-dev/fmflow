@@ -52,7 +52,7 @@ def ctype_to_tform(ctype, shape=None):
         return count + "B"
     # character
     elif re.search("s", ctype):
-        num = re.findall("\d+", ctype)[0]
+        num = re.findall(r"\d+", ctype)[0]
         return count + "A{}".format(num)
     # otherwise
     else:
@@ -94,7 +94,7 @@ def dtype_to_tform(dtype, shape=None):
         return count + "D"
     # character or Unicode
     elif re.search("S|U", dtype):
-        num = re.findall("\d+", dtype)[0]
+        num = re.findall(r"\d+", dtype)[0]
         return count + "A{}".format(num)
     # otherwise
     else:

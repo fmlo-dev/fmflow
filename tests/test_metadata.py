@@ -3,7 +3,7 @@ import fmflow as fm
 
 def test_version():
     """Make sure the version is valid."""
-    assert fm.__version__ == "0.4.0"
+    assert fm.__version__ == "0.5.0"
 
 
 def test_author():

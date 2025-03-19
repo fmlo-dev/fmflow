@@ -91,7 +91,7 @@ def read_fmlolog(fmlolog):
     fmlolog = Path(fmlolog).expanduser()
 
     # read fmlolog
-    fmts = yaml.load(CONF_FMLOLOG, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_FMLOLOG, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -123,7 +123,7 @@ def read_antennalog(antennalog):
     antennalog = Path(antennalog).expanduser()
 
     # read antennalog
-    fmts = yaml.load(CONF_ANTENNA, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_ANTENNA, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -174,7 +174,7 @@ def check_backend(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.SafeLoader)
     head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
     ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
 
@@ -203,8 +203,8 @@ def read_backendlog_mac(backendlog, byteorder):
     # path
     backendlog = Path(backendlog).expanduser()
 
-    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.BaseLoader)
-    mac = yaml.load(CONF_BACKEND_MAC, Loader=yaml.BaseLoader)
+    com = yaml.load(CONF_BACKEND_COM, Loader=yaml.SafeLoader)
+    mac = yaml.load(CONF_BACKEND_MAC, Loader=yaml.SafeLoader)
     head = fm.utils.CStructReader(com["head"], IGNORED_KEY, byteorder)
     ctl = fm.utils.CStructReader(com["ctl"], IGNORED_KEY, byteorder)
     obs = fm.utils.CStructReader(mac["obs"], IGNORED_KEY, byteorder)
@@ -268,7 +268,7 @@ def read_backendlog_mac(backendlog, byteorder):
             data["arraydata"][on] *= np.mean(data["dalpha"][on])
 
         ## apply ZERO and coeff. to R data
-        for (r, sky) in zip(rs, skys):
+        for r, sky in zip(rs, skys):
             data["arraydata"][r] -= data["arraydata"][zero]
             data["arraydata"][r] *= data["dbeta"][sky]
 
@@ -287,7 +287,7 @@ def read_backendlog_mac(backendlog, byteorder):
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
-    num = re.findall("\d+", fmts.pop("iary_data"))[0]
+    num = re.findall(r"\d+", fmts.pop("iary_data"))[0]
     fmts["arraydata"] = "{}E".format(num)
     fmts["starttime"] = "A26"
     fmts["arrayid"] = fmts.pop("cary_name")
@@ -324,7 +324,7 @@ def make_obsinfo_mac(hdus):
     p = fm.utils.DatetimeParser()
     flag = np.array(obsinfo["iary_usefg"], dtype=bool)
 
-    fmts = yaml.load(CONF_OBSINFO, Loader=yaml.BaseLoader)
+    fmts = yaml.load(CONF_OBSINFO, Loader=yaml.SafeLoader)
     names, dtypes, units = list(map(list, zip(*fmts)))
     tforms = list(map(fm.utils.dtype_to_tform, dtypes))
 
@@ -339,7 +339,7 @@ def make_obsinfo_mac(hdus):
     header["object"] = obsinfo["cobj_name"]
     header["ra"] = obsinfo["dsrc_pos"][0][0]
     header["dec"] = obsinfo["dsrc_pos"][1][0]
-    header["equinox"] = float(re.findall("\d+", obsinfo["cepoch"])[0])
+    header["equinox"] = float(re.findall(r"\d+", obsinfo["cepoch"])[0])
 
     data = OrderedDict()
     data["arrayid"] = np.unique(datinfo["arrayid"])

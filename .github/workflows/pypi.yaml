@@ -1,0 +1,22 @@
+name: PyPI
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  job:
+    name: PyPI
+    runs-on: ubuntu-latest
+    env:
+      POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: "1.8.5"
+      - run: poetry publish --build

@@ -1,5 +1,6 @@
 # coding: utf-8
 
+
 # base model
 class BaseModel(object):
     def __init__(self, params, logger=None):
