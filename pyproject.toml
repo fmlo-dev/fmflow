@@ -10,7 +10,7 @@ homepage = "https://github.com/fmlo-dev/fmflow/"
 documentation = "https://fmlo-dev.github.io/fmflow/"
 
 [tool.poetry.dependencies]
-python = ">=3.10, <3.14"
+python = ">=3.10, <3.13"
 astropy = ">=6, <8"
 matplotlib = "^3"
 netcdf4 = "^1"
