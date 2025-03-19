@@ -34,6 +34,7 @@ CONF_BACKEND_SAM = get_data("fmflow", "data/nro45m_backendlog_sam45.yaml")
 CONF_ANTENNA = get_data("fmflow", "data/nro45m_antennalog.yaml")
 BAR_FORMAT = "{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]"
 
+
 # functions
 def fromnro45m(fmlolog, backendlog, antennalog=None, byteorder="<"):
     """Read logging data of NRO45m and merge them into a FITS object.

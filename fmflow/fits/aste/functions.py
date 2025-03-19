@@ -268,7 +268,7 @@ def read_backendlog_mac(backendlog, byteorder):
             data["arraydata"][on] *= np.mean(data["dalpha"][on])
 
         ## apply ZERO and coeff. to R data
-        for (r, sky) in zip(rs, skys):
+        for r, sky in zip(rs, skys):
             data["arraydata"][r] -= data["arraydata"][zero]
             data["arraydata"][r] *= data["dbeta"][sky]
 
