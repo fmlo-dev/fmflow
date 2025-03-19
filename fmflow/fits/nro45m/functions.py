@@ -256,6 +256,7 @@ def read_backendlog_sam45(backendlog, byteorder):
 
         ## slices of each scantype
         ons = fm.utils.slicewhere(flag & (data["scantype"] == b"ON"))
+        offs = fm.utils.slicewhere(flag & (data["scantype"] == b"OFF"))
         rs = fm.utils.slicewhere(flag & (data["scantype"] == b"R"))
         skys = fm.utils.slicewhere(flag & (data["scantype"] == b"SKY"))
         zero = fm.utils.slicewhere(flag & (data["scantype"] == b"ZERO"))[0]
@@ -263,6 +264,10 @@ def read_backendlog_sam45(backendlog, byteorder):
         ## apply ZERO to ON data
         for on in ons:
             data["arraydata"][on] -= data["arraydata"][zero]
+
+        ## apply ZERO to OFF data
+        for off in offs:
+            data["arraydata"][off] -= data["arraydata"][zero]
 
         ## apply ZERO and ifatt to R data
         for r in rs:
