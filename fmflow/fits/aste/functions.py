@@ -287,7 +287,7 @@ def read_backendlog_mac(backendlog, byteorder):
     tforms = map(fm.utils.ctype_to_tform, ctypes, shapes)
     fmts = OrderedDict(item for item in zip(names, tforms))
 
-    num = re.findall("\d+", fmts.pop("iary_data"))[0]
+    num = re.findall(r"\d+", fmts.pop("iary_data"))[0]
     fmts["arraydata"] = "{}E".format(num)
     fmts["starttime"] = "A26"
     fmts["arrayid"] = fmts.pop("cary_name")
@@ -339,7 +339,7 @@ def make_obsinfo_mac(hdus):
     header["object"] = obsinfo["cobj_name"]
     header["ra"] = obsinfo["dsrc_pos"][0][0]
     header["dec"] = obsinfo["dsrc_pos"][1][0]
-    header["equinox"] = float(re.findall("\d+", obsinfo["cepoch"])[0])
+    header["equinox"] = float(re.findall(r"\d+", obsinfo["cepoch"])[0])
 
     data = OrderedDict()
     data["arrayid"] = np.unique(datinfo["arrayid"])

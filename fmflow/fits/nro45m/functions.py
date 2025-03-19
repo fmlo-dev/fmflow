@@ -335,7 +335,7 @@ def make_obsinfo_sam45(hdus):
     header["object"] = obsinfo["cobj_name"]
     header["ra"] = obsinfo["dsrc_pos"][0][0]
     header["dec"] = obsinfo["dsrc_pos"][1][0]
-    header["equinox"] = float(re.findall("\d+", obsinfo["cepoch"])[0])
+    header["equinox"] = float(re.findall(r"\d+", obsinfo["cepoch"])[0])
 
     data = OrderedDict()
     arrayids = np.unique(datinfo["arrayid"])
